@@ -208,7 +208,7 @@ M.SYS = {
   currency_clock_scale = 600, -- credits scale by 1 + run seconds / this
   temp_shield_ge = "/Game/Abilities/Effects/GE_TempShield", -- barrier effect (TemporaryShield, SetByCaller Data.TempShield)
   invuln_ge = "/Game/Abilities/Effects/GE_Invulnerability_Temporary", -- 2 s invulnerability
-  buff_row_tilt_deg = -1.2, -- degrees; negative rises to the right, measured off Deadzone's health bar
+  buff_row_tilt_deg = -2.0, -- degrees; negative rises to the right, measured off Deadzone's health bar
 }
 
 M.HOOKS = {

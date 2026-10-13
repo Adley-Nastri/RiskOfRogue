@@ -129,7 +129,7 @@
   },
   {
    "id": "buff_row_tilt_deg",
-   "value": -1.2,
+   "value": -2.0,
    "unit": "degrees; negative rises to the right, measured off Deadzone's health bar",
    "note": "measured from an in-game screenshot 2026-10-13"
   }
