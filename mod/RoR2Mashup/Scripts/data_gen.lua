@@ -264,6 +264,8 @@ M.INV = {
   brush_fn = "/Script/ValhallaUI.ValRHUIActiveItemDisplay:UpdateBrushForItem",
   icon_param = "Icon",
   slot_class = "/Game/UI/Components/Shared/Equipment/UI_Equipment_Perk.UI_Equipment_Perk_C",
+  tabmenu_class = "/Game/UI/RallyHereUpdates/Game/UI_Game_TabMenu.UI_Game_TabMenu_C",
+  grid_class = "/Game/UI/Components/Shared/Equipment/UI_Equipment_Perks_Items.UI_Equipment_Perks_Items_C",
 }
 
 -- systems: generated from sheets/systems.json

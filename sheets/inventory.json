@@ -69,6 +69,16 @@
    "id": "slot_class",
    "value": "/Game/UI/Components/Shared/Equipment/UI_Equipment_Perk.UI_Equipment_Perk_C",
    "note": "Deadzone's item slot widget; UpdateTexture / UpdateDefaultTexture set its icon after AsyncLoadTexture (function names listed live 2026-10-13)"
+  },
+  {
+   "id": "tabmenu_class",
+   "value": "/Game/UI/RallyHereUpdates/Game/UI_Game_TabMenu.UI_Game_TabMenu_C",
+   "note": "Deadzone's Tab menu; OnShown / ToggleVisibility (names listed live 2026-10-13)"
+  },
+  {
+   "id": "grid_class",
+   "value": "/Game/UI/Components/Shared/Equipment/UI_Equipment_Perks_Items.UI_Equipment_Perks_Items_C",
+   "note": "item grid; UpdatePerkAtIndex / InitializeWidget (names listed live 2026-10-13)"
   }
  ]
 }
