@@ -137,7 +137,7 @@ local function run_item(pc, it, done)
       sample(80)
     end
     if it.id == "StrengthenBurn" then st.items.Gasoline = 1 end
-    if it.id == "BarrierOnOverHeal" then st.items.Seed = 1 end
+    if it.id == "BarrierOnOverHeal" then st.items.Seed = 4 end -- 4 HP per hit, so the overheal makes at least 2 shield
     give(name, it.id, 1)
   end)
   S(500, function()

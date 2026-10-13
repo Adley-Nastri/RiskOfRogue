@@ -641,8 +641,15 @@ local function heal_player(name, pawn, amount)
   pawn:SetHealth(math.min(mx, hp + amount) * 1.0)
   local aegis = count(st, "BarrierOnOverHeal")
   if aegis > 0 and over > 0 then
+    -- small heals (Leeching Seed's 1 HP, regen ticks) give fractions of a point: keep the remainder
+    -- instead of rounding every one of them down to nothing
     local it = Data.ITEM_BY_ID.BarrierOnOverHeal
-    barrier(pawn, over * per(it.k, it.k_per, aegis))
+    st.aegis_acc = (st.aegis_acc or 0) + over * per(it.k, it.k_per, aegis)
+    if st.aegis_acc >= 1 then
+      local whole = math.floor(st.aegis_acc)
+      st.aegis_acc = st.aegis_acc - whole
+      barrier(pawn, whole)
+    end
   end
 end
 
