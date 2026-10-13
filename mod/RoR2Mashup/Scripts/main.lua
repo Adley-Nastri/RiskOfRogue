@@ -1891,11 +1891,36 @@ local KEYS = {
   { "End", "re-test only the items that failed last time" },
 }
 local function dev_msg(t) Dev.msg = t; Dev.msg_t = now_ms; log("test menu: " .. t) end
+-- which HUD buff icons an item can show (the rings' ready/cooldown icons belong to both rings)
+function Dev.icons_for(id)
+  if not Dev.ibuf then
+    Dev.ibuf = {}
+    for _, b in ipairs(Data.BUFFS) do
+      local owners = { b.item }
+      if b.event == "ringcd" or b.event == "ringready" then owners = { "FireRing", "IceRing" } end
+      for _, o in ipairs(owners) do Dev.ibuf[o] = Dev.ibuf[o] or {}; table.insert(Dev.ibuf[o], b.id) end
+    end
+  end
+  return Dev.ibuf[id]
+end
+function Dev.menu_icons(H, rows)
+  for i, set in ipairs(H.menu_icons or {}) do
+    local ids = rows and rows[i] or nil
+    for k, e in ipairs(set) do
+      local id = ids and ids[k] or nil
+      if e.shown ~= id then
+        e.shown = id
+        if id and valid(H.tex["buff_" .. id]) then e.img:SetBrushFromTexture(H.tex["buff_" .. id], false); e.img:SetVisibility(VIS)
+        else e.img:SetVisibility(HID) end
+      end
+    end
+  end
+end
 draw_menu = function(H)
   local show = Dev.open
   H.menu_bg:SetVisibility(show and VIS or HID)
   for _, tb in ipairs(H.menu_lines) do tb:SetVisibility(show and VIS or HID) end
-  if not show then return end
+  if not show then Dev.menu_icons(H, nil); return end
   local lines = {}
   local function add(t, c) lines[#lines + 1] = { t, c or { 0.88, 0.88, 0.88 } } end
   add("RoR2 MASHUP  //  TEST MENU", { 1, 0.85, 0.35 })
@@ -1913,6 +1938,7 @@ draw_menu = function(H)
     if i ~= Dev.sel then c = { c[1] * 0.75, c[2] * 0.75, c[3] * 0.75 } end
     local el = it.element ~= "none" and ("  [" .. Data.ELEMENT_BY_ID[it.element].name .. "]") or ""
     add(mark .. it.name .. (n > 0 and ("  x" .. n) or "") .. el, c)
+    lines[#lines][3] = Dev.icons_for(it.id)
   end
   add(" ")
   for _, k in ipairs(KEYS) do add(k[1] .. "   " .. k[2], { 0.7, 0.75, 0.8 }) end
@@ -1921,6 +1947,9 @@ draw_menu = function(H)
     local l = lines[i]
     if l then tb:SetText(FText(l[1])); color(tb, l[2]) else tb:SetText(FText("")) end
   end
+  local icons = {}
+  for i, l in ipairs(lines) do icons[i] = l[3] end
+  Dev.menu_icons(H, icons)
 end
 
 local function dev_action(key)
@@ -2074,6 +2103,18 @@ local function build_hud(pc)
     anchor(sl, 0, 0.5, 40, -(nlines * 21) / 2 + (i - 1) * 21, nil, nil, 0, 0)
     tb:SetVisibility(HID)
     H.menu_lines[i] = tb
+  end
+  -- up to 3 HUD buff icons per item row, in a column after the item names
+  H.menu_icons = {}
+  for i = 1, nlines do
+    H.menu_icons[i] = {}
+    for k = 1, 3 do
+      local img, sl = image(wt, canvas, "MenuIcon" .. i .. "_" .. k)
+      anchor(sl, 0, 0.5, 380 + (k - 1) * 22, -(nlines * 21) / 2 + (i - 1) * 21 + 1, 18, 18, 0, 0)
+      img:SetVisibility(HID)
+      pcall(function() img:ForceVolatile(true) end)
+      H.menu_icons[i][k] = { img = img, shown = nil }
+    end
   end
   H.menu_bg:SetVisibility(HID)
 
