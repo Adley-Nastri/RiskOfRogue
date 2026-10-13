@@ -296,6 +296,7 @@ M.SYS = {
   crit_damage_attr = "CriticalDamageMultiplier", -- attribute
   shock_crit_bonus = 0.15, -- chance
   mark_damage_taken = 0.5, -- fraction
+  map_settle_ms = 1500, -- ms
 }
 
 M.HOOKS = {

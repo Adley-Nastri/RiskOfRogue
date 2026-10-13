@@ -156,6 +156,12 @@
    "value": 0.5,
    "unit": "fraction",
    "note": "Deadzone Mark: +50% damage taken (Item_GrenadeWeakensEnemies text)"
+  },
+  {
+   "id": "map_settle_ms",
+   "value": 1500,
+   "unit": "ms",
+   "note": "after the local player controller changes (map load), wait this long before touching game objects; added after a UE4SS crash right at LoadMap"
   }
  ]
 }

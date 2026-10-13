@@ -2129,19 +2129,19 @@ local function draw_hud()
       -- RoR2 tints the icon with the BuffDef's colour and does not fade it
       local c = a.b.color
       slot.img:SetColorAndOpacity({ R = c[1], G = c[2], B = c[3], A = c[4] })
-      slot.img:SetVisibility(VIS)
+      if slot.iv ~= 1 then slot.img:SetVisibility(VIS); slot.iv = 1 end
       if a.b.stack == 1 then
         local n = (View.bcount[a.b.id] or 1) + a.b.offset
         slot.cnt:SetText(FText(a.b.stack_pct == 1 and (n .. "%") or ("x" .. n)))
         color(slot.cnt, { 1, 1, 1 })
         anchor(slot.cslot, 0, 1, bx + 37, by + 3, nil, nil, 1, 1)
-        slot.cnt:SetVisibility(VIS)
+        if slot.cv ~= 1 then slot.cnt:SetVisibility(VIS); slot.cv = 1 end
       else
-        slot.cnt:SetVisibility(HID)
+        if slot.cv ~= 0 then slot.cnt:SetVisibility(HID); slot.cv = 0 end
       end
     else
-      slot.img:SetVisibility(HID)
-      slot.cnt:SetVisibility(HID)
+      if slot.iv ~= 0 then slot.img:SetVisibility(HID); slot.iv = 0 end
+      if slot.cv ~= 0 then slot.cnt:SetVisibility(HID); slot.cv = 0 end
     end
   end
   -- ticker
@@ -2245,10 +2245,17 @@ end
 
 local hud_acc = 0
 local test_acc = 0
+local Settle = { pc = 0, until_ms = 0 }
 LoopAsync(TICK_MS, function()
   ExecuteInGameThread(function()
     now_ms = now_ms + TICK_MS
     local ok, err = pcall(function()
+      -- After a map load the old world's widgets and actors are being torn down. When the local
+      -- player controller changes, drop the HUD and wait a moment before touching game objects.
+      local lp = local_pc()
+      local la = lp and addr(lp) or 0
+      if la ~= Settle.pc then Settle.pc = la; Settle.until_ms = now_ms + SYS.map_settle_ms; HUD = nil end
+      if now_ms < Settle.until_ms then return end
       run_timers()
       local srv, gm = server()
       if srv then host_tick(gm) end
