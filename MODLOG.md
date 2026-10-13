@@ -44,6 +44,10 @@ UE4SS Lua (loader API). The game uses GAS (ValAttributeSet, ValAbilitySystemComp
 - God mode re-applies GE_Invulnerability_Temporary every 1.5 s (incoming damage x0) on top of the health refill.
 - The self-test (Scripts/selftest.lua) is reloaded each run and reaches the mod's internals through _G.R2I, so it can change without a game restart.
 
+## Cooldown attributes (checked in game by the user)
+- UniversalCooldownModifier and DashCooldownModifier are recharge RATES: higher = faster. Alien Head, Brainstalks, Soulbound Catalyst and Hardlight Afterburner raise them.
+- GrenadeCooldownModifier is a cooldown MULTIPLIER: lower = faster. Fuel Cell lowers it (confirmed working).
+
 ## Mistakes during testing
 - Native hooks on `GetAssetById`/`UpdateBrushForItem`, plus calling the HUD display's `OnItemIdsChanged` on every refresh (the RoR2 ids never stuck, so it re-fired constantly), crashed inside UE4SS's Lua VM (UE4SS.dll+0xc72210) about 15 s after getting 4 items. Most likely the native hook callbacks ran Lua off the game thread. Both are removed; the HUD row stays parked.
 - Reading `TextureMap` (a map of soft object pointers) with `ForEach`/`:get()` crashed the game.
