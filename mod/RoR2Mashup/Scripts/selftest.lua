@@ -231,6 +231,7 @@ local function start(only)
   local list = {}
   for _, it in ipairs(Data.ITEMS) do if not only or only[it.id] then list[#list + 1] = it end end
   Dev.ST.running = true
+  Dev.ST.stop = false
   _G.R2_FORCE = true
   local function finish_all()
     local name = player_name(pc)
@@ -241,6 +242,7 @@ local function start(only)
     Dev.msg = "Self-test done: see selftest.txt"; Dev.msg_t = I.now()
   end
   local function do_item(x, tries)
+    if Dev.ST.stop then Dev.ST.stop = false; wout("\nStopped from the test menu after " .. (x - 1) .. " of " .. #list .. " items."); return finish_all() end
     if x > #list then return finish_all() end
     local it = list[x]
     local ok, e = pcall(run_item, pc, it, function(verdict, why)

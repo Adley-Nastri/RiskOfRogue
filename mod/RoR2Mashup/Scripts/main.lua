@@ -1875,6 +1875,7 @@ local KEYS = {
   { "F8", "remove all RoR2 items" },
   { "F9", "difficulty clock: jump to next tier" },
   { "F10", "kill enemies within 30 m (procs fire)" },
+  { "Home", "run the item self-test (press again to stop)" },
 }
 local function dev_msg(t) Dev.msg = t; Dev.msg_t = now_ms; log("test menu: " .. t) end
 draw_menu = function(H)
@@ -1948,11 +1949,14 @@ local function dev_action(key)
     local n = 0
     for _, b in ipairs(bots_near(pawn, 3000, nil)) do deal(pawn, b, b:GetHealth() + 1); n = n + 1 end
     dev_msg("Killed " .. n .. " enemies")
+  elseif key == "HOME" then
+    if Dev.ST.running then Dev.ST.stop = true; dev_msg("Stopping the self-test after this item...")
+    else dev_msg("Self-test: " .. tostring(Dev.ST.start(nil)) .. "  (results: selftest.txt)") end
   end
 end
 -- extra keys for moving through the item list (they map onto the F-key actions)
 local ALIAS = { UP_ARROW = "F3", DOWN_ARROW = "F4", RIGHT_ARROW = "F5", RETURN = "F5", LEFT_ARROW = "F6", BACKSPACE = "F6", PAGE_UP = "PGUP", PAGE_DOWN = "PGDN" }
-for _, k in ipairs({ "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "UP_ARROW", "DOWN_ARROW", "RIGHT_ARROW", "LEFT_ARROW", "RETURN", "BACKSPACE", "PAGE_UP", "PAGE_DOWN" }) do
+for _, k in ipairs({ "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "HOME", "UP_ARROW", "DOWN_ARROW", "RIGHT_ARROW", "LEFT_ARROW", "RETURN", "BACKSPACE", "PAGE_UP", "PAGE_DOWN" }) do
   local ok, err = pcall(function()
     RegisterKeyBind(Key[k], function()
       ExecuteInGameThread(function()
@@ -2042,7 +2046,7 @@ local function build_hud(pc)
   H.menu_bg:SetColorAndOpacity({ R = 0.02, G = 0.03, B = 0.05, A = 0.86 })
   H.menu_lines = {}
   local MENU_ROWS = 20
-  local nlines = math.min(#Data.ITEMS, MENU_ROWS) + 17
+  local nlines = math.min(#Data.ITEMS, MENU_ROWS) + 18
   local width = 520
   anchor(H.menu_bg_slot, 0, 0.5, 24, 0, width, 26 + nlines * 21, 0, 0.5)
   for i = 1, nlines do
