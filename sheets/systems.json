@@ -126,6 +126,12 @@
    "id": "invuln_ge",
    "value": "/Game/Abilities/Effects/GE_Invulnerability_Temporary",
    "unit": "2 s invulnerability"
+  },
+  {
+   "id": "buff_row_tilt_deg",
+   "value": -1.2,
+   "unit": "degrees; negative rises to the right, measured off Deadzone's health bar",
+   "note": "measured from an in-game screenshot 2026-10-13"
   }
  ]
 }

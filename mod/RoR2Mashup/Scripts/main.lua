@@ -1958,7 +1958,8 @@ local function build_hud(pc)
   H.buffs = {}
   for i = 1, #Data.BUFFS do
     local img, sl = image(wt, canvas, "Buff" .. i)
-    anchor(sl, 0, 1, 40 + (i - 1) * 38, -112, 34, 34, 0, 1)
+    anchor(sl, 0, 1, 40 + (i - 1) * 38, -112 + (i - 1) * 38 * math.tan(math.rad(SYS.buff_row_tilt_deg)), 34, 34, 0, 1)
+    pcall(function() img:SetRenderTransformAngle(SYS.buff_row_tilt_deg) end)
     img:SetVisibility(HID)
     H.buffs[i] = { img = img, slot = sl }
   end
@@ -2059,7 +2060,7 @@ local function draw_hud()
     local a = active[i]
     if a then
       if valid(H.tex["buff_" .. a.b.id]) then slot.img:SetBrushFromTexture(H.tex["buff_" .. a.b.id], false) end
-      anchor(slot.slot, 0, 1, 40 + (i - 1) * 38, -112, 34, 34, 0, 1)
+      anchor(slot.slot, 0, 1, 40 + (i - 1) * 38, -112 + (i - 1) * 38 * math.tan(math.rad(SYS.buff_row_tilt_deg)), 34, 34, 0, 1)
       local alpha = a.left < 500 and (0.35 + 0.65 * (a.left / 500)) or 1
       slot.img:SetColorAndOpacity({ R = 1, G = 1, B = 1, A = alpha })
       slot.img:SetVisibility(VIS)
