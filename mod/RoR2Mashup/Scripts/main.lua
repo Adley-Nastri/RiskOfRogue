@@ -112,6 +112,9 @@ local function deal(attacker, bot, amount)
     if valid(attacker) and valid(attacker.AbilitySystemComponent) and valid(bot.AbilitySystemComponent) then
       local asc = attacker.AbilitySystemComponent
       pcall(function() asc:BP_ApplyGameplayEffectToTarget(cls(SUICIDE), bot.AbilitySystemComponent, 1.0, asc:MakeEffectContext()) end)
+      -- make sure the kill counts for on-kill items even if the damage event has no instigator
+      local cb = rawget(_G, "R2_ON_KILL")
+      if cb and attacker:IsPlayerControlled() then after(150, function() if valid(bot) and bot:GetHealth() <= 0 then cb(bot, attacker) end end) end
       return true
     end
     bot:SetHealth(1.0)
@@ -542,7 +545,7 @@ local function speed_of(pawn)
 end
 local function luck(st) return count(st, "Clover") end
 local function roll(st, p)
-  if p >= 1 then return true end
+  if p >= 1 or rawget(_G, "R2_FORCE") then return true end
   for _ = 0, luck(st) do if math.random() < p then return true end end
   return false
 end
@@ -1216,9 +1219,9 @@ local function engine_hurt(victim, amount, d)
   local pc = victim.Controller
   if not valid(pc) then return end
   local ctx = ctx_for(pc, { amount = amount, d = d })
-  ctx.g.last_hurt = now_ms
   special_hurt(ctx)
-  fire("hurt", ctx)
+  fire("hurt", ctx) -- before marking combat, so "out of combat" items see the first hit
+  ctx.g.last_hurt = now_ms
   local broke = false
   pcall(function() broke = d.bShieldBroke end)
   if broke then fire("shieldbreak", ctx) end
@@ -1301,8 +1304,25 @@ local function on_bot_killed(victim, killer)
   end
 end
 
+_G.R2_ON_KILL = function(v, k) local ok, err = pcall(on_bot_killed, v, k); if not ok then log("kill error: " .. tostring(err)) end end
 local function on_damaged(victim, d)
   if not valid(victim) then return end
+  -- Kills: the game's OnBotKilled event stopped firing (no calls for gun or mod kills, checked
+  -- live), so a killing blow on a bot is detected here instead. Covers mod kills too (GE_Suicide).
+  if not victim:IsPlayerControlled() then
+    local lethal = false
+    pcall(function() lethal = d.bKillingBlow end)
+    if not lethal then pcall(function() lethal = victim:GetHealth() <= 0 end) end
+    if lethal then
+      local killer = nil
+      pcall(function() killer = d.Instigator:Get() end)
+      if valid(killer) and killer:IsPlayerControlled() then
+        local ok, err = pcall(on_bot_killed, victim, killer)
+        if not ok then log("kill error: " .. tostring(err)) end
+      end
+      return
+    end
+  end
   -- Deadzone reports damage as a negative Amount (-910 for a sniper crit); the execute
   -- effect reports about -1e6, which is ours or an instant kill and is skipped.
   local amount = d.Amount and math.abs(d.Amount) or 0
@@ -1338,7 +1358,7 @@ local function on_damaged(victim, d)
   local okh, errh = pcall(engine_hit, victim, inst, amount, d)
   if not okh then log("engine hit: " .. tostring(errh)) end
   local uke = count(st, "Ukulele")
-  if uke > 0 and math.random() < Data.ITEM_BY_ID.Ukulele.chance then
+  if uke > 0 and (math.random() < Data.ITEM_BY_ID.Ukulele.chance or rawget(_G, "R2_FORCE")) then
     local it = Data.ITEM_BY_ID.Ukulele
     local targets = 3 + it.k * (uke - 1)
     local dmg = it.dmg * amount
@@ -2021,7 +2041,15 @@ local function host_tick(gm)
   if Dev.god then
     local gpc = local_pc()
     local p = gpc and gpc.Pawn
-    if alive(p) and p:GetHealth() < p:GetHealthMax() then pcall(function() p:SetHealth(p:GetHealthMax() * 1.0) end) end
+    -- real invulnerability: Deadzone's own 2 s invulnerability effect (incoming damage x0),
+    -- re-applied every 1.5 s, so bursts can't kill you between health refills
+    if alive(p) and now_ms - (Dev.inv_t or 0) >= 1500 then
+      Dev.inv_t = now_ms
+      pcall(apply_fixed, p, SYS.invuln_ge, nil)
+    end
+    -- during the self-test the health refill only steps in near death, so healing items can be measured
+    local floor = (Dev.ST and Dev.ST.running) and 0.15 or 1.0
+    if alive(p) and p:GetHealth() < p:GetHealthMax() * floor then pcall(function() p:SetHealth(p:GetHealthMax() * 1.0) end) end
   end
   -- a new mission (a different game mode object while in a run) starts the 'stage' items
   if addr(gm) ~= Run.gm_addr then
@@ -2084,6 +2112,36 @@ LoopAsync(TICK_MS, function()
   return false
 end)
 
+---------------------------------------------------------------------------
+-- In-game self-test: gives each RoR2 item on its own, sets off what triggers it (hits, kills,
+-- getting hurt, low health, timers, encounter, orb pick) against real enemies, and records what
+-- actually changed in the game: stats, enemy health, statuses on enemies, healing, shields, jumps.
+-- Results go to ue4ss/Mods/RoR2Mashup/selftest.txt. Started from the test mode (R2.selftest()).
+---------------------------------------------------------------------------
+-- In-game self-test. The test itself lives in selftest.lua next to this file and is loaded fresh
+-- every time it starts, so it can be changed without restarting the game. It reaches the mod's
+-- internals through R2I below.
+Dev.ST = { running = false }
+_G.R2I = {
+  Data = Data, SYS = SYS, MOD = MOD, Dev = Dev,
+  now = function() return now_ms end, after = after, log = log,
+  valid = valid, alive = alive, addr = addr, attr = attr, loc = loc, dist = dist,
+  bots_near = bots_near, nearest = nearest, deal = deal, apply_status = apply_status, note_status = note_status,
+  pstate = pstate, gstate = gstate, ctx_for = ctx_for, player_name = player_name, local_pc = local_pc, server = server,
+  give = give, take_all = take_all, apply_items = apply_items, on_damaged = on_damaged,
+  engine_all = engine_all, engine_orb = engine_orb, buff_from = function(...) return BUFF_FROM(...) end, cd_of = cd_of,
+  get_hp_ema = function() return HpEma end, set_hp_ema = function(v) HpEma = v end,
+  clear_auras = function() Auras = {} end,
+}
+function Dev.ST.start(only)
+  if Dev.ST.running then return "already running" end
+  local fn, err = loadfile(MOD .. "Scripts/selftest.lua")
+  if not fn then return "selftest.lua: " .. tostring(err) end
+  local ok, res = pcall(fn)
+  if not ok then return "selftest.lua: " .. tostring(res) end
+  return res(only)
+end
+
 -- test/debug surface (used by the dev bridge and the in-game test mode)
 _G.RoR2Mashup = {
   give = function(id, n) local pc = local_pc(); if pc then give(player_name(pc), id, n or 1) end end,
@@ -2092,6 +2150,8 @@ _G.RoR2Mashup = {
   hooks = function() return hooks_ok end,
   set_clock = function(s) Run.clock = s end,
   deal = deal,
+  selftest = function(ids) local only = nil; if ids then only = {}; for _, i in ipairs(ids) do only[i] = true end end; return Dev.ST.start(only) end,
+  selftest_running = function() return Dev.ST.running end,
   -- test: one elemental hit from an item on a bot, as the local player
   item_hit = function(item_id, bot, base) local pc = local_pc(); if pc then item_hit(pc.Pawn, bot, Data.ITEM_BY_ID[item_id], base or 10) end end,
   element_damage = function(item_id, base) local pc = local_pc(); return element_damage(pc.Pawn, Data.ELEMENT_BY_ID[Data.ITEM_BY_ID[item_id].element], base) end,

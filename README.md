@@ -148,6 +148,10 @@ Press **F1** in a run to open the test menu (host or solo only). The other keys 
 
 The menu lists every RoR2 item with how many you hold and its element, plus the god mode state and the clock.
 
+## Self-test
+
+`R2.selftest()` from the test mode (or the `selftest.lua` test command) gives each RoR2 item on its own, sets off its trigger against real enemies and writes what changed to `RoR2Mashup\selftest.txt`: PASS with the evidence, FAIL, or MANUAL for items that need you (sprinting, high ground, a real jump, a real orb pick). Turn on god mode first and stand near enemies.
+
 ## Requirements
 
 - Deadzone: Rogue (Steam), with UE4SS experimental 3.0.1-1165 installed in `Valhalla\Binaries\Win64`.

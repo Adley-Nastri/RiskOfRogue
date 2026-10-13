@@ -38,6 +38,12 @@ UE4SS Lua (loader API). The game uses GAS (ValAttributeSet, ValAbilitySystemComp
 - Player element attributes are additive from 0: `FireDamageModifier`, `AllElementDamageModifier` (0.3 with an upgrade), `ProcDamageMultiplier` (1), `ElementDebuffDurationMultiplier` and `ElementDebuffPotencyMultiplier` (1), `LightningShockDurationModifier`, `LightningShockCritChanceModifier`. There is no Lightning damage attribute.
 - The mod: Ukulele = Lightning (Shock); Gasoline, Will-o'-the-wisp and Brilliant Behemoth = Fire (Ignite). Damage × (1 + element mod + all-element mod) × proc multiplier. Statuses are rate-limited per enemy (`sheets/elements.json`).
 
+## Self-test findings (2026-10-13)
+- OnBotKilled stopped firing: 0 calls for gun kills and mod kills (checked live). Kills are now detected in OnDamaged (bKillingBlow or health <= 0), and deal() also reports its own lethal hits. On-kill items work again.
+- UE4SS can't call UObject methods from inside a Lua coroutine ("lua state has no instance"), so the self-test chains steps with the mod's timer.
+- God mode re-applies GE_Invulnerability_Temporary every 1.5 s (incoming damage x0) on top of the health refill.
+- The self-test (Scripts/selftest.lua) is reloaded each run and reaches the mod's internals through _G.R2I, so it can change without a game restart.
+
 ## Mistakes during testing
 - Native hooks on `GetAssetById`/`UpdateBrushForItem`, plus calling the HUD display's `OnItemIdsChanged` on every refresh (the RoR2 ids never stuck, so it re-fired constantly), crashed inside UE4SS's Lua VM (UE4SS.dll+0xc72210) about 15 s after getting 4 items. Most likely the native hook callbacks ran Lua off the game thread. Both are removed; the HUD row stays parked.
 - Reading `TextureMap` (a map of soft object pointers) with `ForEach`/`:get()` crashed the game.
