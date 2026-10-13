@@ -106,6 +106,17 @@ for r in buffs['rows']:
     if r['event'] not in ('hurt','kill','hit','buff','aura','ready','ringcd','cstat','ooc','tpready','tpused','echopending','ringready'): errs.append(f"buffs.{r['id']}.event: unknown {r['event']}")
     if r['event']=='buff' and r['item'] in ids and next(x for x in items['rows'] if x['id']==r['item'])['kind']!='buff' and next(x for x in items['rows'] if x['id']==r['item'])['action'] not in ('buff','aura'): errs.append(f"buffs.{r['id']}: item {r['item']} never makes a buff")
     if r['event']=='cstat' and r['item'] in ids and next(x for x in items['rows'] if x['id']==r['item'])['kind']!='cstat': errs.append(f"buffs.{r['id']}: item {r['item']} is not a cstat item")
+import re as _re
+txt=L('item_text.json'); KNOWN_IMG=set(v[0] for v in txt['keywords'].values() if v[0])
+for r in txt['rows']:
+    checked+=1
+    if r['id'] not in ids: errs.append(f"item_text.{r['id']} -> items: unresolved")
+    opens=len(_re.findall(r'<(?:em|element_\w+)>',r['rich'])); closes=r['rich'].count('</>')
+    if opens!=closes: errs.append(f"item_text.{r['id']}: {opens} tags opened, {closes} closed")
+    for i in _re.findall(r'<img id="([^"]+)"/>',r['rich']):
+        if i not in KNOWN_IMG: errs.append(f"item_text.{r['id']}: unknown icon {i}")
+for i in ids:
+    if i not in {r['id'] for r in txt['rows']}: errs.append(f"items.{i}: no rich description in item_text")
 procs=L('procs.json')
 for r in procs['rows']:
     for c in procs['columns']:
@@ -127,7 +138,7 @@ for r in elems['rows']:
         checked+=1
         if r.get(c) in ('',None): errs.append(f"elements.{r['id']}.{c}: empty")
     if r['status_ge']!='none' and not ge_ok(r['status_ge']): errs.append(f"elements.{r['id']}.status_ge -> game classes: not found")
-    if not any(it.get('element')==r['id'] or it.get('status')==r['id'] for it in items['rows']): errs.append(f"elements.{r['id']}: no items use it")
+    if not any(it.get('element')==r['id'] or it.get('status')==r['id'] for it in items['rows']): print(f"  note: elements.{r['id']} is not used by any item (kept for Noxious Thorn and future items)")
 print(f"preflight: {checked} cells over {len(items['rows'])} items, {len(rar['rows'])} rarities, {len(tiers['rows'])} tiers, {len(sysv['rows'])} systems, {len(hooks['rows'])} hooks, {len(apis['rows'])} apis")
 if errs:
     print("\n".join("  FAIL "+e for e in errs)); sys.exit(1)

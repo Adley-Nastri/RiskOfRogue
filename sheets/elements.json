@@ -9,7 +9,8 @@
   "status_mag",
   "mag_attr",
   "status_cooldown_ms",
-  "note"
+  "note",
+  "elemental"
  ],
  "rows": [
   {
@@ -22,7 +23,8 @@
    "status_mag": 0,
    "mag_attr": "none",
    "status_cooldown_ms": 1000,
-   "note": "Ignite: fixed 5 s duration in the effect; its own burn tick reads Data.Damage, which mods can't set, so the burn damage is dealt by the mod. Verified: flames show on the enemy."
+   "note": "Ignite: fixed 5 s duration in the effect; its own burn tick reads Data.Damage, which mods can't set, so the burn damage is dealt by the mod. Verified: flames show on the enemy.",
+   "elemental": 1
   },
   {
    "id": "lightning",
@@ -34,7 +36,8 @@
    "status_mag": -0.15,
    "mag_attr": "LightningShockCritChanceModifier",
    "status_cooldown_ms": 500,
-   "note": "Shock: duration and CritChanceResistanceModifier are SetByCaller; swapped to fixed values on the effect's default object for the call. Damage scales with ElectroDamageModifier."
+   "note": "Shock: duration and CritChanceResistanceModifier are SetByCaller; swapped to fixed values on the effect's default object for the call. Damage scales with ElectroDamageModifier.",
+   "elemental": 1
   },
   {
    "id": "cryo",
@@ -46,7 +49,8 @@
    "status_mag": 0.5,
    "mag_attr": "none",
    "status_cooldown_ms": 500,
-   "note": "Chill: MovementSpeed and MaxGroundSpeedMultiplier x magnitude (SetByCaller, swapped to 0.5 = half speed)."
+   "note": "Chill: MovementSpeed and MaxGroundSpeedMultiplier x magnitude (SetByCaller, swapped to 0.5 = half speed).",
+   "elemental": 1
   },
   {
    "id": "freeze",
@@ -58,7 +62,8 @@
    "status_mag": 0,
    "mag_attr": "none",
    "status_cooldown_ms": 3000,
-   "note": "Freeze: movement overridden to 0 and animations paused; only the duration is SetByCaller."
+   "note": "Freeze: movement overridden to 0 and animations paused; only the duration is SetByCaller.",
+   "elemental": 1
   },
   {
    "id": "void",
@@ -70,7 +75,8 @@
    "status_mag": -0.2,
    "mag_attr": "VoidCorruptionDamageReductionModifier",
    "status_cooldown_ms": 1000,
-   "note": "Corruption: the enemy's GlobalDamageMultiplier -0.2 (it deals 20% less)."
+   "note": "Corruption: the enemy's GlobalDamageMultiplier -0.2 (it deals 20% less).",
+   "elemental": 1
   },
   {
    "id": "radiation",
@@ -82,7 +88,8 @@
    "status_mag": -0.25,
    "mag_attr": "RadiationIrradiateWeakpointDamageModifier",
    "status_cooldown_ms": 1000,
-   "note": "Irradiate: WeakpointDamageMitigationMultiplier -0.25 (weak points take more damage)."
+   "note": "Irradiate: WeakpointDamageMitigationMultiplier -0.25 (weak points take more damage).",
+   "elemental": 1
   },
   {
    "id": "psionic",
@@ -94,7 +101,8 @@
    "status_mag": 0.3,
    "mag_attr": "PsionicFractureStaggerChanceModifier",
    "status_cooldown_ms": 1000,
-   "note": "Fracture: IncomingStaggerChance +0.3 (both SetByCaller modifiers get the same value)."
+   "note": "Fracture: IncomingStaggerChance +0.3 (both SetByCaller modifiers get the same value).",
+   "elemental": 1
   },
   {
    "id": "nano",
@@ -106,7 +114,8 @@
    "status_mag": 0.1,
    "mag_attr": "none",
    "status_cooldown_ms": 1000,
-   "note": "Infect: the Nano status visual; its modifier is NanoInfectReplenishmentChance."
+   "note": "Infect: the Nano status visual; its modifier is NanoInfectReplenishmentChance.",
+   "elemental": 1
   },
   {
    "id": "launch",
@@ -118,7 +127,21 @@
    "status_mag": 0,
    "mag_attr": "none",
    "status_cooldown_ms": 2000,
-   "note": "Anti-gravity stun: lifts the enemy; only the duration is SetByCaller."
+   "note": "Anti-gravity stun: lifts the enemy; only the duration is SetByCaller.",
+   "elemental": 1
+  },
+  {
+   "id": "mark",
+   "name": "Mark",
+   "status_ge": "/Game/AI/Logic/GameplayEffects/GE_GrenadeWeakened",
+   "dmg_attr": "none",
+   "duration_s": 5,
+   "duration_attr": "none",
+   "status_mag": 0,
+   "mag_attr": "none",
+   "status_cooldown_ms": 500,
+   "note": "Deadzone's Mark (the grenade 'weaken'): +50% damage taken. A tag effect with no modifiers; its duration is 0 on the default object (set by the grenade), so the mod sets it for the call. Not an elemental debuff.",
+   "elemental": 0
   }
  ]
 }

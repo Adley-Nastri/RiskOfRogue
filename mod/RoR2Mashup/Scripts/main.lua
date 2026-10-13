@@ -107,6 +107,8 @@ end
 -- the game's own execute effect so the kill, credit and encounter progress are real.
 local function deal(attacker, bot, amount)
   if not alive(bot) or amount <= 0 then return false end
+  local sc = rawget(_G, "R2_DMG_SCALE")
+  if sc then local ok, v = pcall(sc, attacker, bot, amount); if ok and type(v) == "number" then amount = v end end
   local hp = bot:GetHealth()
   if amount >= hp then
     if valid(attacker) and valid(attacker.AbilitySystemComponent) and valid(bot.AbilitySystemComponent) then
@@ -166,7 +168,7 @@ local function apply_status(attacker, bot, el, dur_override)
   local saved = {}
   local dm = cdo.DurationMagnitude
   local dt, dv = dm.MagnitudeCalculationType, dm.ScalableFloatMagnitude.Value
-  if dt == 3 then dm.MagnitudeCalculationType = 0; dm.ScalableFloatMagnitude.Value = dur end
+  if dt == 3 or (dt == 0 and dv == 0) then dm.MagnitudeCalculationType = 0; dm.ScalableFloatMagnitude.Value = dur end
   local mods = cdo.Modifiers
   for i = 1, mods:GetArrayNum() do
     local mm = mods[i].ModifierMagnitude
@@ -489,7 +491,7 @@ local function patch_orb_menu(tex)
   local descs = find_all_named(card, row.desc_widget, {})
   for i, d in ipairs(descs) do
     pcall(function()
-      if i == 1 then d:SetText(FText(it.pickup .. " " .. it.desc)) else d:SetText(FText("")) end
+      if i == 1 then d:SetText(FText(it.pickup .. " " .. (it.desc_rich or it.desc))) else d:SetText(FText("")) end
     end)
   end
   local host = find_named(card, row.icon_host)
@@ -528,7 +530,7 @@ for _, it in ipairs(Data.ITEMS) do
   if it.trigger == "periodic" then PERIODIC_ITEMS[#PERIODIC_ITEMS + 1] = it end
 end
 local ELEMENT_IDS = {}
-for _, e in ipairs(Data.ELEMENTS) do ELEMENT_IDS[#ELEMENT_IDS + 1] = e.id end
+for _, e in ipairs(Data.ELEMENTS) do if e.elemental == 1 then ELEMENT_IDS[#ELEMENT_IDS + 1] = e.id end end
 
 local function per(base, step, n) return base + step * (n - 1) end
 local function sec_ms(s) return math.floor(s * 1000) end
@@ -768,7 +770,7 @@ ACTIONS.dot = function(it, n, ctx)
   end
   local ticks = math.max(1, math.floor(it.dur * 2))
   ghit(pawn, b, it, n, 0)
-  for i = 1, ticks do after(i * 500, function() if alive(b) then deal(pawn, b, element_damage(pawn, el_of(it), total / ticks)) end end) end
+  for i = 1, ticks do after(i * 500, function() if alive(b) then Procs.crit = "none"; deal(pawn, b, element_damage(pawn, el_of(it), total / ticks)); Procs.crit = nil end end) end
 end
 ACTIONS.delayed = function(it, n, ctx)
   local b, pawn = ctx.victim, ctx.pawn
@@ -922,6 +924,7 @@ local function fire(trigger, ctx)
         end
         local ok, err
         Procs.hits = 0
+        Procs.crit = Procs.crit_for(trigger, it, ctx)
         if it.kind == "buff" then ok, err = pcall(BUFF_FROM, it, n, ctx)
         elseif it.kind == "growth2" then
           local gr = ctx.g.growth
@@ -939,6 +942,7 @@ local function fire(trigger, ctx)
         end
         if ok == false then log(it.id .. " " .. trigger .. ": " .. tostring(err))
         else pcall(Procs.say, ctx, it.id, Procs.hits) end
+        Procs.crit = nil
       end
     end
     ::continue::
@@ -1040,6 +1044,36 @@ function Procs.say(ctx, id, hits)
   if (g.proc_t[id] or -1e9) + p.gap_ms > now_ms then return end
   g.proc_t[id] = now_ms
   notify(ctx.name, "t", text)
+end
+-- Deadzone keywords for RoR2 item damage (the mod deals it directly, so the game's own damage
+-- calculation never sees it):
+--  * Critical Hit: procs from a hit inherit that hit's crit, as in RoR2. Items that scale off the hit
+--    already include it. Other procs roll your Crit Chance (+15% against Shocked targets, as Shock says).
+--    A crit multiplies by your CriticalDamageMultiplier.
+--  * Mark: Marked enemies take +50% damage (GE_GrenadeWeakened's text).
+function Procs.crit_for(trigger, it, ctx)
+  if trigger == "hit" or trigger == "crit" then
+    if it.dmg_base ~= "base" and it.dmg_base ~= "vmax" then return "none" end
+    local c = false
+    pcall(function() c = ctx.d and ctx.d.bCriticalHit or false end)
+    return c
+  end
+  return nil
+end
+_G.R2_DMG_SCALE = function(attacker, bot, amount)
+  if not valid(attacker) or not attacker:IsPlayerControlled() then return amount end
+  local c = Procs.crit
+  if c == nil then
+    local chance = attr(attacker, SYS.crit_chance_attr, 0)
+    if (StatusUntil[addr(bot) .. "|lightning"] or 0) > now_ms then chance = chance + SYS.shock_crit_bonus end
+    c = math.random() < chance
+  end
+  local out = amount
+  if c == true then out = out * attr(attacker, SYS.crit_damage_attr, 1) end
+  local marked = (StatusUntil[addr(bot) .. "|mark"] or 0) > now_ms
+  if marked then out = out * (1 + SYS.mark_damage_taken) end
+  Procs.last = { crit = c == true, marked = marked, base = amount, out = out }
+  return out
 end
 function Procs.row(ctx)
   -- Mirrors RoR2's BuffDisplay: one icon per active buff, tinted with its BuffDef colour,
@@ -1292,7 +1326,9 @@ local function engine_hit(victim, inst, amount, d)
   local crit = false
   pcall(function() crit = d.bCriticalHit end)
   if crit then fire("crit", ctx) end
+  Procs.crit = "none"
   special_hit(ctx)
+  Procs.crit = nil
 end
 local function engine_hurt(victim, amount, d)
   local pc = victim.Controller
@@ -1639,7 +1675,7 @@ local function item_def(it)
   if not valid(d) then return nil end
   local rar = Data.RARITY_BY_ID[it.rarity]
   d.DisplayName = FText(it.name)
-  d.Description = FText(it.pickup .. "\n<em>" .. it.desc .. "</>\n// RISK OF RAIN 2 " .. string.upper(it.rarity) .. " ITEM")
+  d.Description = FText(it.pickup .. "\n" .. (it.desc_rich or ("<em>" .. it.desc .. "</>")) .. "\n// RISK OF RAIN 2 " .. string.upper(it.rarity) .. " ITEM")
   d.Rarity = rar.dz_rarity
   pcall(function() d.MaxStackSize = 999 end)
   pcall(function() d.AssetId = ror2_asset_id(it.id) end)

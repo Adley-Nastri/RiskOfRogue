@@ -132,6 +132,30 @@
    "value": -2.0,
    "unit": "degrees; negative rises to the right, measured off Deadzone's health bar",
    "note": "measured from an in-game screenshot 2026-10-13"
+  },
+  {
+   "id": "crit_chance_attr",
+   "value": "CriticalChanceModifier",
+   "unit": "attribute",
+   "note": "player crit chance (0..1) used when an item proc rolls its own crit"
+  },
+  {
+   "id": "crit_damage_attr",
+   "value": "CriticalDamageMultiplier",
+   "unit": "attribute",
+   "note": "player crit damage multiplier (base 1.35) applied to item crits"
+  },
+  {
+   "id": "shock_crit_bonus",
+   "value": 0.15,
+   "unit": "chance",
+   "note": "Deadzone Shock: +15% Crit Chance against the target (Perk_Lightning_Parent text)"
+  },
+  {
+   "id": "mark_damage_taken",
+   "value": 0.5,
+   "unit": "fraction",
+   "note": "Deadzone Mark: +50% damage taken (Item_GrenadeWeakensEnemies text)"
   }
  ]
 }
