@@ -25,7 +25,7 @@ G = {  # stat effects (path, attribute, op)
  'clip': (A+'GE_GenericAttribute_MaxClipSize_Multiplicative', 'ClipAmmoMaxMultiplicativeBonus', 'add'),
  'sprint': (A+'GE_GenericAttribute_SprintSpeed', 'SprintSpeedMultiplier', 'mult'),
  'jump': (A+'GE_GenericAttribute_JumpHeight', 'JumpHeightMultiplier', 'add'),
- 'cdr': (A+'GE_GenericAttribute_UniversalCooldownModifier', 'UniversalCooldownModifier', 'mult'),
+ 'cdr': (A+'GE_GenericAttribute_UniversalCooldownModifier', 'UniversalCooldownModifier', 'mult'),  # a recharge RATE: higher = faster (checked in game)
  'dashcd': (A+'GE_GenericAttribute_DashCooldownModifier', 'DashCooldownModifier', 'add'),  # a recharge RATE: higher = faster (checked in game)
  'grenadecd': (A+'GE_GenericAttribute_GrenadeCooldownModifier', 'GrenadeCooldownModifier', 'mult'),
  'orb': (A+'GE_GenericAttribute_HealthOrbValueMultiplier', 'HealthOrbValueMultiplier', 'mult'),
@@ -133,7 +133,7 @@ NEW = {
 'WarCryOnMultiKill': B(kind='buff', trigger='multikill', cv=4, cd=1, dur=6, dur_per=4, cap=1, **st('move', .50), **st2('atk', 1.0),
     desc="Killing 4 enemies within 1 s sends you into a frenzy for 6 s (+4 s per stack): +50% move speed and +100% fire rate."),
 # ---------------- red ----------------
-'AlienHead': B(kind='stat', **st('cdr', -.25), stack='power', desc="All ability cooldowns -25% per stack."),
+'AlienHead': B(kind='stat', **st('cdr', 1/3), stack='power', desc="Abilities recharge 33% faster per stack (25% shorter cooldowns)."),
 'ArmorReductionOnHit': B(kind='effect', trigger='hit', cond='every_target', cv=5, action='status', status='radiation', dur=8, dur_per=8,
     desc="Every 5th hit on the same enemy Irradiates it (weak points take more damage) for 8 s (+8 s per stack)."),
 'BarrageOnBoss': B(kind='effect', trigger='periodic', cd=3, action='elite_strike', radius=4000, dmg=.025, dmg_per=.025, dmg_base='vmax', n=5, element='fire', tag='missile',
@@ -158,7 +158,7 @@ NEW = {
 'ImmuneToDebuff': B(kind='effect', trigger='hurt', cd=5, action='barrier', dmg=.10, desc="Every 5 s, getting hit gives a temporary shield of 10% max health. (Deadzone debuffs can't be blocked, so this shields you instead.)"),
 'IncreaseHealing': B(kind='stat', **st('orb', 1.0), desc="Healing orbs and RoR2 healing heal +100% (+100% per stack) more."),
 'ItemDropChanceOnKill': B(kind='effect', trigger='elitekill', action='currency', k=50, k_per=10, desc="Killing an elite gives 50 (+10 per stack) credits. (RoR2 items never drop on their own here.)"),
-'KillEliteFrenzy': B(kind='buff', trigger='elitekill', dur=4, dur_per=4, cap=1, **st('cdr', -.9), desc="Killing an elite sends you into a frenzy for 4 s (+4 s per stack) with 90% shorter ability cooldowns."),
+'KillEliteFrenzy': B(kind='buff', trigger='elitekill', dur=4, dur_per=4, cap=1, **st('cdr', 9.0), desc="Killing an elite sends you into a frenzy for 4 s (+4 s per stack): abilities recharge 10x faster."),
 'LaserTurbine': B(kind='effect', trigger='multikill', cv=4, cd=7, action='disc', radius=3000, dmg=3.0, dmg_per=3.0, dmg_base='base', k=10.0, k_per=10.0, element='plasma',
     desc="Killing 4 enemies within 7 s launches a disc: it hits every enemy within 30 m for 300% (+300% per stack) base damage and explodes on one for 1000% (+1000% per stack). Deadzone Plasma damage."),
 'MeteorAttackOnHighDamage': B(kind='effect', trigger='hit', chance=.03, cond='meteor', action='aoe', radius=800, dmg=20.0, dmg_per=0, dmg_base='base', element='fire',
@@ -179,7 +179,7 @@ NEW = {
     desc="Zaps 3 (+2 per stack) enemies within 35 m for 200% base damage every 0.5 s. Switches off every 10 s. Deadzone Lightning damage."),
 'StunAndPierce': B(kind='effect', trigger='hit', chance=.15, action='aoe', radius=800, dmg=1.2, dmg_per=1.2, dmg_base='base', element='lightning', status='freeze', dur=1,
     desc="15% chance on hit to throw a boomerang that hits enemies around the target for 120% (+120% per stack) base damage and stuns them. Deadzone Lightning damage."),
-'Talisman': B(kind='buff', trigger='kill', dur=4, dur_per=2, cap=5, **st('cdr', -.10), desc="Kills give -10% ability cooldowns for 4 s (+2 s per stack), stacking up to 5 times."),
+'Talisman': B(kind='buff', trigger='kill', dur=4, dur_per=2, cap=5, **st('cdr', .11), desc="Kills make abilities recharge 11% faster (about 10% shorter cooldowns) for 4 s (+2 s per stack), stacking up to 5 times."),
 'UtilitySkillMagazine': B(kind='stat', **st('dashcd', .5), stack='power', **st2('sprint', .10), desc="Dash recharges 50% faster per stack (33% shorter cooldown) and +10% sprint speed."),
 }
 SKIP = {'RegeneratingScrap': 'needs 3D printers', 'DroneWeapons': 'needs drones', 'ExtraLife': "removed at the user's request (Dio)",
