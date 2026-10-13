@@ -15,80 +15,80 @@ Solo and co-op. In co-op the host runs the items and the clock, and each player'
 
 | Item | Rarity | Element | In Deadzone |
 |---|---|---|---|
-| Armor-Piercing Rounds | white |  | Deal +20% (+20% per stack) damage to elites and bosses (the toughest enemies in the area). |
-| Backup Magazine | white |  | +10% (+10% per stack) magazine size. (Deadzone has no secondary-skill charges.) |
-| Bison Steak | white |  | +25 (+25 per stack) max health. |
-| Bolstering Lantern | white |  | +10% fire rate (+3.5% per stack) for each enemy or ally within 20 m, up to 3 (+1 per stack). |
-| Bustling Fungus | white |  | After standing still for 1 s, heal 4.5% (+2.25% per stack) of max health per second, along with allies within 3 m (+1.5 m per stack). |
-| Cautious Slug | white |  | Regenerate 3 (+3 per stack) health per second while out of combat (5 s without dealing or taking damage). |
-| Chronic Expansion | white |  | Each kill gives +3.5% (+1% per stack) damage, up to 10 (+5 per stack) times, for 7 s. Hitting enemies keeps it going. |
-| Crowbar | white |  | +75% (+75% per stack) damage to enemies above 90% health. |
-| Delicate Watch | white |  | +20% (+20% per stack) damage. Dropping below 25% health breaks all your Delicate Watches. |
-| Energy Drink | white |  | +25% (+25% per stack) sprint speed. |
-| Focus Crystal | white |  | +20% (+20% per stack) damage to enemies within 13 m. |
-| Gasoline | white | Fire | Kills burn enemies within 12m (+4m per stack). Deadzone Fire damage, applies Ignite. |
-| Hiker's Boots | white |  | Hitting an enemy from above grants +1% (+1% per stack) crit chance and crit damage, up to 10 times, for 10 s. |
-| Lens-Maker's Glasses | white |  | +10% crit chance per stack. |
-| Medkit | white |  | Heal 25 per stack 2s after taking damage. |
-| Mocha | white |  | +7.5% fire rate and +7% move speed per stack. |
-| Monster Tooth | white |  | Heal 10 (+5 per stack) on kill. |
-| Oddly-shaped Opal | white |  | While out of combat, the first hit you take is reduced by 50% (stacks like armor). |
-| Paul's Goat Hoof | white |  | +14% move speed per stack. |
-| Personal Shield Generator | white |  | +20 (+20 per stack) max shield. |
-| Power Elixir | white |  | Dropping below 25% health uses up one Power Elixir and heals you for 75% of max health. |
-| Repulsion Armor Plate | white |  | Each hit to your health is reduced by 12 per stack. |
-| Soldier's Syringe | white |  | +15% fire rate per stack. |
-| Stun Grenade | white |  | 5% (+5% per stack) chance on hit to freeze an enemy in place for 2 s (Deadzone Cryo Freeze). |
-| Topaz Brooch | white |  | Gain a 15 (+15 per stack) temporary shield on kill. |
-| Tougher Times | white |  | 15% chance to dodge a hit (stacks like RoR2). |
-| Tri-Tip Dagger | white | Nano | 10% (+10% per stack) chance on hit to bleed an enemy for 240% base damage over 3 s. Deadzone Nano damage. |
-| Warbanner | white |  | When an encounter starts, drop a banner: you and allies within 16 m (+8 m per stack) get +30% fire rate and move speed for 30 s. |
-| Warped Echo | white |  | Every 15 s, the next hit you take is reduced by 10% and spread over 3 (+1 per stack) hits, one per second. The echoed hits can't kill you. |
-| Bandolier | green |  | 18% (+10% per stack) chance on kill to refill all your ammo. |
-| Berzerker's Pauldron | green |  | Killing 4 enemies within 1 s sends you into a frenzy for 6 s (+4 s per stack): +50% move speed and +100% fire rate. |
-| Breaching Fin | green |  | Hitting an enemy launches it into the air (Deadzone Anti-Gravity stun) and it takes +10% damage. Each enemy can be launched once every 15 s. |
-| Chronobauble | green |  | Hits slow enemies (Deadzone Cryo Chill) for 2 s (+2 s per stack). |
-| Collector's Compulsion | green |  | Choosing an orb reward gives +3% damage and move speed for 20 s, up to 3 (+2 per stack) times. |
-| Death Mark | green |  | Enemies with 2 or more elemental debuffs are marked: your hits on them deal +50% damage and Irradiate them for 7 (+7 per stack) s. |
-| Faraday Spur | green | Lightning | Moving builds charge. Once you've moved for 6 s, your next hit discharges for 400% (+280% per stack) base damage within 17 m (+7.5 m per stack). Deadzone Lightning damage. |
-| Fuel Cell | green |  | Grenade cooldown -15% per stack. (Deadzone's grenade stands in for RoR2 equipment.) |
-| Harvester's Scythe | green |  | +5% crit chance. Critical hits heal 8 (+4 per stack) health. |
-| Hopoo Feather | green |  | +1 jump per stack. |
-| Hunter's Harpoon | green |  | Kills give +125% move speed for 1 s (+0.5 s per stack). |
-| Ignition Tank | green |  | Your RoR2 burns (Fire damage over time) deal +300% (+300% per stack) damage. |
-| Infusion | green |  | +1 max health per kill per stack (up to 100 per stack). |
-| Kinetic Dampener | green | Psionic | +10 max shield per stack. When your shield breaks, release a stunning pulse for 100% base damage plus your max shield. Deadzone Psionic damage. |
-| Kjaro's Band | green | Fire | Hits over 4x your normal damage also set off a flame tornado for 300% (+300% per stack) of the hit over 3 s. 10 s cooldown. Deadzone Fire damage. |
-| Leeching Seed | green |  | Every hit heals you for 1 (+1 per stack) health. |
-| Lepton Daisy | green |  | When an encounter starts, heal you and allies within 30 m for 50% of max health, 1 (+1 per stack) time(s) during the fight. |
-| Noxious Thorn | green | Nano | 10% chance on hit to bleed (Nano). Killing an enemy passes its elemental debuffs on to 1 (+1 per stack) enemy within 20 m (+5 m per stack). |
-| Old Guillotine | green |  | Instantly kill elites below 13% (+13% per stack) health. |
-| Old War Stealthkit | green |  | Dropping below 25% health makes you invulnerable for 2 s and gives +40% move speed for 5 s. Recharges every 30 s (-50% per stack). |
-| Predatory Instincts | green |  | Critical hits give +12% fire rate for 3 s, up to 3 (+2 per stack) times. Also +5% crit chance. |
-| Red Whip | green |  | +30% (+30% per stack) move speed while out of combat. |
-| Rose Buckler | green |  | While moving fast, hits you take are reduced by 23% (stacks like armor). |
-| Runald's Band | green | Cryo | Hits over 4x your normal damage also blast the enemy with ice for 250% (+250% per stack) of the hit and slow it for 3 s (+3 s per stack). 10 s cooldown. Deadzone Cryo. |
-| Ukulele | green | Lightning | 25% on hit: lightning chains to 3 (+2 per stack) enemies for 80% damage. Deadzone Lightning damage, applies Shock. |
-| Unstable Transmitter | green | Nano | Once per mission, dropping below 25% health gives a 30% temporary shield and for 8 s blasts away and damages enemies within 10 m. Deadzone Nano damage. |
-| Will-o'-the-wisp | green | Fire | Kills detonate, hurting enemies within 12m (+2.4m per stack). Deadzone Fire damage, applies Ignite. |
-| 57 Leaf Clover | red |  | All RoR2 item chances roll +1 (+1 per stack) extra time for a good result. |
-| Aegis | red |  | Healing past full health gives a temporary shield worth 50% (+50% per stack) of the extra healing. |
-| Alien Head | red |  | All ability cooldowns -25% per stack. |
-| Brainstalks | red |  | Killing an elite sends you into a frenzy for 4 s (+4 s per stack) with 90% shorter ability cooldowns. |
-| Brilliant Behemoth | red | Fire | Every hit explodes for 60% damage within 4m (+2.5m per stack). Deadzone Fire damage, applies Ignite. |
-| Frost Relic | red | Cryo | Kills surround you with an ice storm for 6 s that hits enemies for 60% base damage every 0.5 s and slows them. Each kill grows it by 2 m, up to 18 m (+12 m per stack). Deadzone Cryo. |
-| Growth Nectar | red |  | +4% damage and fire rate for each active RoR2 buff, up to 4 (+4 per stack). |
-| H3AD-5T v2 | red | Psionic | +30% jump height. Landing after a big fall causes a kinetic blast that grows with the fall height. Recharges in 10 s (-50% per stack). Deadzone Psionic damage. |
-| Hardlight Afterburner | red |  | Dash cooldown -33% per stack and +10% sprint speed. |
-| Interstellar Desk Plant | red |  | Kills plant a seed that grows after 5 s and for 10 s heals you and allies within 5 m (+5 m per stack) for 10% max health per second. |
-| Laser Scope | red |  | +35% (+35% per stack) critical damage (doubles Deadzone's crit bonus). |
-| Networked Suffering | red | Void | Infect up to 4 (+2 per stack) enemies. 45% of all damage they take is pooled, and every 3 s every infected enemy takes the pool. Deadzone Void damage. |
-| Rejuvenation Rack | red |  | Healing orbs and RoR2 healing heal +100% (+100% per stack) more. |
-| Shattering Justice | red |  | Every 5th hit on the same enemy Irradiates it (weak points take more damage) for 8 s (+8 s per stack). |
-| Soulbound Catalyst | red |  | Kills give -10% ability cooldowns for 4 s (+2 s per stack), stacking up to 5 times. |
-| Substandard Duplicator | red |  | Getting a RoR2 item also gives you a temporary copy of it for 10 s (+10 s per stack). |
-| Symbiotic Scorpion | red |  | Each hit permanently makes that enemy take +2% (+2% per stack) more damage from you, up to +50%. |
-| Unstable Tesla Coil | red | Lightning | Zaps 3 (+2 per stack) enemies within 35 m for 200% base damage every 0.5 s. Switches off every 10 s. Deadzone Lightning damage. |
+| Armor-Piercing Rounds | Common |  | +20% (+20% per stack) damage to Elite enemies and bosses. |
+| Backup Magazine | Common |  | +10% (+10% per stack) magazine capacity. |
+| Bison Steak | Common |  | +25 (+25 per stack) Maximum Health. |
+| Bolstering Lantern | Common |  | +10% (+3.5% per stack) Fire Rate for each enemy within 20m, up to 3 (+1 per stack) enemies. |
+| Bustling Fungus | Common |  | After standing still for 1 second, heal 4.5% (+2.25% per stack) of your Maximum Health every second. Allies within 3m (+1.5m per stack) are healed too. |
+| Cautious Slug | Common |  | Heal 3 (+3 per stack) Health per second while out of combat (5 seconds without dealing or taking damage). |
+| Chronic Expansion | Common |  | Killing an enemy grants +3.5% (+1% per stack) damage for 7 seconds, stacking up to 10 (+5 per stack) times. Hitting enemies keeps it active. |
+| Crowbar | Common |  | +75% (+75% per stack) damage to enemies above 90% Health. |
+| Delicate Watch | Common |  | +20% (+20% per stack) damage. Dropping below 25% Health breaks all of your Delicate Watches. |
+| Energy Drink | Common |  | +25% (+25% per stack) Sprint Speed. |
+| Focus Crystal | Common |  | +20% (+20% per stack) damage to nearby enemies (within 13m). |
+| Gasoline | Common | Fire | Killed enemies burn everything within 12m (+4m per stack) for 25% (+12.5% per stack) of their Maximum Health as Fire Damage over 3 seconds, applying Ignite. Can Critical Hit. |
+| Hiker's Boots | Common |  | Hitting an enemy at least 1.5m below you grants +1% (+1% per stack) Crit Chance and +1% Crit Damage for 10 seconds, stacking up to 10 times. |
+| Lens-Maker's Glasses | Common |  | +10% Crit Chance per stack. |
+| Medkit | Common |  | 2 seconds after taking damage, heal 25 (+25 per stack) Health. |
+| Mocha | Common |  | +7.5% Fire Rate and +7% Movement Speed per stack. |
+| Monster Tooth | Common |  | Killing an enemy heals 15 (+5 per stack) Health. Can Critical Hit. |
+| Oddly-shaped Opal | Common |  | While out of combat, the next hit you take is reduced by 50% (more with stacks, with diminishing returns). |
+| Paul's Goat Hoof | Common |  | +14% Movement Speed per stack. |
+| Personal Shield Generator | Common |  | +20 (+20 per stack) Maximum Shields. |
+| Power Elixir | Common |  | Dropping below 25% Health consumes one Power Elixir and heals 75% of your Maximum Health. |
+| Repulsion Armor Plate | Common |  | Damage to your Health is reduced by 12 (+12 per stack) per hit, down to a minimum of 1. |
+| Soldier's Syringe | Common |  | +15% Fire Rate per stack. |
+| Stun Grenade | Common |  | 5% chance on hit to Freeze an enemy for 2 seconds (more with stacks, with diminishing returns). |
+| Topaz Brooch | Common |  | Killing an enemy gives 15 (+15 per stack) Temporary Shield. |
+| Tougher Times | Common |  | 15% chance to dodge incoming damage (more with stacks, with diminishing returns). |
+| Tri-Tip Dagger | Common | Nano | 10% (+10% per stack) chance on hit to deal 240% of your average hit as Nano Damage over 3 seconds. Can Critical Hit. |
+| Warbanner | Common |  | When an encounter starts, drop a Warbanner for 30 seconds. You and allies within 16m (+8m per stack) of it gain +30% Fire Rate and Movement Speed. |
+| Warped Echo | Common |  | Once every 15 seconds, the next hit you take is reduced by 10% and the rest is dealt to you over 3 (+1 per stack) seconds instead. The delayed damage can't kill you. |
+| Bandolier | Uncommon |  | 18% chance on kill to refill all of your ammo (more with stacks, with diminishing returns). |
+| Berzerker's Pauldron | Uncommon |  | Killing 4 enemies within 1 second sends you into a frenzy for 6 (+4 per stack) seconds: +50% Movement Speed and +100% Fire Rate. |
+| Breaching Fin | Uncommon |  | Hitting an enemy launches it into the air for 1.5 seconds and deals +10% damage. Each enemy can be launched once every 15 seconds. Can Critical Hit. |
+| Chronobauble | Uncommon |  | Hits apply Chill for 2 (+2 per stack) seconds. |
+| Collector's Compulsion | Uncommon |  | Taking an item orb reward grants +3% damage and Movement Speed for 20 seconds, stacking up to 3 (+2 per stack) times. |
+| Death Mark | Uncommon |  | Hitting an enemy that has 2 or more Elemental Debuffs from your items applies Mark for 7 (+7 per stack) seconds. Marked enemies take +50% damage. |
+| Faraday Spur | Uncommon | Lightning | Moving builds charge. After 6 seconds of moving, your next hit releases 400% (+280% per stack) of your average hit as Lightning Damage to enemies within 17m (+7.5m per stack), applying Shock. Can Critical Hit. |
+| Fuel Cell | Uncommon |  | -15% Grenade cooldown per stack. |
+| Harvester's Scythe | Uncommon |  | +5% (+5% per stack) Crit Chance. Critical Hits heal 8 (+4 per stack) Health. |
+| Hopoo Feather | Uncommon |  | +1 (+1 per stack) extra jump. |
+| Hunter's Harpoon | Uncommon |  | Killing an enemy grants +125% Movement Speed for 1 (+0.5 per stack) second. |
+| Ignition Tank | Uncommon |  | Fire Damage that burns over time from your items (Gasoline, Kjaro's Band) deals +300% (+300% per stack) damage. |
+| Infusion | Uncommon |  | Killing an enemy permanently gives +1 (+1 per stack) Maximum Health, up to 100 (+100 per stack). |
+| Kinetic Dampener | Uncommon | Psionic | +10 (+10 per stack) Maximum Shields. When your Shields break, release a pulse within 10m that deals 100% of your average hit plus your Maximum Shields as Psionic Damage and launches enemies. Can Critical Hit. |
+| Kjaro's Band | Uncommon | Fire | Hits that deal at least 4x your average hit also burn the target for 300% (+300% per stack) of that hit as Fire Damage over 3 seconds, applying Ignite. (10 second cooldown) Can Critical Hit. |
+| Leeching Seed | Uncommon |  | Every hit heals you for 1 (+1 per stack) Health. |
+| Lepton Daisy | Uncommon |  | When an encounter starts, heal yourself and allies within 30m for 50% of Maximum Health. Repeats 1 (+1 per stack) times, 15 seconds apart. |
+| Noxious Thorn | Uncommon | Nano | 10% chance on hit to deal 100% of your average hit as Nano Damage over 2 seconds. Killing an enemy passes its Elemental Debuffs on to 1 (+1 per stack) enemy within 20m (+5m per stack). Can Critical Hit. |
+| Old Guillotine | Uncommon |  | Instantly kill Elite enemies below 13% Health (more with stacks, with diminishing returns). |
+| Old War Stealthkit | Uncommon |  | Dropping below 25% Health makes you Immune to damage for 2 seconds and grants +40% Movement Speed for 5 seconds. (30 second cooldown, halved per stack) |
+| Predatory Instincts | Uncommon |  | +5% (+5% per stack) Crit Chance. Critical Hits grant +12% Fire Rate for 3 seconds, stacking up to 3 (+2 per stack) times. |
+| Red Whip | Uncommon |  | +30% (+30% per stack) Movement Speed while out of combat. |
+| Rose Buckler | Uncommon |  | While moving fast, damage you take is reduced by 23% (more with stacks, with diminishing returns). |
+| Runald's Band | Uncommon | Cryo | Hits that deal at least 4x your average hit also blast the target for 250% (+250% per stack) of that hit as Cryo Damage, applying Chill. (10 second cooldown) Can Critical Hit. |
+| Ukulele | Uncommon | Lightning | 25% chance on hit to fire chain lightning at up to 3 (+2 per stack) enemies within 20m for 80% of the hit as Lightning Damage, applying Shock. Can Critical Hit. |
+| Unstable Transmitter | Uncommon | Nano | Once per mission, dropping below 25% Health grants Temporary Shield worth 30% of your Maximum Health. For the next 8 seconds, enemies within 10m take 100% of your average hit as Nano Damage every second and are launched. Can Critical Hit. |
+| Will-o'-the-wisp | Uncommon | Fire | Killed enemies detonate, dealing 35% (+26% per stack) of their Maximum Health as Fire Damage to enemies within 12m (+2.4m per stack), applying Ignite. Can Critical Hit. |
+| 57 Leaf Clover | Legendary |  | Item effects that rely on chance roll 1 (+1 per stack) extra time for a favourable outcome. |
+| Aegis | Legendary |  | Healing past full Health grants Temporary Shield worth 50% (+50% per stack) of the extra healing. |
+| Alien Head | Legendary |  | Abilities recharge 33% faster (+33% per stack, compounding). |
+| Brainstalks | Legendary |  | Killing an Elite enemy sends you into a frenzy for 4 (+4 per stack) seconds: abilities recharge 10x faster. |
+| Brilliant Behemoth | Legendary | Fire | Every hit explodes for 60% of the hit as Fire Damage to other enemies within 4m (+2.5m per stack), applying Ignite. Can Critical Hit. |
+| Frost Relic | Legendary | Cryo | Killing an enemy surrounds you with an ice storm for 6 seconds that deals 60% of your average hit as Cryo Damage every 0.5 seconds, applying Chill. Each kill grows it by 2m, up to 18m (+12m per stack). Can Critical Hit. |
+| Growth Nectar | Legendary |  | +4% damage and Fire Rate for each active item buff, up to 4 (+4 per stack) buffs. |
+| H3AD-5T v2 | Legendary | Psionic | +30% (+30% per stack) jump height. Landing after falling at least 4m releases a kinetic blast of Psionic Damage that grows with the fall height. (10 second cooldown, halved per stack) Can Critical Hit. |
+| Hardlight Afterburner | Legendary |  | Dash recharges 50% faster (+50% per stack, compounding). +10% (+10% per stack) Sprint Speed. |
+| Interstellar Desk Plant | Legendary |  | Killing an enemy plants a seed that sprouts after 5 seconds. For 10 seconds it heals you and allies within 5m (+5m per stack) for 10% of Maximum Health every second. |
+| Laser Scope | Legendary |  | +35% (+35% per stack) Crit Damage. |
+| Networked Suffering | Legendary | Void | Hits infect up to 4 (+2 per stack) enemies with Corruption. 45% of all damage you deal to infected enemies is pooled, and every 3 seconds each infected enemy takes the pool as Void Damage. Can Critical Hit. |
+| Rejuvenation Rack | Legendary |  | All healing is +100% (+100% per stack) stronger, including Health Orbs. |
+| Shattering Justice | Legendary |  | Every 5th hit on the same enemy applies Mark for 8 (+8 per stack) seconds. Marked enemies take +50% damage. |
+| Soulbound Catalyst | Legendary |  | Killing an enemy makes abilities recharge 11% faster for 4 (+2 per stack) seconds, stacking up to 5 times. |
+| Substandard Duplicator | Legendary |  | Taking an item from an item orb also grants a temporary copy of it for 10 (+10 per stack) seconds. |
+| Symbiotic Scorpion | Legendary |  | Each hit permanently makes that enemy take +2% (+2% per stack) more damage from you, up to +50%. |
+| Unstable Tesla Coil | Legendary | Lightning | Every 0.5 seconds, zap 3 (+2 per stack) enemies within 35m for 200% of your average hit as Lightning Damage, applying Shock. Switches on and off every 10 seconds. Can Critical Hit. |
 
 **Left out** (the RoR2 mechanic doesn't exist in Deadzone):
 

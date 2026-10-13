@@ -487,7 +487,7 @@ local function patch_orb_menu(tex)
     pcall(function() nameW:SetColorAndOpacity({ SpecifiedColor = { R = rar.color[1], G = rar.color[2], B = rar.color[3], A = 1 }, ColorUseRule = 0 }) end)
   end
   local typeW = find_named(card, row.type_widget)
-  if valid(typeW) then typeW:SetText(FText("// RISK OF RAIN 2  " .. string.upper(it.rarity) .. " ITEM")) end
+  if valid(typeW) then typeW:SetText(FText("// " .. string.upper(Data.RARITY_BY_ID[it.rarity].name or it.rarity) .. " ITEM")) end
   local descs = find_all_named(card, row.desc_widget, {})
   for i, d in ipairs(descs) do
     pcall(function()
@@ -1371,7 +1371,7 @@ local function on_bot_killed(victim, killer)
   pcall(function() vx, vy, vz = loc(victim) end)
 
   local tooth = count(st, "Tooth")
-  if tooth > 0 then local it = Data.ITEM_BY_ID.Tooth; heal(killer, it.dmg + it.k * tooth); notify(name, "b", "tooth_regen"); fx_at("heal", killer) end
+  if tooth > 0 then local it = Data.ITEM_BY_ID.Tooth; heal_player(name, killer, it.dmg + it.k * tooth); notify(name, "b", "tooth_regen"); fx_at("heal", killer) end
 
   local inf = count(st, "Infusion")
   if inf > 0 then
@@ -1402,6 +1402,8 @@ local function on_bot_killed(victim, killer)
     local it = Data.ITEM_BY_ID.Gasoline
     local radius = it.radius + it.radius_per * (gas - 1)
     local total = it.dmg * vmax * (1 + it.dmg_per * (gas - 1))
+    local tank = count(st, "StrengthenBurn")
+    if tank > 0 then local t = Data.ITEM_BY_ID.StrengthenBurn; total = total * (1 + per(t.k, t.k_per, tank)) end
     local targets = {}
     for _, b in ipairs(FindAllOf("ValCharacter") or {}) do
       if is_bot(b) and alive(b) and addr(b) ~= va then
@@ -1464,7 +1466,7 @@ local function on_damaged(victim, d)
     local med = count(st, "Medkit")
     if med > 0 then
       notify(name, "b", "medkit_heal")
-      after(SYS.medkit_delay_ms, function() heal(victim, Data.ITEM_BY_ID.Medkit.k * med); fx_at("heal", victim) end)
+      after(SYS.medkit_delay_ms, function() heal_player(name, victim, Data.ITEM_BY_ID.Medkit.k * med); fx_at("heal", victim) end)
     end
     return
   end
@@ -1483,7 +1485,7 @@ local function on_damaged(victim, d)
     if not okh then log("engine hit: " .. tostring(errh)) end
   end)
   local uke = count(st, "Ukulele")
-  if uke > 0 and (math.random() < Data.ITEM_BY_ID.Ukulele.chance or rawget(_G, "R2_FORCE")) then
+  if uke > 0 and roll(st, Data.ITEM_BY_ID.Ukulele.chance) then
     local it = Data.ITEM_BY_ID.Ukulele
     local targets = 3 + it.k * (uke - 1)
     local dmg = it.dmg * amount
@@ -1492,7 +1494,7 @@ local function on_damaged(victim, d)
     local hits = {}
     for i = 1, math.min(targets, #near) do hits[#hits + 1] = near[i] end
     if #hits > 0 then
-      after(0, function() for _, b in ipairs(hits) do fx_at("ukulele_hit", b); item_hit(inst, b, it, dmg) end end)
+      after(0, function() Procs.crit = "none"; for _, b in ipairs(hits) do fx_at("ukulele_hit", b); item_hit(inst, b, it, dmg) end; Procs.crit = nil end)
       notify(name, "t", "Ukulele chained to " .. #hits .. " enemies")
       notify(name, "b", "tesla")
     end
@@ -1503,7 +1505,7 @@ local function on_damaged(victim, d)
     local radius = it.radius + it.radius_per * (beh - 1)
     local near = bots_near(victim, radius, victim)
     if (st.last_behemoth or 0) + 150 <= now_ms then st.last_behemoth = now_ms; fx_at("behemoth_blast", victim) end
-    if #near > 0 then after(0, function() for _, b in ipairs(near) do item_hit(inst, b, it, it.dmg * amount) end end) end
+    if #near > 0 then after(0, function() Procs.crit = "none"; for _, b in ipairs(near) do item_hit(inst, b, it, it.dmg * amount) end; Procs.crit = nil end) end
   end
 end
 
@@ -1675,7 +1677,7 @@ local function item_def(it)
   if not valid(d) then return nil end
   local rar = Data.RARITY_BY_ID[it.rarity]
   d.DisplayName = FText(it.name)
-  d.Description = FText(it.pickup .. "\n" .. (it.desc_rich or ("<em>" .. it.desc .. "</>")) .. "\n// RISK OF RAIN 2 " .. string.upper(it.rarity) .. " ITEM")
+  d.Description = FText(it.pickup .. "\n" .. (it.desc_rich or ("<em>" .. it.desc .. "</>")) .. "\n// " .. string.upper(Data.RARITY_BY_ID[it.rarity].name or it.rarity) .. " ITEM")
   d.Rarity = rar.dz_rarity
   pcall(function() d.MaxStackSize = 999 end)
   pcall(function() d.AssetId = ror2_asset_id(it.id) end)

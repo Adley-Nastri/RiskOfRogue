@@ -3,7 +3,8 @@
   "id",
   "color",
   "orb_weight",
-  "dz_rarity"
+  "dz_rarity",
+  "name"
  ],
  "rows": [
   {
@@ -14,7 +15,8 @@
     0.92
    ],
    "orb_weight": 70,
-   "dz_rarity": 1
+   "dz_rarity": 1,
+   "name": "Common"
   },
   {
    "id": "green",
@@ -24,7 +26,8 @@
     0.27
    ],
    "orb_weight": 25,
-   "dz_rarity": 2
+   "dz_rarity": 2,
+   "name": "Uncommon"
   },
   {
    "id": "red",
@@ -34,7 +37,8 @@
     0.25
    ],
    "orb_weight": 5,
-   "dz_rarity": 5
+   "dz_rarity": 5,
+   "name": "Legendary"
   }
  ]
 }

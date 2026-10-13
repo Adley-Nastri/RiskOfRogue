@@ -1,304 +1,454 @@
 {
  "columns": [
   "id",
-  "rich"
+  "rich",
+  "plain",
+  "pickup"
  ],
  "rows": [
   {
    "id": "Syringe",
-   "rich": "<em>+15%</> <em>Fire Rate</> per stack."
+   "rich": "<em>+15%</> <em>Fire Rate</> per stack.",
+   "plain": "+15% Fire Rate per stack.",
+   "pickup": "Increase attack speed."
   },
   {
    "id": "Glasses",
-   "rich": "<em>+10%</> <img id=\"Crit.CritChance\"/><em>Crit Chance</> per stack."
+   "rich": "<em>+10%</> <img id=\"Crit.CritChance\"/><em>Crit Chance</> per stack.",
+   "plain": "+10% Crit Chance per stack.",
+   "pickup": "Chance to critically strike."
   },
   {
    "id": "Hoof",
-   "rich": "<em>+14%</> <em>Movement Speed</> per stack."
+   "rich": "<em>+14%</> <em>Movement Speed</> per stack.",
+   "plain": "+14% Movement Speed per stack.",
+   "pickup": "Move faster."
   },
   {
    "id": "Bear",
-   "rich": "<em>15%</> chance to <em>dodge</> a hit (stacks like RoR2)."
+   "rich": "<em>15%</> chance to <em>dodge</> incoming damage (more with stacks, with diminishing returns).",
+   "plain": "15% chance to dodge incoming damage (more with stacks, with diminishing returns).",
+   "pickup": "Chance to block incoming damage."
   },
   {
    "id": "Crowbar",
-   "rich": "<em>+75%</> (<em>+75%</> per stack) damage to enemies above <em>90%</> <img id=\"Stat.Health\"/><em>Health</>."
+   "rich": "<em>+75%</> (<em>+75%</> per stack) damage to enemies above <em>90%</> <img id=\"Stat.Health\"/><em>Health</>.",
+   "plain": "+75% (+75% per stack) damage to enemies above 90% Health.",
+   "pickup": "Deal more damage."
   },
   {
    "id": "ArmorPlate",
-   "rich": "Each hit to your <img id=\"Stat.Health\"/><em>Health</> is reduced by <em>12</> per stack."
+   "rich": "Damage to your <img id=\"Stat.Health\"/><em>Health</> is reduced by <em>12</> (<em>+12</> per stack) per hit, down to a minimum of <em>1</>.",
+   "plain": "Damage to your Health is reduced by 12 (+12 per stack) per hit, down to a minimum of 1.",
+   "pickup": "Reduce all incoming damage."
   },
   {
    "id": "Tooth",
-   "rich": "Heal <em>10</> (<em>+5</> per stack) <img id=\"Stat.Health\"/><em>Health</> on kill. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "Killing an enemy heals <em>15</> (<em>+5</> per stack) <img id=\"Stat.Health\"/><em>Health</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "Killing an enemy heals 15 (+5 per stack) Health. Can Critical Hit.",
+   "pickup": "Heal on kill."
   },
   {
    "id": "Medkit",
-   "rich": "Heal <em>25</> <img id=\"Stat.Health\"/><em>Health</> per stack <em>2 seconds</> after taking damage."
+   "rich": "<em>2 seconds</> after taking damage, heal <em>25</> (<em>+25</> per stack) <img id=\"Stat.Health\"/><em>Health</>.",
+   "plain": "2 seconds after taking damage, heal 25 (+25 per stack) Health.",
+   "pickup": "Heal after getting hurt."
   },
   {
    "id": "Ukulele",
-   "rich": "<em>25%</> chance on hit to chain <img id=\"DamageType.Lightning\"/><element_lightning>Lightning Damage</> to <em>3</> (<em>+2</> per stack) enemies for <em>80%</> damage, applying <img id=\"Element.Lightning.Shock\"/><element_lightning>Shock</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "<em>25%</> chance on hit to fire chain lightning at up to <em>3</> (<em>+2</> per stack) enemies within <em>20m</> for <em>80%</> of the hit as <img id=\"DamageType.Lightning\"/><element_lightning>Lightning Damage</>, applying <img id=\"Element.Lightning.Shock\"/><element_lightning>Shock</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "25% chance on hit to fire chain lightning at up to 3 (+2 per stack) enemies within 20m for 80% of the hit as Lightning Damage, applying Shock. Can Critical Hit.",
+   "pickup": "...and his music was electric."
   },
   {
    "id": "Wisp",
-   "rich": "Kills detonate, dealing <img id=\"DamageType.Fire\"/><element_fire>Fire Damage</> to enemies within <em>12m</> (<em>+2.4m</> per stack) and applying <img id=\"Element.Fire.Ignite\"/><element_fire>Ignite</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "Killed enemies detonate, dealing <em>35%</> (<em>+26%</> per stack) of their <img id=\"Stat.Health\"/><em>Maximum Health</> as <img id=\"DamageType.Fire\"/><element_fire>Fire Damage</> to enemies within <em>12m</> (<em>+2.4m</> per stack), applying <img id=\"Element.Fire.Ignite\"/><element_fire>Ignite</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "Killed enemies detonate, dealing 35% (+26% per stack) of their Maximum Health as Fire Damage to enemies within 12m (+2.4m per stack), applying Ignite. Can Critical Hit.",
+   "pickup": "Detonate enemies on kill."
   },
   {
    "id": "Gasoline",
-   "rich": "Kills burn enemies within <em>12m</> (<em>+4m</> per stack) with <img id=\"DamageType.Fire\"/><element_fire>Fire Damage</>, applying <img id=\"Element.Fire.Ignite\"/><element_fire>Ignite</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "Killed enemies burn everything within <em>12m</> (<em>+4m</> per stack) for <em>25%</> (<em>+12.5%</> per stack) of their <img id=\"Stat.Health\"/><em>Maximum Health</> as <img id=\"DamageType.Fire\"/><element_fire>Fire Damage</> over <em>3 seconds</>, applying <img id=\"Element.Fire.Ignite\"/><element_fire>Ignite</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "Killed enemies burn everything within 12m (+4m per stack) for 25% (+12.5% per stack) of their Maximum Health as Fire Damage over 3 seconds, applying Ignite. Can Critical Hit.",
+   "pickup": "Killing an enemy burns nearby enemies."
   },
   {
    "id": "Feather",
-   "rich": "<em>+1</> jump per stack."
+   "rich": "<em>+1</> (<em>+1</> per stack) extra jump.",
+   "plain": "+1 (+1 per stack) extra jump.",
+   "pickup": "Gain an extra jump."
   },
   {
    "id": "Infusion",
-   "rich": "<em>+1</> <img id=\"Stat.Health\"/><em>Maximum Health</> per kill per stack (up to <em>100</> per stack)."
+   "rich": "Killing an enemy permanently gives <em>+1</> (<em>+1</> per stack) <img id=\"Stat.Health\"/><em>Maximum Health</>, up to <em>100</> (<em>+100</> per stack).",
+   "plain": "Killing an enemy permanently gives +1 (+1 per stack) Maximum Health, up to 100 (+100 per stack).",
+   "pickup": "Killing an enemy permanently increases your health."
   },
   {
    "id": "Behemoth",
-   "rich": "Every hit explodes for <em>60%</> <img id=\"DamageType.Fire\"/><element_fire>Fire Damage</> within <em>4m</> (<em>+2.5m</> per stack), applying <img id=\"Element.Fire.Ignite\"/><element_fire>Ignite</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "Every hit explodes for <em>60%</> of the hit as <img id=\"DamageType.Fire\"/><element_fire>Fire Damage</> to other enemies within <em>4m</> (<em>+2.5m</> per stack), applying <img id=\"Element.Fire.Ignite\"/><element_fire>Ignite</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "Every hit explodes for 60% of the hit as Fire Damage to other enemies within 4m (+2.5m per stack), applying Ignite. Can Critical Hit.",
+   "pickup": "All your attacks explode!"
   },
   {
    "id": "AttackSpeedAndMoveSpeed",
-   "rich": "<em>+7.5%</> <em>Fire Rate</> and <em>+7%</> <em>Movement Speed</> per stack."
+   "rich": "<em>+7.5%</> <em>Fire Rate</> and <em>+7%</> <em>Movement Speed</> per stack.",
+   "plain": "+7.5% Fire Rate and +7% Movement Speed per stack.",
+   "pickup": "Slightly increase attack speed and movement speed."
   },
   {
    "id": "AttackSpeedPerNearbyAllyOrEnemy",
-   "rich": "<em>+10%</> <em>Fire Rate</> (<em>+3.5%</> per stack) for each enemy or ally within <em>20m</>, up to <em>3</> (<em>+1</> per stack)."
+   "rich": "<em>+10%</> (<em>+3.5%</> per stack) <em>Fire Rate</> for each enemy within <em>20m</>, up to <em>3</> (<em>+1</> per stack) enemies.",
+   "plain": "+10% (+3.5% per stack) Fire Rate for each enemy within 20m, up to 3 (+1 per stack) enemies.",
+   "pickup": "Increases your attack speed for every nearby enemy."
   },
   {
    "id": "BarrierOnKill",
-   "rich": "Gain <em>15</> (<em>+15</> per stack) <img id=\"Stat.Shield\"/><em>Temporary Shield</> on kill."
+   "rich": "Killing an enemy gives <em>15</> (<em>+15</> per stack) <img id=\"Stat.Shield\"/><em>Temporary Shield</>.",
+   "plain": "Killing an enemy gives 15 (+15 per stack) Temporary Shield.",
+   "pickup": "Gain a temporary shield on kill."
   },
   {
    "id": "BleedOnHit",
-   "rich": "<em>10%</> (<em>+10%</> per stack) chance on hit to bleed an enemy for <em>240%</> base <img id=\"DamageType.Nano\"/><element_nano>Nano Damage</> over <em>3 seconds</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "<em>10%</> (<em>+10%</> per stack) chance on hit to deal <em>240%</> of your average hit as <img id=\"DamageType.Nano\"/><element_nano>Nano Damage</> over <em>3 seconds</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "10% (+10% per stack) chance on hit to deal 240% of your average hit as Nano Damage over 3 seconds. Can Critical Hit.",
+   "pickup": "Gain +10% chance to bleed enemies on hit."
   },
   {
    "id": "BossDamageBonus",
-   "rich": "<em>+20%</> (<em>+20%</> per stack) damage to <img id=\"EnemyType.Elite\"/><em>Elite</> enemies and bosses."
+   "rich": "<em>+20%</> (<em>+20%</> per stack) damage to <img id=\"EnemyType.Elite\"/><em>Elite</> enemies and bosses.",
+   "plain": "+20% (+20% per stack) damage to Elite enemies and bosses.",
+   "pickup": "Deal extra damage to bosses and elites."
   },
   {
    "id": "CritAtLowerElevation",
-   "rich": "Hitting an enemy from above grants <em>+1%</> (<em>+1%</> per stack) <img id=\"Crit.CritChance\"/><em>Crit Chance</> and <img id=\"Crit.CritDamage\"/><em>Crit Damage</>, up to <em>10</> times, for <em>10 seconds</>."
+   "rich": "Hitting an enemy at least <em>1.5m</> below you grants <em>+1%</> (<em>+1%</> per stack) <img id=\"Crit.CritChance\"/><em>Crit Chance</> and <em>+1%</> <img id=\"Crit.CritDamage\"/><em>Crit Damage</> for <em>10 seconds</>, stacking up to <em>10</> times.",
+   "plain": "Hitting an enemy at least 1.5m below you grants +1% (+1% per stack) Crit Chance and +1% Crit Damage for 10 seconds, stacking up to 10 times.",
+   "pickup": "Striking enemies from a higher elevation grants critical strike chance and damage."
   },
   {
    "id": "DelayedDamage",
-   "rich": "Every <em>15 seconds</>, the next hit you take is reduced by <em>10%</> and spread over <em>3</> (<em>+1</> per stack) hits, one per second. The echoed hits can't kill you."
+   "rich": "Once every <em>15 seconds</>, the next hit you take is reduced by <em>10%</> and the rest is dealt to you over <em>3</> (<em>+1</> per stack) seconds instead. The delayed damage can't kill you.",
+   "plain": "Once every 15 seconds, the next hit you take is reduced by 10% and the rest is dealt to you over 3 (+1 per stack) seconds instead. The delayed damage can't kill you.",
+   "pickup": "Incoming damage is reduced and dealt over time."
   },
   {
    "id": "FlatHealth",
-   "rich": "<em>+25</> (<em>+25</> per stack) <img id=\"Stat.Health\"/><em>Maximum Health</>."
+   "rich": "<em>+25</> (<em>+25</> per stack) <img id=\"Stat.Health\"/><em>Maximum Health</>.",
+   "plain": "+25 (+25 per stack) Maximum Health.",
+   "pickup": "Gain 25 max health."
   },
   {
    "id": "FragileDamageBonus",
-   "rich": "<em>+20%</> (<em>+20%</> per stack) damage. Dropping below <em>25%</> <img id=\"Stat.Health\"/><em>Health</> breaks all your Delicate Watches."
+   "rich": "<em>+20%</> (<em>+20%</> per stack) damage. Dropping below <em>25%</> <img id=\"Stat.Health\"/><em>Health</> breaks all of your Delicate Watches.",
+   "plain": "+20% (+20% per stack) damage. Dropping below 25% Health breaks all of your Delicate Watches.",
+   "pickup": "Deal bonus damage. Breaks at low health."
   },
   {
    "id": "HealWhileSafe",
-   "rich": "Regenerate <em>3</> (<em>+3</> per stack) <img id=\"Stat.Health\"/><em>Health</> per second while <em>out of combat</>."
+   "rich": "Heal <em>3</> (<em>+3</> per stack) <img id=\"Stat.Health\"/><em>Health</> per second while <em>out of combat</> (<em>5 seconds</> without dealing or taking damage).",
+   "plain": "Heal 3 (+3 per stack) Health per second while out of combat (5 seconds without dealing or taking damage).",
+   "pickup": "Rapidly heal outside of danger."
   },
   {
    "id": "HealingPotion",
-   "rich": "Dropping below <em>25%</> <img id=\"Stat.Health\"/><em>Health</> uses up one Power Elixir and heals <em>75%</> of your <img id=\"Stat.Health\"/><em>Maximum Health</>."
+   "rich": "Dropping below <em>25%</> <img id=\"Stat.Health\"/><em>Health</> consumes one Power Elixir and heals <em>75%</> of your <img id=\"Stat.Health\"/><em>Maximum Health</>.",
+   "plain": "Dropping below 25% Health consumes one Power Elixir and heals 75% of your Maximum Health.",
+   "pickup": "Receive an instant heal at low health. Consumed on use."
   },
   {
    "id": "IncreaseDamageOnMultiKill",
-   "rich": "Each kill gives <em>+3.5%</> (<em>+1%</> per stack) damage, up to <em>10</> (<em>+5</> per stack) times, for <em>7 seconds</>. Hitting enemies keeps it going."
+   "rich": "Killing an enemy grants <em>+3.5%</> (<em>+1%</> per stack) damage for <em>7 seconds</>, stacking up to <em>10</> (<em>+5</> per stack) times. Hitting enemies keeps it active.",
+   "plain": "Killing an enemy grants +3.5% (+1% per stack) damage for 7 seconds, stacking up to 10 (+5 per stack) times. Hitting enemies keeps it active.",
+   "pickup": "Deal bonus damage for each enemy killed."
   },
   {
    "id": "Mushroom",
-   "rich": "After standing still for <em>1 second</>, heal <em>4.5%</> (<em>+2.25%</> per stack) of your <img id=\"Stat.Health\"/><em>Maximum Health</> per second, along with allies within <em>3m</> (<em>+1.5m</> per stack)."
+   "rich": "After standing still for <em>1 second</>, heal <em>4.5%</> (<em>+2.25%</> per stack) of your <img id=\"Stat.Health\"/><em>Maximum Health</> every second. Allies within <em>3m</> (<em>+1.5m</> per stack) are healed too.",
+   "plain": "After standing still for 1 second, heal 4.5% (+2.25% per stack) of your Maximum Health every second. Allies within 3m (+1.5m per stack) are healed too.",
+   "pickup": "Heal all nearby allies after standing still for 1 second."
   },
   {
    "id": "NearbyDamageBonus",
-   "rich": "<em>+20%</> (<em>+20%</> per stack) damage to <em>nearby</> enemies (within <em>13m</>)."
+   "rich": "<em>+20%</> (<em>+20%</> per stack) damage to <em>nearby</> enemies (within <em>13m</>).",
+   "plain": "+20% (+20% per stack) damage to nearby enemies (within 13m).",
+   "pickup": "Deal bonus damage to nearby enemies."
   },
   {
    "id": "OutOfCombatArmor",
-   "rich": "While <em>out of combat</>, the first hit you take is reduced by <em>50%</> (stacks like armor)."
+   "rich": "While <em>out of combat</>, the next hit you take is reduced by <em>50%</> (more with stacks, with diminishing returns).",
+   "plain": "While out of combat, the next hit you take is reduced by 50% (more with stacks, with diminishing returns).",
+   "pickup": "Reduce damage the first time you are hit."
   },
   {
    "id": "PersonalShield",
-   "rich": "<em>+20</> (<em>+20</> per stack) <img id=\"Stat.Shield\"/><em>Maximum Shields</>."
+   "rich": "<em>+20</> (<em>+20</> per stack) <img id=\"Stat.Shield\"/><em>Maximum Shields</>.",
+   "plain": "+20 (+20 per stack) Maximum Shields.",
+   "pickup": "Gain a recharging shield."
   },
   {
    "id": "SecondarySkillMagazine",
-   "rich": "<em>+10%</> (<em>+10%</> per stack) magazine capacity."
+   "rich": "<em>+10%</> (<em>+10%</> per stack) magazine capacity.",
+   "plain": "+10% (+10% per stack) magazine capacity.",
+   "pickup": "Increase your magazine size."
   },
   {
    "id": "SprintBonus",
-   "rich": "<em>+25%</> (<em>+25%</> per stack) <em>Sprint Speed</>."
+   "rich": "<em>+25%</> (<em>+25%</> per stack) <em>Sprint Speed</>.",
+   "plain": "+25% (+25% per stack) Sprint Speed.",
+   "pickup": "Increase sprint speed by +25%."
   },
   {
    "id": "StunChanceOnHit",
-   "rich": "<em>5%</> (<em>+5%</> per stack) chance on hit to <img id=\"Element.Cryo.Freeze\"/><element_cryo>Freeze</> an enemy for <em>2 seconds</>."
+   "rich": "<em>5%</> chance on hit to <img id=\"Element.Cryo.Freeze\"/><element_cryo>Freeze</> an enemy for <em>2 seconds</> (more with stacks, with diminishing returns).",
+   "plain": "5% chance on hit to Freeze an enemy for 2 seconds (more with stacks, with diminishing returns).",
+   "pickup": "Chance to freeze on hit."
   },
   {
    "id": "WardOnLevel",
-   "rich": "When an encounter starts, drop a banner: you and allies within <em>16m</> (<em>+8m</> per stack) get <em>+30%</> <em>Fire Rate</> and <em>Movement Speed</> for <em>30 seconds</>."
+   "rich": "When an encounter starts, drop a Warbanner for <em>30 seconds</>. You and allies within <em>16m</> (<em>+8m</> per stack) of it gain <em>+30%</> <em>Fire Rate</> and <em>Movement Speed</>.",
+   "plain": "When an encounter starts, drop a Warbanner for 30 seconds. You and allies within 16m (+8m per stack) of it gain +30% Fire Rate and Movement Speed.",
+   "pickup": "Drop a Warbanner when an encounter starts. Grants allies attack and movement speed."
   },
   {
    "id": "AttackSpeedOnCrit",
-   "rich": "<em>+5%</> <img id=\"Crit.CritChance\"/><em>Crit Chance</>. <img id=\"Crit.CriticalHit\"/><em>Critical Hits</> give <em>+12%</> <em>Fire Rate</> for <em>3 seconds</>, up to <em>3</> (<em>+2</> per stack) times."
+   "rich": "<em>+5%</> (<em>+5%</> per stack) <img id=\"Crit.CritChance\"/><em>Crit Chance</>. <img id=\"Crit.CriticalHit\"/><em>Critical Hits</> grant <em>+12%</> <em>Fire Rate</> for <em>3 seconds</>, stacking up to <em>3</> (<em>+2</> per stack) times.",
+   "plain": "+5% (+5% per stack) Crit Chance. Critical Hits grant +12% Fire Rate for 3 seconds, stacking up to 3 (+2 per stack) times.",
+   "pickup": "'Critical Strikes' increase attack speed. Stacks 3 times."
   },
   {
    "id": "Bandolier",
-   "rich": "<em>18%</> (<em>+10%</> per stack) chance on kill to refill all your ammo."
+   "rich": "<em>18%</> chance on kill to refill all of your ammo (more with stacks, with diminishing returns).",
+   "plain": "18% chance on kill to refill all of your ammo (more with stacks, with diminishing returns).",
+   "pickup": "Chance on kill to refill all of your ammo."
   },
   {
    "id": "DeathMark",
-   "rich": "Enemies with <em>2</> or more <img id=\"Elemental\"/><em>Elemental Debuffs</> are <img id=\"Effect.Marked\"/><em>Marked</>: your hits deal <em>+50%</> damage to them, and they stay <img id=\"Effect.Marked\"/><em>Marked</> for <em>7</> (<em>+7</> per stack) <em>seconds</>."
+   "rich": "Hitting an enemy that has <em>2</> or more <img id=\"Elemental\"/><em>Elemental Debuffs</> from your items applies <img id=\"Effect.Marked\"/><em>Mark</> for <em>7</> (<em>+7</> per stack) <em>seconds</>. <img id=\"Effect.Marked\"/><em>Marked</> enemies take <em>+50%</> damage.",
+   "plain": "Hitting an enemy that has 2 or more Elemental Debuffs from your items applies Mark for 7 (+7 per stack) seconds. Marked enemies take +50% damage.",
+   "pickup": "Enemies with 2 or more debuffs are marked, taking bonus damage."
   },
   {
    "id": "EquipmentMagazine",
-   "rich": "<em>-15%</> <em>Grenade</> cooldown per stack."
+   "rich": "<em>-15%</> <em>Grenade</> cooldown per stack.",
+   "plain": "-15% Grenade cooldown per stack.",
+   "pickup": "Reduce grenade cooldown."
   },
   {
    "id": "ExecuteLowHealthElite",
-   "rich": "Instantly kill <img id=\"EnemyType.Elite\"/><em>Elite</> enemies below <em>13%</> (<em>+13%</> per stack) <img id=\"Stat.Health\"/><em>Health</>."
+   "rich": "Instantly kill <img id=\"EnemyType.Elite\"/><em>Elite</> enemies below <em>13%</> <img id=\"Stat.Health\"/><em>Health</> (more with stacks, with diminishing returns).",
+   "plain": "Instantly kill Elite enemies below 13% Health (more with stacks, with diminishing returns).",
+   "pickup": "Instantly kill low health Elite monsters."
   },
   {
    "id": "FireRing",
-   "rich": "Hits over <em>4x</> your normal damage also set off a flame tornado for <em>300%</> (<em>+300%</> per stack) of the hit as <img id=\"DamageType.Fire\"/><element_fire>Fire Damage</> over <em>3 seconds</>. (<em>10 second</> cooldown) Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "Hits that deal at least <em>4x</> your average hit also burn the target for <em>300%</> (<em>+300%</> per stack) of that hit as <img id=\"DamageType.Fire\"/><element_fire>Fire Damage</> over <em>3 seconds</>, applying <img id=\"Element.Fire.Ignite\"/><element_fire>Ignite</>. (<em>10 second</> cooldown) Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "Hits that deal at least 4x your average hit also burn the target for 300% (+300% per stack) of that hit as Fire Damage over 3 seconds, applying Ignite. (10 second cooldown) Can Critical Hit.",
+   "pickup": "High damage hits also blasts enemies with a runic flame tornado. Recharges over time."
   },
   {
    "id": "HealOnCrit",
-   "rich": "<em>+5%</> <img id=\"Crit.CritChance\"/><em>Crit Chance</>. <img id=\"Crit.CriticalHit\"/><em>Critical Hits</> heal <em>8</> (<em>+4</> per stack) <img id=\"Stat.Health\"/><em>Health</>."
+   "rich": "<em>+5%</> (<em>+5%</> per stack) <img id=\"Crit.CritChance\"/><em>Crit Chance</>. <img id=\"Crit.CriticalHit\"/><em>Critical Hits</> heal <em>8</> (<em>+4</> per stack) <img id=\"Stat.Health\"/><em>Health</>.",
+   "plain": "+5% (+5% per stack) Crit Chance. Critical Hits heal 8 (+4 per stack) Health.",
+   "pickup": "'Critical Strikes' heal you."
   },
   {
    "id": "IceRing",
-   "rich": "Hits over <em>4x</> your normal damage also blast the enemy for <em>250%</> (<em>+250%</> per stack) of the hit as <img id=\"DamageType.Cryo\"/><element_cryo>Cryo Damage</>, applying <img id=\"Element.Cryo.Chill\"/><element_cryo>Chill</> for <em>3 seconds</> (<em>+3</> per stack). (<em>10 second</> cooldown) Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "Hits that deal at least <em>4x</> your average hit also blast the target for <em>250%</> (<em>+250%</> per stack) of that hit as <img id=\"DamageType.Cryo\"/><element_cryo>Cryo Damage</>, applying <img id=\"Element.Cryo.Chill\"/><element_cryo>Chill</>. (<em>10 second</> cooldown) Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "Hits that deal at least 4x your average hit also blast the target for 250% (+250% per stack) of that hit as Cryo Damage, applying Chill. (10 second cooldown) Can Critical Hit.",
+   "pickup": "High damage hits also blasts enemies with runic ice. Recharges over time."
   },
   {
    "id": "JumpDamageStrike",
-   "rich": "Moving builds charge. After <em>6 seconds</> of moving, your next hit discharges <em>400%</> (<em>+280%</> per stack) base <img id=\"DamageType.Lightning\"/><element_lightning>Lightning Damage</> within <em>17m</> (<em>+7.5m</> per stack), applying <img id=\"Element.Lightning.Shock\"/><element_lightning>Shock</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "Moving builds charge. After <em>6 seconds</> of moving, your next hit releases <em>400%</> (<em>+280%</> per stack) of your average hit as <img id=\"DamageType.Lightning\"/><element_lightning>Lightning Damage</> to enemies within <em>17m</> (<em>+7.5m</> per stack), applying <img id=\"Element.Lightning.Shock\"/><element_lightning>Shock</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "Moving builds charge. After 6 seconds of moving, your next hit releases 400% (+280% per stack) of your average hit as Lightning Damage to enemies within 17m (+7.5m per stack), applying Shock. Can Critical Hit.",
+   "pickup": "Moving around builds up charge. Your next hit discharges into an electric blast."
   },
   {
    "id": "KnockBackHitEnemies",
-   "rich": "Hits launch enemies into the air with an <em>Anti-Gravity</> stun and deal <em>+10%</> damage. Each enemy can be launched once every <em>15 seconds</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "Hitting an enemy launches it into the air for <em>1.5 seconds</> and deals <em>+10%</> damage. Each enemy can be launched once every <em>15 seconds</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "Hitting an enemy launches it into the air for 1.5 seconds and deals +10% damage. Each enemy can be launched once every 15 seconds. Can Critical Hit.",
+   "pickup": "Enemies hit are launched and take bonus damage."
   },
   {
    "id": "MoveSpeedOnKill",
-   "rich": "Kills give <em>+125%</> <em>Movement Speed</> for <em>1 second</> (<em>+0.5</> per stack)."
+   "rich": "Killing an enemy grants <em>+125%</> <em>Movement Speed</> for <em>1</> (<em>+0.5</> per stack) <em>second</>.",
+   "plain": "Killing an enemy grants +125% Movement Speed for 1 (+0.5 per stack) second.",
+   "pickup": "Killing an enemy gives you a burst of movement speed."
   },
   {
    "id": "Phasing",
-   "rich": "Dropping below <em>25%</> <img id=\"Stat.Health\"/><em>Health</> makes you <em>Immune</> to all damage for <em>2 seconds</> and gives <em>+40%</> <em>Movement Speed</> for <em>5 seconds</>. (<em>30 second</> cooldown, <em>-50%</> per stack)"
+   "rich": "Dropping below <em>25%</> <img id=\"Stat.Health\"/><em>Health</> makes you <em>Immune</> to damage for <em>2 seconds</> and grants <em>+40%</> <em>Movement Speed</> for <em>5 seconds</>. (<em>30 second</> cooldown, halved per stack)",
+   "plain": "Dropping below 25% Health makes you Immune to damage for 2 seconds and grants +40% Movement Speed for 5 seconds. (30 second cooldown, halved per stack)",
+   "pickup": "Turn invincible at low health."
   },
   {
    "id": "Seed",
-   "rich": "Every hit heals you for <em>1</> (<em>+1</> per stack) <img id=\"Stat.Health\"/><em>Health</> through <img id=\"Effect.Lifesteal\"/><em>Lifesteal</>."
+   "rich": "Every hit heals you for <em>1</> (<em>+1</> per stack) <img id=\"Stat.Health\"/><em>Health</>.",
+   "plain": "Every hit heals you for 1 (+1 per stack) Health.",
+   "pickup": "Dealing damage heals you."
   },
   {
    "id": "ShieldBooster",
-   "rich": "<em>+10</> <img id=\"Stat.Shield\"/><em>Maximum Shields</> per stack. When your <img id=\"Stat.Shield\"/><em>Shields</> break, release a pulse of <em>100%</> base <img id=\"DamageType.Psionic\"/><element_Psionic>Psionic Damage</> plus your <img id=\"Stat.Shield\"/><em>Maximum Shields</>, launching enemies. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "<em>+10</> (<em>+10</> per stack) <img id=\"Stat.Shield\"/><em>Maximum Shields</>. When your <img id=\"Stat.Shield\"/><em>Shields</> break, release a pulse within <em>10m</> that deals <em>100%</> of your average hit plus your <img id=\"Stat.Shield\"/><em>Maximum Shields</> as <img id=\"DamageType.Psionic\"/><element_Psionic>Psionic Damage</> and launches enemies. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "+10 (+10 per stack) Maximum Shields. When your Shields break, release a pulse within 10m that deals 100% of your average hit plus your Maximum Shields as Psionic Damage and launches enemies. Can Critical Hit.",
+   "pickup": "Gain extra shield. When shield breaks, release a stunning pulse that deals more damage the more shield you have."
   },
   {
    "id": "SlowOnHit",
-   "rich": "Hits apply <img id=\"Element.Cryo.Chill\"/><element_cryo>Chill</> for <em>2 seconds</> (<em>+2</> per stack)."
+   "rich": "Hits apply <img id=\"Element.Cryo.Chill\"/><element_cryo>Chill</> for <em>2</> (<em>+2</> per stack) <em>seconds</>.",
+   "plain": "Hits apply Chill for 2 (+2 per stack) seconds.",
+   "pickup": "Slow enemies on hit."
   },
   {
    "id": "SpeedOnPickup",
-   "rich": "Choosing an orb reward gives <em>+3%</> damage and <em>Movement Speed</> for <em>20 seconds</>, up to <em>3</> (<em>+2</> per stack) times."
+   "rich": "Taking an item orb reward grants <em>+3%</> damage and <em>Movement Speed</> for <em>20 seconds</>, stacking up to <em>3</> (<em>+2</> per stack) times.",
+   "plain": "Taking an item orb reward grants +3% damage and Movement Speed for 20 seconds, stacking up to 3 (+2 per stack) times.",
+   "pickup": "Item orbs grant a stacking bonus to damage and movement speed."
   },
   {
    "id": "SprintArmor",
-   "rich": "While moving fast, hits you take are reduced by <em>23%</> (stacks like armor)."
+   "rich": "While moving fast, damage you take is reduced by <em>23%</> (more with stacks, with diminishing returns).",
+   "plain": "While moving fast, damage you take is reduced by 23% (more with stacks, with diminishing returns).",
+   "pickup": "Reduce incoming damage while sprinting."
   },
   {
    "id": "SprintOutOfCombat",
-   "rich": "<em>+30%</> (<em>+30%</> per stack) <em>Movement Speed</> while <em>out of combat</>."
+   "rich": "<em>+30%</> (<em>+30%</> per stack) <em>Movement Speed</> while <em>out of combat</>.",
+   "plain": "+30% (+30% per stack) Movement Speed while out of combat.",
+   "pickup": "Move fast out of combat."
   },
   {
    "id": "StrengthenBurn",
-   "rich": "Your RoR2 burns (<img id=\"DamageType.Fire\"/><element_fire>Fire Damage</> over time) deal <em>+300%</> (<em>+300%</> per stack) damage."
+   "rich": "<img id=\"DamageType.Fire\"/><element_fire>Fire Damage</> that burns over time from your items (Gasoline, Kjaro's Band) deals <em>+300%</> (<em>+300%</> per stack) damage.",
+   "plain": "Fire Damage that burns over time from your items (Gasoline, Kjaro's Band) deals +300% (+300% per stack) damage.",
+   "pickup": "Your ignite effects deal quadruple damage."
   },
   {
    "id": "TPHealingNova",
-   "rich": "When an encounter starts, heal you and allies within <em>30m</> for <em>50%</> of <img id=\"Stat.Health\"/><em>Maximum Health</>, <em>1</> (<em>+1</> per stack) time during the fight."
+   "rich": "When an encounter starts, heal yourself and allies within <em>30m</> for <em>50%</> of <img id=\"Stat.Health\"/><em>Maximum Health</>. Repeats <em>1</> (<em>+1</> per stack) times, <em>15 seconds</> apart.",
+   "plain": "When an encounter starts, heal yourself and allies within 30m for 50% of Maximum Health. Repeats 1 (+1 per stack) times, 15 seconds apart.",
+   "pickup": "Release a healing nova when an encounter starts."
   },
   {
    "id": "TeleportOnLowHealth",
-   "rich": "Once per mission, dropping below <em>25%</> <img id=\"Stat.Health\"/><em>Health</> gives a <em>30%</> <img id=\"Stat.Shield\"/><em>Temporary Shield</> and for <em>8 seconds</> blasts away enemies within <em>10m</> with <img id=\"DamageType.Nano\"/><element_nano>Nano Damage</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "Once per mission, dropping below <em>25%</> <img id=\"Stat.Health\"/><em>Health</> grants <img id=\"Stat.Shield\"/><em>Temporary Shield</> worth <em>30%</> of your <img id=\"Stat.Health\"/><em>Maximum Health</>. For the next <em>8 seconds</>, enemies within <em>10m</> take <em>100%</> of your average hit as <img id=\"DamageType.Nano\"/><element_nano>Nano Damage</> every second and are launched. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "Once per mission, dropping below 25% Health grants Temporary Shield worth 30% of your Maximum Health. For the next 8 seconds, enemies within 10m take 100% of your average hit as Nano Damage every second and are launched. Can Critical Hit.",
+   "pickup": "Gain a temporary shield and a dimensional aura on low health."
   },
   {
    "id": "TriggerEnemyDebuffs",
-   "rich": "<em>10%</> chance on hit to bleed for <img id=\"DamageType.Nano\"/><element_nano>Nano Damage</>. Killing an enemy passes its <img id=\"Elemental\"/><em>Elemental Debuffs</> on to <em>1</> (<em>+1</> per stack) enemy within <em>20m</> (<em>+5m</> per stack). Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "<em>10%</> chance on hit to deal <em>100%</> of your average hit as <img id=\"DamageType.Nano\"/><element_nano>Nano Damage</> over <em>2 seconds</>. Killing an enemy passes its <img id=\"Elemental\"/><em>Elemental Debuffs</> on to <em>1</> (<em>+1</> per stack) enemy within <em>20m</> (<em>+5m</> per stack). Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "10% chance on hit to deal 100% of your average hit as Nano Damage over 2 seconds. Killing an enemy passes its Elemental Debuffs on to 1 (+1 per stack) enemy within 20m (+5m per stack). Can Critical Hit.",
+   "pickup": "Killing an enemy transfers debuffs to a nearby enemy."
   },
   {
    "id": "WarCryOnMultiKill",
-   "rich": "Killing <em>4</> enemies within <em>1 second</> sends you into a frenzy for <em>6 seconds</> (<em>+4</> per stack): <em>+50%</> <em>Movement Speed</> and <em>+100%</> <em>Fire Rate</>."
+   "rich": "Killing <em>4</> enemies within <em>1 second</> sends you into a frenzy for <em>6</> (<em>+4</> per stack) <em>seconds</>: <em>+50%</> <em>Movement Speed</> and <em>+100%</> <em>Fire Rate</>.",
+   "plain": "Killing 4 enemies within 1 second sends you into a frenzy for 6 (+4 per stack) seconds: +50% Movement Speed and +100% Fire Rate.",
+   "pickup": "Enter a frenzy after killing 4 enemies in quick succession."
   },
   {
    "id": "AlienHead",
-   "rich": "Abilities recharge <em>33%</> faster per stack (<em>25%</> shorter cooldowns)."
+   "rich": "Abilities recharge <em>33%</> faster (<em>+33%</> per stack, compounding).",
+   "plain": "Abilities recharge 33% faster (+33% per stack, compounding).",
+   "pickup": "Reduces cooldowns for your skills."
   },
   {
    "id": "ArmorReductionOnHit",
-   "rich": "Every <em>5th</> hit on the same enemy <img id=\"Effect.Marked\"/><em>Mark</>s it, increasing damage taken by <em>50%</> for <em>8 seconds</> (<em>+8</> per stack)."
+   "rich": "Every <em>5th</> hit on the same enemy applies <img id=\"Effect.Marked\"/><em>Mark</> for <em>8</> (<em>+8</> per stack) <em>seconds</>. <img id=\"Effect.Marked\"/><em>Marked</> enemies take <em>+50%</> damage.",
+   "plain": "Every 5th hit on the same enemy applies Mark for 8 (+8 per stack) seconds. Marked enemies take +50% damage.",
+   "pickup": "Mark enemies after repeatedly striking them."
   },
   {
    "id": "BarrierOnOverHeal",
-   "rich": "Healing past full <img id=\"Stat.Health\"/><em>Health</> gives <img id=\"Stat.Shield\"/><em>Temporary Shield</> worth <em>50%</> (<em>+50%</> per stack) of the extra healing."
+   "rich": "Healing past full <img id=\"Stat.Health\"/><em>Health</> grants <img id=\"Stat.Shield\"/><em>Temporary Shield</> worth <em>50%</> (<em>+50%</> per stack) of the extra healing.",
+   "plain": "Healing past full Health grants Temporary Shield worth 50% (+50% per stack) of the extra healing.",
+   "pickup": "Healing past full grants you a temporary shield."
   },
   {
    "id": "BoostAllStats",
-   "rich": "<em>+4%</> damage and <em>Fire Rate</> for each active RoR2 buff, up to <em>4</> (<em>+4</> per stack)."
+   "rich": "<em>+4%</> damage and <em>Fire Rate</> for each active item buff, up to <em>4</> (<em>+4</> per stack) buffs.",
+   "plain": "+4% damage and Fire Rate for each active item buff, up to 4 (+4 per stack) buffs.",
+   "pickup": "Your buffs increase your damage and attack speed."
   },
   {
    "id": "Clover",
-   "rich": "All RoR2 item chances roll <em>+1</> (<em>+1</> per stack) extra time for a good result."
+   "rich": "Item effects that rely on chance roll <em>1</> (<em>+1</> per stack) extra time for a favourable outcome.",
+   "plain": "Item effects that rely on chance roll 1 (+1 per stack) extra time for a favourable outcome.",
+   "pickup": "Luck is on your side."
   },
   {
    "id": "CritDamage",
-   "rich": "<em>+35%</> (<em>+35%</> per stack) <img id=\"Crit.CritDamage\"/><em>Crit Damage</>."
+   "rich": "<em>+35%</> (<em>+35%</> per stack) <img id=\"Crit.CritDamage\"/><em>Crit Damage</>.",
+   "plain": "+35% (+35% per stack) Crit Damage.",
+   "pickup": "Your 'Critical Strikes' deal more damage."
   },
   {
    "id": "Duplicator",
-   "rich": "Getting a RoR2 item also gives you a temporary copy of it for <em>10 seconds</> (<em>+10</> per stack)."
+   "rich": "Taking an item from an item orb also grants a temporary copy of it for <em>10</> (<em>+10</> per stack) <em>seconds</>.",
+   "plain": "Taking an item from an item orb also grants a temporary copy of it for 10 (+10 per stack) seconds.",
+   "pickup": "Picking up an item grants a temporary copy."
   },
   {
    "id": "FallBoots",
-   "rich": "<em>+30%</> jump height. Landing after a big fall causes a kinetic blast of <img id=\"DamageType.Psionic\"/><element_Psionic>Psionic Damage</> that grows with the fall height. (<em>10 second</> cooldown, <em>-50%</> per stack) Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "<em>+30%</> (<em>+30%</> per stack) jump height. Landing after falling at least <em>4m</> releases a kinetic blast of <img id=\"DamageType.Psionic\"/><element_Psionic>Psionic Damage</> that grows with the fall height. (<em>10 second</> cooldown, halved per stack) Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "+30% (+30% per stack) jump height. Landing after falling at least 4m releases a kinetic blast of Psionic Damage that grows with the fall height. (10 second cooldown, halved per stack) Can Critical Hit.",
+   "pickup": "Increase jump height. Landing from a great height creates a kinetic blast."
   },
   {
    "id": "Icicle",
-   "rich": "Kills surround you with an ice storm for <em>6 seconds</> that hits enemies for <em>60%</> base <img id=\"DamageType.Cryo\"/><element_cryo>Cryo Damage</> every <em>0.5 seconds</>, applying <img id=\"Element.Cryo.Chill\"/><element_cryo>Chill</>. Each kill grows it by <em>2m</>, up to <em>18m</> (<em>+12m</> per stack). Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "Killing an enemy surrounds you with an ice storm for <em>6 seconds</> that deals <em>60%</> of your average hit as <img id=\"DamageType.Cryo\"/><element_cryo>Cryo Damage</> every <em>0.5 seconds</>, applying <img id=\"Element.Cryo.Chill\"/><element_cryo>Chill</>. Each kill grows it by <em>2m</>, up to <em>18m</> (<em>+12m</> per stack). Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "Killing an enemy surrounds you with an ice storm for 6 seconds that deals 60% of your average hit as Cryo Damage every 0.5 seconds, applying Chill. Each kill grows it by 2m, up to 18m (+12m per stack). Can Critical Hit.",
+   "pickup": "Killing enemies surrounds you with an ice storm."
   },
   {
    "id": "IncreaseHealing",
-   "rich": "<em>+100%</> (<em>+100%</> per stack) <em>Health Orb</> and RoR2 healing."
+   "rich": "All healing is <em>+100%</> (<em>+100%</> per stack) stronger, including <em>Health Orbs</>.",
+   "plain": "All healing is +100% (+100% per stack) stronger, including Health Orbs.",
+   "pickup": "Double the strength of healing."
   },
   {
    "id": "KillEliteFrenzy",
-   "rich": "Killing an <img id=\"EnemyType.Elite\"/><em>Elite</> enemy sends you into a frenzy for <em>4 seconds</> (<em>+4</> per stack): abilities recharge <em>10x</> faster."
+   "rich": "Killing an <img id=\"EnemyType.Elite\"/><em>Elite</> enemy sends you into a frenzy for <em>4</> (<em>+4</> per stack) <em>seconds</>: abilities recharge <em>10x</> faster.",
+   "plain": "Killing an Elite enemy sends you into a frenzy for 4 (+4 per stack) seconds: abilities recharge 10x faster.",
+   "pickup": "Skills recharge rapidly for a short period after killing an elite."
   },
   {
    "id": "PermanentDebuffOnHit",
-   "rich": "Each hit permanently makes that enemy take <em>+2%</> (<em>+2%</> per stack) more damage from you, up to <em>+50%</>."
+   "rich": "Each hit permanently makes that enemy take <em>+2%</> (<em>+2%</> per stack) more damage from you, up to <em>+50%</>.",
+   "plain": "Each hit permanently makes that enemy take +2% (+2% per stack) more damage from you, up to +50%.",
+   "pickup": "Enemies you hit permanently take more damage from you."
   },
   {
    "id": "Plant",
-   "rich": "Kills plant a seed that grows after <em>5 seconds</> and for <em>10 seconds</> heals you and allies within <em>5m</> (<em>+5m</> per stack) for <em>10%</> of <img id=\"Stat.Health\"/><em>Maximum Health</> per second."
+   "rich": "Killing an enemy plants a seed that sprouts after <em>5 seconds</>. For <em>10 seconds</> it heals you and allies within <em>5m</> (<em>+5m</> per stack) for <em>10%</> of <img id=\"Stat.Health\"/><em>Maximum Health</> every second.",
+   "plain": "Killing an enemy plants a seed that sprouts after 5 seconds. For 10 seconds it heals you and allies within 5m (+5m per stack) for 10% of Maximum Health every second.",
+   "pickup": "Plant a healing fruit on kill."
   },
   {
    "id": "SharedSuffering",
-   "rich": "Infect up to <em>4</> (<em>+2</> per stack) enemies with <img id=\"Element.Void.Corruption\"/><element_void>Corruption</>. <em>45%</> of all damage they take is pooled, and every <em>3 seconds</> each infected enemy takes the pool as <img id=\"DamageType.Void\"/><element_void>Void Damage</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "Hits infect up to <em>4</> (<em>+2</> per stack) enemies with <img id=\"Element.Void.Corruption\"/><element_void>Corruption</>. <em>45%</> of all damage you deal to infected enemies is pooled, and every <em>3 seconds</> each infected enemy takes the pool as <img id=\"DamageType.Void\"/><element_void>Void Damage</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "Hits infect up to 4 (+2 per stack) enemies with Corruption. 45% of all damage you deal to infected enemies is pooled, and every 3 seconds each infected enemy takes the pool as Void Damage. Can Critical Hit.",
+   "pickup": "Inflict a computer virus on hit that spreads a portion of all damage dealt between infected enemies. Affects up to 4 enemies."
   },
   {
    "id": "ShockNearby",
-   "rich": "Zaps <em>3</> (<em>+2</> per stack) enemies within <em>35m</> for <em>200%</> base <img id=\"DamageType.Lightning\"/><element_lightning>Lightning Damage</> every <em>0.5 seconds</>, applying <img id=\"Element.Lightning.Shock\"/><element_lightning>Shock</>. Switches off every <em>10 seconds</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>."
+   "rich": "Every <em>0.5 seconds</>, zap <em>3</> (<em>+2</> per stack) enemies within <em>35m</> for <em>200%</> of your average hit as <img id=\"DamageType.Lightning\"/><element_lightning>Lightning Damage</>, applying <img id=\"Element.Lightning.Shock\"/><element_lightning>Shock</>. Switches on and off every <em>10 seconds</>. Can <img id=\"Crit.CriticalHit\"/><em>Critical Hit</>.",
+   "plain": "Every 0.5 seconds, zap 3 (+2 per stack) enemies within 35m for 200% of your average hit as Lightning Damage, applying Shock. Switches on and off every 10 seconds. Can Critical Hit.",
+   "pickup": "Shock nearby enemies. Turns on and off every 10 seconds."
   },
   {
    "id": "Talisman",
-   "rich": "Kills make abilities recharge <em>11%</> faster for <em>4 seconds</> (<em>+2</> per stack), stacking up to <em>5</> times."
+   "rich": "Killing an enemy makes abilities recharge <em>11%</> faster for <em>4</> (<em>+2</> per stack) <em>seconds</>, stacking up to <em>5</> times.",
+   "plain": "Killing an enemy makes abilities recharge 11% faster for 4 (+2 per stack) seconds, stacking up to 5 times.",
+   "pickup": "Kills make your abilities recharge faster."
   },
   {
    "id": "UtilitySkillMagazine",
-   "rich": "Dash recharges <em>50%</> faster per stack (<em>33%</> shorter cooldown) and <em>+10%</> <em>Sprint Speed</>."
+   "rich": "Dash recharges <em>50%</> faster (<em>+50%</> per stack, compounding). <em>+10%</> (<em>+10%</> per stack) <em>Sprint Speed</>.",
+   "plain": "Dash recharges 50% faster (+50% per stack, compounding). +10% (+10% per stack) Sprint Speed.",
+   "pickup": "Your dash recharges faster."
   }
  ],
  "keywords": {
