@@ -26,7 +26,7 @@ G = {  # stat effects (path, attribute, op)
  'sprint': (A+'GE_GenericAttribute_SprintSpeed', 'SprintSpeedMultiplier', 'mult'),
  'jump': (A+'GE_GenericAttribute_JumpHeight', 'JumpHeightMultiplier', 'add'),
  'cdr': (A+'GE_GenericAttribute_UniversalCooldownModifier', 'UniversalCooldownModifier', 'mult'),
- 'dashcd': (A+'GE_GenericAttribute_DashCooldownModifier', 'DashCooldownModifier', 'add'),
+ 'dashcd': (A+'GE_GenericAttribute_DashCooldownModifier', 'DashCooldownModifier', 'add'),  # a recharge RATE: higher = faster (checked in game)
  'grenadecd': (A+'GE_GenericAttribute_GrenadeCooldownModifier', 'GrenadeCooldownModifier', 'mult'),
  'orb': (A+'GE_GenericAttribute_HealthOrbValueMultiplier', 'HealthOrbValueMultiplier', 'mult'),
 }
@@ -180,7 +180,7 @@ NEW = {
 'StunAndPierce': B(kind='effect', trigger='hit', chance=.15, action='aoe', radius=800, dmg=1.2, dmg_per=1.2, dmg_base='base', element='lightning', status='freeze', dur=1,
     desc="15% chance on hit to throw a boomerang that hits enemies around the target for 120% (+120% per stack) base damage and stuns them. Deadzone Lightning damage."),
 'Talisman': B(kind='buff', trigger='kill', dur=4, dur_per=2, cap=5, **st('cdr', -.10), desc="Kills give -10% ability cooldowns for 4 s (+2 s per stack), stacking up to 5 times."),
-'UtilitySkillMagazine': B(kind='stat', **st('dashcd', -.33), stack='power', **st2('sprint', .10), desc="Dash cooldown -33% per stack and +10% sprint speed."),
+'UtilitySkillMagazine': B(kind='stat', **st('dashcd', .5), stack='power', **st2('sprint', .10), desc="Dash recharges 50% faster per stack (33% shorter cooldown) and +10% sprint speed."),
 }
 SKIP = {'RegeneratingScrap': 'needs 3D printers', 'DroneWeapons': 'needs drones', 'ExtraLife': "removed at the user's request (Dio)",
  # removed after review: the RoR2 mechanic doesn't exist in Deadzone, so the item would only be a stand-in
