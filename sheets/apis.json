@@ -1,0 +1,69 @@
+{
+ "columns": [
+  "id",
+  "how",
+  "verified"
+ ],
+ "rows": [
+  {
+   "id": "ge_cdo_swap",
+   "how": "set CDO Modifiers[1] magnitude to ScalableFloat, BP_ApplyGameplayEffectToSelf, restore",
+   "verified": "AttackRate 1.45; bot MaxHealth x2; GlobalDamage +0.5"
+  },
+  {
+   "id": "kill_with_credit",
+   "how": "BP_ApplyGameplayEffectToTarget GE_Suicide from attacker ASC",
+   "verified": "OnBotKilled killer=player"
+  },
+  {
+   "id": "partial_damage",
+   "how": "ValCharacter:SetHealth(hp-dmg) when dmg<hp",
+   "verified": "hp changed; no death at 0, so lethal path uses GE_Suicide"
+  },
+  {
+   "id": "hud_widget",
+   "how": "StaticConstructObject UserWidget+WidgetTree+CanvasPanel+Image/TextBlock, AddToViewport",
+   "verified": "icon + text shown in hub"
+  },
+  {
+   "id": "icon_import",
+   "how": "KismetRenderingLibrary:ImportFileAsTexture2D(pc, 'ue4ss/Mods/RoR2Mashup/icons/X.png')",
+   "verified": "Texture2D created"
+  },
+  {
+   "id": "client_message",
+   "how": "pc:ClientMessage('R2|...') host->client; hook /Script/Engine.PlayerController:ClientMessage",
+   "verified": "local hook fired with payload; remote client untested"
+  },
+  {
+   "id": "dodge_infinite",
+   "how": "CDO swap also DurationPolicy=1 on GE_GenericAttribute_DodgeChance_WithDuration",
+   "verified": "DodgeChance 0.15, removed cleanly"
+  },
+  {
+   "id": "armor_rating",
+   "how": "ArmorRatingAdditiveBonus +20 => GetArmorDamageReduction 0.002",
+   "verified": "too weak a scale; Armor Plate uses post-hit health refund instead"
+  },
+  {
+   "id": "dio_dropped",
+   "how": "Dio's Best Friend removed at the user's request (game ends a solo run on death before a mod can intervene)",
+   "verified": "2026-10-12: bDoesNotDie ignored by lethal hits; revive after death still ends the run"
+  },
+  {
+   "id": "orb_close",
+   "how": "bundle:DestroyPickup() closes WBP_LootSelection and consumes the orb",
+   "verified": "2026-10-12 live"
+  },
+  {
+   "id": "inventory_grid",
+   "how": "Tab menu UI_Equipment_Perks_Items ItemGrid slot: BGMat:SetBrushFromTexture + StackText 'x3'",
+   "verified": "2026-10-13 live screenshot: Syringe x3 shown in slot 2"
+  },
+  {
+   "id": "niagara_spawn",
+   "how": "NiagaraFunctionLibrary:SpawnSystemAtLocation(pc, NS, loc, rot, scale, true, true, 0, true)",
+   "verified": "2026-10-13 live: returned NiagaraComponent for NS_Lightning_Strike and NS_Barrel_Elemental_Fire_Explosion"
+  }
+ ]
+}

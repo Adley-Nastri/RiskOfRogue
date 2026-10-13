@@ -1,0 +1,60 @@
+{
+ "columns": [
+  "id",
+  "item",
+  "system",
+  "at",
+  "scale",
+  "verified"
+ ],
+ "rows": [
+  {
+   "id": "ukulele_hit",
+   "item": "Ukulele",
+   "system": "/Game/VFX/Abilities/Elemental/Lightning/NS_Lightning_Shock.NS_Lightning_Shock",
+   "at": "target",
+   "scale": 1.0,
+   "verified": "asset loaded in Zone1 missions; SpawnSystemAtLocation returned a component"
+  },
+  {
+   "id": "wisp_blast",
+   "item": "Wisp",
+   "system": "/Game/VFX/Environment/Barrel/Standard/NS_Barrel_Standard_Explosion.NS_Barrel_Standard_Explosion",
+   "at": "victim",
+   "scale": 1.0,
+   "verified": "asset loaded in Zone1 missions"
+  },
+  {
+   "id": "gasoline_blast",
+   "item": "Gasoline",
+   "system": "/Game/VFX/Environment/Barrel/Fire/NS_Barrel_Elemental_Fire_Explosion.NS_Barrel_Elemental_Fire_Explosion",
+   "at": "victim",
+   "scale": 1.0,
+   "verified": "spawned live 2026-10-13"
+  },
+  {
+   "id": "gasoline_burn",
+   "item": "Gasoline",
+   "system": "/Game/VFX/Abilities/Elemental/Fire/Ignite/NS_Fire_Ignite.NS_Fire_Ignite",
+   "at": "target",
+   "scale": 1.0,
+   "verified": "asset loaded in Zone1 missions"
+  },
+  {
+   "id": "behemoth_blast",
+   "item": "Behemoth",
+   "system": "/Game/VFX/Abilities/FragGrenade/NS_FragGrenade_Explosion_A.NS_FragGrenade_Explosion_A",
+   "at": "victim",
+   "scale": 0.5,
+   "verified": "asset loaded in Zone1 missions"
+  },
+  {
+   "id": "heal",
+   "item": "Medkit",
+   "system": "/Game/VFX/Abilities/HealShieldPack/NS_Canister_Activating_Heal_A.NS_Canister_Activating_Heal_A",
+   "at": "player",
+   "scale": 1.0,
+   "verified": "asset loaded in Zone1 missions"
+  }
+ ]
+}

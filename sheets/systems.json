@@ -1,0 +1,96 @@
+{
+ "columns": [
+  "id",
+  "value",
+  "unit",
+  "note"
+ ],
+ "rows": [
+  {
+   "id": "clock_health_per_min",
+   "value": 0.08,
+   "unit": "x max HP per minute",
+   "note": "bot HP multiplier = 1 + v*min"
+  },
+  {
+   "id": "clock_damage_per_min",
+   "value": 0.03,
+   "unit": "+damage mult per minute",
+   "note": "GlobalDamageMultiplier additive"
+  },
+  {
+   "id": "clock_speed_per_min",
+   "value": 0.0125,
+   "unit": "x move speed per minute",
+   "note": "capped by clock_speed_cap"
+  },
+  {
+   "id": "clock_speed_cap",
+   "value": 0.5,
+   "unit": "max extra speed",
+   "note": ""
+  },
+  {
+   "id": "medkit_delay_ms",
+   "value": 2000,
+   "unit": "ms",
+   "note": ""
+  },
+  {
+   "id": "hud_refresh_ms",
+   "value": 250,
+   "unit": "ms",
+   "note": ""
+  },
+  {
+   "id": "pickup_banner_ms",
+   "value": 4000,
+   "unit": "ms",
+   "note": ""
+  },
+  {
+   "id": "sync_ms",
+   "value": 1000,
+   "unit": "ms",
+   "note": "host -> client state push"
+  },
+  {
+   "id": "orb_ror2_chance",
+   "value": 1.0,
+   "unit": "chance per orb",
+   "note": "chance a perk/augment orb shows one RoR2 card"
+  },
+  {
+   "id": "orb_block_index",
+   "value": 77,
+   "unit": "index",
+   "note": "invalid index the game ignores; used to cancel its own reward"
+  },
+  {
+   "id": "orb_client_index_offset",
+   "value": 1000,
+   "unit": "index",
+   "note": "client marks a RoR2 pick to the host as 1000+slot"
+  },
+  {
+   "id": "elem_all_attr",
+   "value": "AllElementDamageModifier",
+   "unit": "attribute added to every element's damage"
+  },
+  {
+   "id": "elem_proc_attr",
+   "value": "ProcDamageMultiplier",
+   "unit": "attribute multiplying proc damage"
+  },
+  {
+   "id": "elem_potency_attr",
+   "value": "ElementDebuffPotencyMultiplier",
+   "unit": "attribute multiplying status magnitude"
+  },
+  {
+   "id": "elem_duration_attr",
+   "value": "ElementDebuffDurationMultiplier",
+   "unit": "attribute multiplying status duration"
+  }
+ ]
+}

@@ -1,0 +1,8 @@
+# Game assets never go in the repo: icons are extracted from your own RoR2 install
+mod/RoR2Mashup/icons/
+*.png
+# runtime/test files
+mod/RoR2Mashup/test_*
+mod/RoR2Mashup/*.txt
+!mod/RoR2Mashup/enabled.txt
+__pycache__/

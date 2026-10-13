@@ -1,0 +1,44 @@
+{
+ "columns": [
+  "id",
+  "icon",
+  "item",
+  "event",
+  "duration_ms",
+  "verified"
+ ],
+ "rows": [
+  {
+   "id": "medkit_heal",
+   "icon": "BuffMedkitHeal",
+   "item": "Medkit",
+   "event": "hurt",
+   "duration_ms": 2000,
+   "verified": "icon extracted from RoR2 medkit_static bundle"
+  },
+  {
+   "id": "tooth_regen",
+   "icon": "BuffRegenBoost",
+   "item": "Tooth",
+   "event": "kill",
+   "duration_ms": 1500,
+   "verified": "icon extracted from RoR2 croco_static bundle"
+  },
+  {
+   "id": "tesla",
+   "icon": "BuffTesla",
+   "item": "Ukulele",
+   "event": "hit",
+   "duration_ms": 1500,
+   "verified": "icon extracted from RoR2 shocknearby_static bundle"
+  },
+  {
+   "id": "on_fire",
+   "icon": "BuffOnFire",
+   "item": "Gasoline",
+   "event": "kill",
+   "duration_ms": 3000,
+   "verified": "icon extracted from RoR2 common_static bundle"
+  }
+ ]
+}

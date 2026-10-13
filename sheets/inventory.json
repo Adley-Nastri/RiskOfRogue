@@ -1,0 +1,69 @@
+{
+ "columns": [
+  "id",
+  "value",
+  "note"
+ ],
+ "rows": [
+  {
+   "id": "tab_grid_owner",
+   "value": "UI_Game_TabMenu",
+   "note": "the Tab menu's UI_Equipment_Perks_Items_C; its ItemGrid has 18 UI_Equipment_Perk slots"
+  },
+  {
+   "id": "end_grid_owner",
+   "value": "UI_Scene_Result",
+   "note": "end-of-run equipment display, same layout"
+  },
+  {
+   "id": "slot_icon",
+   "value": "BGMat",
+   "note": "Image inside UI_Equipment_Perk; SetBrushFromTexture shows our icon (verified live)"
+  },
+  {
+   "id": "slot_stack",
+   "value": "StackText",
+   "note": "TextBlock inside UI_Equipment_Perk; shows 'x3' (verified live)"
+  },
+  {
+   "id": "owned_items",
+   "value": "r_PerkIds",
+   "note": "ValPlayerState array of PrimaryAssetId for vanilla run items"
+  },
+  {
+   "id": "hud_display_class",
+   "value": "WBP_ActiveItemsDisplay_C",
+   "note": "visor item row under the minimap (native ValRHUIActiveItemDisplay); fed by OnItemIdsChanged(PerkIds)"
+  },
+  {
+   "id": "hud_display_owner",
+   "value": "UI_Game_Visor",
+   "note": "only the live visor's display"
+  },
+  {
+   "id": "item_template",
+   "value": "/Game/Items/Items/Item_ArmorValue.Item_ArmorValue",
+   "note": "vanilla ValAbilityAsset copied (rooted, transient) into one definition per RoR2 item"
+  },
+  {
+   "id": "asset_type",
+   "value": "ValDataAsset",
+   "note": "PrimaryAssetType used for RoR2 ids (name RoR2_<id>)"
+  },
+  {
+   "id": "get_asset_fn",
+   "value": "/Script/Valhalla.ValBlueprintLibrary:GetAssetById",
+   "note": "hooked: returns the RoR2 definition for RoR2_ ids"
+  },
+  {
+   "id": "brush_fn",
+   "value": "/Script/ValhallaUI.ValRHUIActiveItemDisplay:UpdateBrushForItem",
+   "note": "hooked: puts the RoR2 icon into the item's material"
+  },
+  {
+   "id": "icon_param",
+   "value": "Icon",
+   "note": "texture parameter of MI_UI_ItemEntry (read live)"
+  }
+ ]
+}

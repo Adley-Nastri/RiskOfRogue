@@ -1,0 +1,40 @@
+{
+ "columns": [
+  "id",
+  "color",
+  "orb_weight",
+  "dz_rarity"
+ ],
+ "rows": [
+  {
+   "id": "white",
+   "color": [
+    0.92,
+    0.92,
+    0.92
+   ],
+   "orb_weight": 70,
+   "dz_rarity": 1
+  },
+  {
+   "id": "green",
+   "color": [
+    0.47,
+    0.85,
+    0.27
+   ],
+   "orb_weight": 25,
+   "dz_rarity": 2
+  },
+  {
+   "id": "red",
+   "color": [
+    0.89,
+    0.25,
+    0.25
+   ],
+   "orb_weight": 5,
+   "dz_rarity": 5
+  }
+ ]
+}

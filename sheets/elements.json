@@ -1,0 +1,40 @@
+{
+ "columns": [
+  "id",
+  "name",
+  "status_ge",
+  "dmg_attr",
+  "duration_s",
+  "duration_attr",
+  "status_mag",
+  "mag_attr",
+  "status_cooldown_ms",
+  "note"
+ ],
+ "rows": [
+  {
+   "id": "fire",
+   "name": "Fire",
+   "status_ge": "/Game/Abilities/Elements/GE_Fire_Ignite",
+   "dmg_attr": "FireDamageModifier",
+   "duration_s": 5,
+   "duration_attr": "none",
+   "status_mag": 0,
+   "mag_attr": "none",
+   "status_cooldown_ms": 1000,
+   "note": "Ignite: fixed 5 s duration in the effect; its own burn tick reads Data.Damage, which mods can't set, so the burn damage is dealt by the mod. Verified: flames show on the enemy."
+  },
+  {
+   "id": "lightning",
+   "name": "Lightning",
+   "status_ge": "/Game/Abilities/Elements/GE_Lightning_Shock",
+   "dmg_attr": "none",
+   "duration_s": 3,
+   "duration_attr": "LightningShockDurationModifier",
+   "status_mag": -0.15,
+   "mag_attr": "LightningShockCritChanceModifier",
+   "status_cooldown_ms": 500,
+   "note": "Shock: duration and CritChanceResistanceModifier are SetByCaller; swapped to fixed values on the effect's default object for the call. No Lightning damage attribute exists, so only AllElementDamageModifier scales it."
+  }
+ ]
+}

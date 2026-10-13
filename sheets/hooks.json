@@ -1,0 +1,68 @@
+{
+ "columns": [
+  "id",
+  "kind",
+  "target",
+  "side",
+  "args",
+  "verified"
+ ],
+ "rows": [
+  {
+   "id": "bot_killed",
+   "kind": "RegisterHook",
+   "target": "/Script/Valhalla.ValPlayerUpgradeComponent:OnBotKilled",
+   "side": "server",
+   "args": "Victim,Killer",
+   "verified": "2026-10-12 live: fires with killer pawn"
+  },
+  {
+   "id": "damaged",
+   "kind": "RegisterHook",
+   "target": "/Script/Valhalla.ValCharacter:OnDamaged",
+   "side": "server",
+   "args": "DamageData",
+   "verified": "2026-10-12 live: Instigator, Amount is NEGATIVE for real hits (-910 sniper crit), bFromProcAbility, bCriticalHit"
+  },
+  {
+   "id": "new_character",
+   "kind": "NotifyOnNewObject",
+   "target": "/Script/Valhalla.ValCharacter",
+   "side": "both",
+   "args": "Character",
+   "verified": "2026-10-12 live: bots spawn"
+  },
+  {
+   "id": "client_message",
+   "kind": "RegisterHook",
+   "target": "/Script/Engine.PlayerController:ClientMessage",
+   "side": "client",
+   "args": "S,Type,MsgLifeTime",
+   "verified": "2026-10-12 live: local call hooked with payload"
+  },
+  {
+   "id": "request_pick",
+   "kind": "RegisterHook",
+   "target": "/Script/Valhalla.ValPlayerController:RequestPickupIndex",
+   "side": "both",
+   "args": "Pickup,Index",
+   "verified": "2026-10-12 live: pre-hook fires on click; index:set(77) blocks the game's reward"
+  },
+  {
+   "id": "server_pick",
+   "kind": "RegisterHook",
+   "target": "/Script/Valhalla.ValPlayerController:ServerRequestPickupIndex",
+   "side": "server",
+   "args": "Pickup,Index",
+   "verified": "2026-10-12 live: not called through ProcessEvent for the host's own clicks; remote clients' RPC is the expected path (untested)"
+  },
+  {
+   "id": "new_bundle",
+   "kind": "NotifyOnNewObject",
+   "target": "/Script/Valhalla.ValPickup_Bundle",
+   "side": "server",
+   "args": "Bundle",
+   "verified": "2026-10-12 live: perk, shard and augment bundles (BP_Pickup_Bundle_Augment_C)"
+  }
+ ]
+}

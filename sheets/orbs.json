@@ -1,0 +1,30 @@
+{
+ "columns": [
+  "id",
+  "class_match",
+  "loot_type",
+  "card_class",
+  "name_widget",
+  "type_widget",
+  "desc_widget",
+  "icon_host",
+  "icon_widget",
+  "hide_widgets",
+  "verified"
+ ],
+ "rows": [
+  {
+   "id": "item",
+   "class_match": "Bundle_Items",
+   "loot_type": "ShopType.Item",
+   "card_class": "WBP_DungeonShop_Item_Perk_C",
+   "name_widget": "NameText_1",
+   "type_widget": "TypeText_1",
+   "desc_widget": "DescText",
+   "icon_host": "UI_Equipment_Perk",
+   "icon_widget": "BGMat",
+   "hide_widgets": "SynergyBadge,WouldComplete",
+   "verified": "2026-10-13 live: item orb = BP_Pickup_Bundle_Items_C, LootType ShopType.Item, cards WBP_DungeonShop_Item_Perk_C (Equipment_2..4)"
+  }
+ ]
+}
