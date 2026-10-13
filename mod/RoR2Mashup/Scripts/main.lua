@@ -2147,7 +2147,18 @@ local function draw_hud()
   local H = HUD
   local okp, errp = pcall(patch_orb_menu, H.tex)
   if not okp then log("orb menu patch: " .. tostring(errp)) end
-  local show = View.in_run
+  -- shown only while Deadzone's own HUD (the visor) is: hidden in the pause menu and other screens
+  local visor_on = true
+  pcall(function()
+    if not valid(H.visor) then
+      H.visor = nil
+      for _, v in ipairs(FindAllOf("UI_Game_Visor_C") or {}) do
+        if valid(v) and not v:GetFullName():find("Default__") then H.visor = v; break end
+      end
+    end
+    if H.visor then visor_on = H.visor:IsVisible() and true or false end
+  end)
+  local show = View.in_run and visor_on
   -- clock
   for _, x in ipairs({ H.clock_bg, H.clock, H.tier, H.bar_bg, H.bar }) do x:SetVisibility(show and VIS or HID) end
   if show then
@@ -2171,6 +2182,7 @@ local function draw_hud()
   while #View.banners > 0 and now_ms - View.banners[1].t > SYS.pickup_banner_ms do table.remove(View.banners, 1); if View.banners[1] then View.banners[1].t = now_ms end end
   local b = View.banners[1]
   local it = b and Data.ITEM_BY_ID[b.id]
+  if not visor_on then it = nil end
   for _, x in ipairs({ H.ban_bg, H.ban_icon, H.ban_name, H.ban_desc }) do x:SetVisibility(it and VIS or HID) end
   if it then
     if valid(H.tex[it.id]) then H.ban_icon:SetBrushFromTexture(H.tex[it.id], false) end
@@ -2318,11 +2330,19 @@ local test_acc = 0
 local Settle = { pc = 0, until_ms = 0 }
 LoopAsync(TICK_MS, function()
   ExecuteInGameThread(function()
-    now_ms = now_ms + TICK_MS
     local ok, err = pcall(function()
+      local lp = local_pc()
+      -- A real pause (solo) stops the game's clock. Then the mod's clock stops too, so buffs,
+      -- cooldowns and timers freeze with the game. In multiplayer the game never pauses, so
+      -- this never triggers there and only the HUD hides (in draw_hud).
+      local wt = nil
+      if lp then pcall(function() wt = cls("/Script/Engine.Default__GameplayStatics"):GetTimeSeconds(lp) end) end
+      local paused = wt ~= nil and Settle.wt ~= nil and wt == Settle.wt
+      Settle.wt = wt
+      Settle.paused = paused
+      if not paused then now_ms = now_ms + TICK_MS end
       -- After a map load the old world's widgets and actors are being torn down. When the local
       -- player controller changes, drop the HUD and wait a moment before touching game objects.
-      local lp = local_pc()
       local la = lp and addr(lp) or 0
       if la ~= Settle.pc then
         Settle.pc = la; Settle.until_ms = now_ms + SYS.map_settle_ms; HUD = nil; Run.gs = nil
@@ -2332,9 +2352,11 @@ LoopAsync(TICK_MS, function()
         if Dev.ST and Dev.ST.running and Dev.ST.on_abort then pcall(Dev.ST.on_abort) end
       end
       if now_ms < Settle.until_ms then return end
-      run_timers()
-      local srv, gm = server()
-      if srv then host_tick(gm) end
+      if not paused then
+        run_timers()
+        local srv, gm = server()
+        if srv then host_tick(gm) end
+      end
       hud_acc = hud_acc + TICK_MS
       if hud_acc >= SYS.hud_refresh_ms then hud_acc = 0; draw_hud() end
       local okt, errt = pcall(update_tip)
