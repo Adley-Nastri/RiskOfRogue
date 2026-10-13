@@ -1693,6 +1693,33 @@ function Native.set_icon(img, tex)
   return ok
 end
 _G.R2_SET_ICON = Native.set_icon
+-- Deadzone's slot shows a placeholder and then loads the item's icon in the background
+-- (UpdateDefaultTexture / UpdateTexture). Right after either one runs on a RoR2 slot, put the RoR2
+-- icon in, in the same call, so the default icon never reaches the screen. Hooked once the slot
+-- class exists (it's a Blueprint, loaded with the UI).
+function Native.after_slot_texture(self)
+  local w = self:get()
+  if not valid(w) or not Native.tex then return end
+  local d = nil
+  pcall(function() d = w.CachedDataAsset end)
+  if not valid(d) then return end
+  local it = Native.by_name[d:GetFName():ToString()]
+  if not it then return end
+  local icon, tex = w[INV.slot_icon], Native.tex[it.id]
+  if valid(icon) and valid(tex) then Native.set_icon(icon, tex) end
+end
+function Native.hook_slot()
+  if Native.slot_hooked then return end
+  local c = StaticFindObject(INV.slot_class)
+  if not valid(c) then return end
+  Native.slot_hooked = true
+  for _, fn in ipairs({ "UpdateTexture", "UpdateDefaultTexture" }) do
+    local ok, err = pcall(function()
+      RegisterHook(INV.slot_class .. ":" .. fn, function() end, function(self) pcall(Native.after_slot_texture, self) end)
+    end)
+    log("slot hook " .. fn .. ": " .. (ok and "ok" or tostring(err)))
+  end
+end
 local function ror2_name(id) return "RoR2_" .. id end
 local function ror2_asset_id(id)
   return { PrimaryAssetType = { Name = FName(INV.asset_type) }, PrimaryAssetName = FName(ror2_name(id)) }
@@ -1843,6 +1870,7 @@ local function fill_slot(slot, it, n, ps)
 end
 patch_inventory = function(tex, pc)
   Native.tex = tex
+  Native.hook_slot()
   local list = owned_list()
   local ps = pc.PlayerState
   for _, g in ipairs(FindAllOf("UI_Equipment_Perks_Items_C") or {}) do
