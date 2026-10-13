@@ -7,39 +7,59 @@ items,rar,tiers,sysv,hooks,apis,orbs,buffs,fx,inv = [L(n) for n in ['items.json'
 DUMP='/mnt/user-data/uploads/Deadzone Rogue/Valhalla/Binaries/Win64/ue4ss/Mods/DZBridge/'
 classes=open(DUMP+'classes.txt').read(); funcs=open(DUMP+'q.txt').read()
 ICONS='/mnt/user-data/outputs/dz/icons'
-REQ={ # which columns must be meaningful per kind
- 'stat':['ge','attr','op','k','stack'],
- 'heal':['trigger','k'],
- 'refund':['trigger','k'],
- 'proc':['trigger','chance','radius','dmg'],
- 'jump':['attr','k'],
- 'growth':['ge','attr','trigger','k','dmg'],
- 'revive':['trigger'],
+GE_CLASSES=set(open(os.path.join(D,'research','game_ge_classes.txt')).read().split())
+DEVICE_ICONS=set(x[:-4] for x in open(os.path.join(D,'research','icons_on_device.txt')).read().split())
+KINDS={ # legacy (hand-written handlers in main.lua) and generic (sheet-driven) kinds -> required columns
+ 'stat':['ge','attr','op','k','stack'], 'heal':['trigger','k'], 'refund':['trigger','k'], 'proc':['trigger','chance','radius','dmg'],
+ 'jump':['attr','k'], 'growth':['ge','attr','trigger','k','dmg'],
+ 'cstat':['cond','ge','attr','op','k'], 'buff':['trigger','ge','attr','op','k','dur','cap'], 'effect':['trigger','action'],
+ 'regen':['cond'], 'growth2':['trigger','ge','attr','op','k','cap'], 'special':[],
 }
+TRIGGERS={'kill','elitekill','hit','crit','hurt','lowhp','shieldbreak','multikill','orb','stage','encounter','periodic'}
+ACTIONS={'bonus','single','aoe','aoe_self','aoe_random','chain','chain_self','multi','dot','delayed','status','execute',
+         'heal','heal_all','barrier','currency','ammo','refund','buff','aura','disc'}
+CONDS={'','ooc','still','moving','shield','nearby','buffs','in_combat','tesla','v_elite','v_elite_low','v_near','v_hp_above','v_debuffed','v_cooldown',
+       'above','hit_big','every','every_target','charged','charges','meteor'}
+SUBS={'','buff_zone','turret','storm','heal_zone','transmit'}
+SPECIALS={'DelayedDamage','HealingPotion','StrengthenBurn','TriggerEnemyDebuffs','BarrierOnOverHeal','Clover',
+          'Duplicator','FallBoots','MoreMissile','NovaOnHeal','PermanentDebuffOnHit','SharedSuffering'}
+LEGACY_IDS={'Syringe','Glasses','Hoof','Bear','ArmorPlate','Tooth','Medkit','Ukulele','Wisp','Gasoline','Feather','Infusion','Behemoth'}
 errs=[]; checked=0
 rids={r['id'] for r in rar['rows']}
+elems=L('elements.json'); eids={r['id'] for r in elems['rows']}
 ids=set()
+def ge_ok(path): 
+    nm=path.rsplit('/',1)[1]; return f"{path}.{nm}_C" in GE_CLASSES or f"{path}.{nm}_C" in classes
 for r in items['rows']:
+    i=r.get('id')
     for c in items['columns']:
         checked+=1
-        if c not in r: errs.append(f"items.{r.get('id')}.{c}: missing column")
-    i=r['id']
+        if c not in r: errs.append(f"items.{i}.{c}: missing column")
     if i in ids: errs.append(f"items.{i}: duplicate id")
     ids.add(i)
-    for c in ['id','name','rarity','icon','pickup','kind','desc']:
-        if r[c] in ('',None): errs.append(f"items.{i}.{c}: empty")
+    for c in ['id','name','rarity','icon','tex','pickup','kind','desc','src']:
+        if r.get(c) in ('',None): errs.append(f"items.{i}.{c}: empty")
     if r['rarity'] not in rids: errs.append(f"items.{i}.rarity -> rarities: '{r['rarity']}' unresolved")
-    if r['kind'] not in REQ: errs.append(f"items.{i}.kind: unknown '{r['kind']}'")
-    for c in REQ.get(r['kind'],[]):
-        if r[c] in ('',None,0) and not (c=='k' and r['kind']=='revive'): errs.append(f"items.{i}.{c}: required for kind {r['kind']} but empty")
-    if r['ge']:
-        nm=r['ge'].rsplit('/',1)[1]
-        if f"{r['ge']}.{nm}_C" not in classes: errs.append(f"items.{i}.ge -> game classes: {r['ge']} not found")
-    if not os.path.exists(os.path.join(ICONS,r['icon']+'.png')): errs.append(f"items.{i}.icon -> icons: {r['icon']}.png missing")
-    if r['trigger'] and r['trigger'] not in ('kill','hit','hurt','death'): errs.append(f"items.{i}.trigger: unknown {r['trigger']}")
-    if r['trigger']:
-        need={'kill':'bot_killed','hit':'damaged','hurt':'damaged','death':'damaged'}[r['trigger']]
-        if need not in {h['id'] for h in hooks['rows']}: errs.append(f"items.{i}.trigger -> hooks: {need} missing")
+    k=r['kind']
+    if k not in KINDS: errs.append(f"items.{i}.kind: unknown '{k}'"); continue
+    for c in KINDS[k]:
+        if r[c] in ('',None,0) and not (c=='k' and k in ('effect','special')): errs.append(f"items.{i}.{c}: required for kind {k} but empty")
+    if k in ('proc','heal','refund','growth','jump') and i not in LEGACY_IDS|{'Infusion'}: errs.append(f"items.{i}.kind: '{k}' only has hand-written handlers for the original items")
+    if k=='special' and i not in SPECIALS: errs.append(f"items.{i}: special kind but no handler in main.lua")
+    if r['trigger'] and r['trigger'] not in TRIGGERS: errs.append(f"items.{i}.trigger: unknown {r['trigger']}")
+    if r['action'] and r['action'] not in ACTIONS: errs.append(f"items.{i}.action: unknown {r['action']}")
+    if r['cond'] not in CONDS: errs.append(f"items.{i}.cond: unknown {r['cond']}")
+    if r.get('sub','') not in SUBS: errs.append(f"items.{i}.sub: unknown {r['sub']}")
+    if r['action']=='aura' and not r.get('sub'): errs.append(f"items.{i}.sub: aura needs a sub type")
+    for g in ('ge','ge2','pge'):
+        if r.get(g) and not ge_ok(r[g]): errs.append(f"items.{i}.{g} -> game classes: {r[g]} not found")
+    for g,a in (('ge','attr'),('ge2','attr2'),('pge','pattr')):
+        if r.get(g) and not r.get(a): errs.append(f"items.{i}.{a}: empty for {g}")
+    if r['element'] not in eids|{'none'}: errs.append(f"items.{i}.element -> elements: '{r['element']}' unresolved")
+    if r['status'] not in eids|{'none'}: errs.append(f"items.{i}.status -> elements: '{r['status']}' unresolved")
+    if r['action']=='status' and r['status']=='none': errs.append(f"items.{i}.status: status action needs a status")
+    if r['dmg_base'] not in ('hit','base','vmax'): errs.append(f"items.{i}.dmg_base: unknown {r['dmg_base']}")
+    if r['icon'] not in DEVICE_ICONS: errs.append(f"items.{i}.icon -> icons on the PC: {r['icon']}.png missing")
 for r in rar['rows']:
     for c in rar['columns']:
         checked+=1
@@ -91,17 +111,12 @@ for r in fx['rows']:
 for r in inv['rows']:
     checked+=3
     if not r['value']: errs.append(f"inventory.{r['id']}: empty")
-elems=L('elements.json'); eids={r['id'] for r in elems['rows']}
-for r in items['rows']:
-    if r.get('element') not in eids|{'none'}: errs.append(f"items.{r['id']}.element -> elements: '{r.get('element')}' unresolved")
-    if r.get('element')!='none' and r['kind']!='proc': errs.append(f"items.{r['id']}.element: only proc items deal element damage")
 for r in elems['rows']:
     for c in elems['columns']:
         checked+=1
         if r.get(c) in ('',None): errs.append(f"elements.{r['id']}.{c}: empty")
-    nm=r['status_ge'].rsplit('/',1)[1]
-    if f"{r['status_ge']}.{nm}_C" not in classes: errs.append(f"elements.{r['id']}.status_ge -> game classes: not found")
-    if not any(it.get('element')==r['id'] for it in items['rows']): errs.append(f"elements.{r['id']}: no items use it")
+    if r['status_ge']!='none' and not ge_ok(r['status_ge']): errs.append(f"elements.{r['id']}.status_ge -> game classes: not found")
+    if not any(it.get('element')==r['id'] or it.get('status')==r['id'] for it in items['rows']): errs.append(f"elements.{r['id']}: no items use it")
 print(f"preflight: {checked} cells over {len(items['rows'])} items, {len(rar['rows'])} rarities, {len(tiers['rows'])} tiers, {len(sysv['rows'])} systems, {len(hooks['rows'])} hooks, {len(apis['rows'])} apis")
 if errs:
     print("\n".join("  FAIL "+e for e in errs)); sys.exit(1)

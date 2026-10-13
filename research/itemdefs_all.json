@@ -1,0 +1,2903 @@
+[
+{
+"name": "AdaptiveArmor",
+"nameToken": "ITEM_ADAPTIVEARMOR_NAME",
+"tier": 5,
+"tags": [
+3
+],
+"hidden": 0,
+"bundle": "ror2-base-adaptivearmor"
+},
+{
+"name": "AlienHead",
+"nameToken": "ITEM_ALIENHEAD_NAME",
+"tier": 2,
+"tags": [
+3,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-alienhead"
+},
+{
+"name": "ArmorPlate",
+"nameToken": "ITEM_REPULSIONARMORPLATE_NAME",
+"tier": 0,
+"tags": [
+3,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-armorplate"
+},
+{
+"name": "ArmorReductionOnHit",
+"nameToken": "ITEM_ARMORREDUCTIONONHIT_NAME",
+"tier": 2,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-armorreductiononhit"
+},
+{
+"name": "ArtifactKey",
+"nameToken": "ITEM_ARTIFACTKEY_NAME",
+"tier": 4,
+"tags": [
+9,
+31,
+40,
+33,
+38,
+41,
+4
+],
+"hidden": 0,
+"bundle": "ror2-base-artifactkey"
+},
+{
+"name": "AttackSpeedOnCrit",
+"nameToken": "ITEM_ATTACKSPEEDONCRIT_NAME",
+"tier": 1,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-attackspeedoncrit"
+},
+{
+"name": "AutoCastEquipment",
+"nameToken": "ITEM_AUTOCASTEQUIPMENT_NAME",
+"tier": 3,
+"tags": [
+3,
+7
+],
+"hidden": 0,
+"bundle": "ror2-base-autocastequipment"
+},
+{
+"name": "Bandolier",
+"nameToken": "ITEM_BANDOLIER_NAME",
+"tier": 1,
+"tags": [
+3,
+6,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-bandolier"
+},
+{
+"name": "BarrierOnKill",
+"nameToken": "ITEM_BARRIERONKILL_NAME",
+"tier": 0,
+"tags": [
+3,
+2,
+6,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-barrieronkill"
+},
+{
+"name": "BarrierOnOverHeal",
+"nameToken": "ITEM_BARRIERONOVERHEAL_NAME",
+"tier": 2,
+"tags": [
+3,
+2,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-barrieronoverheal"
+},
+{
+"name": "Bear",
+"nameToken": "ITEM_BEAR_NAME",
+"tier": 0,
+"tags": [
+3,
+11,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-bear"
+},
+{
+"name": "BeetleGland",
+"nameToken": "ITEM_BEETLEGLAND_NAME",
+"tier": 4,
+"tags": [
+3,
+13,
+28,
+24,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-beetlegland"
+},
+{
+"name": "Behemoth",
+"nameToken": "ITEM_BEHEMOTH_NAME",
+"tier": 2,
+"tags": [
+1,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-behemoth"
+},
+{
+"name": "BleedOnHit",
+"nameToken": "ITEM_BLEEDONHIT_NAME",
+"tier": 0,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-bleedonhit"
+},
+{
+"name": "BleedOnHitAndExplode",
+"nameToken": "ITEM_BLEEDONHITANDEXPLODE_NAME",
+"tier": 4,
+"tags": [
+1,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-bleedonhitandexplode"
+},
+{
+"name": "BonusGoldPackOnKill",
+"nameToken": "ITEM_BONUSGOLDPACKONKILL_NAME",
+"tier": 1,
+"tags": [
+3,
+6,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-bonusgoldpackonkill"
+},
+{
+"name": "BoostAttackSpeed",
+"nameToken": "ITEM_BOOSTATTACKSPEED_NAME",
+"tier": 5,
+"tags": [
+1
+],
+"hidden": 0,
+"bundle": "ror2-base-boostattackspeed"
+},
+{
+"name": "BoostDamage",
+"nameToken": "ITEM_BOOSTDAMAGE_NAME",
+"tier": 5,
+"tags": [
+1
+],
+"hidden": 0,
+"bundle": "ror2-base-boostdamage"
+},
+{
+"name": "BoostEquipmentRecharge",
+"nameToken": "ITEM_BOOSTEQUIPMENTRECHARGE_NAME",
+"tier": 5,
+"tags": [
+7,
+35,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-boostequipmentrecharge"
+},
+{
+"name": "BoostHp",
+"nameToken": "ITEM_BOOSTHP_NAME",
+"tier": 5,
+"tags": [
+3
+],
+"hidden": 0,
+"bundle": "ror2-base-boosthp"
+},
+{
+"name": "BossDamageBonus",
+"nameToken": "ITEM_BOSSDAMAGEBONUS_NAME",
+"tier": 0,
+"tags": [
+1,
+4,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-bossdamagebonus"
+},
+{
+"name": "BounceNearby",
+"nameToken": "ITEM_BOUNCENEARBY_NAME",
+"tier": 2,
+"tags": [
+1,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-bouncenearby"
+},
+{
+"name": "CaptainDefenseMatrix",
+"nameToken": "ITEM_CAPTAINDEFENSEMATRIX_NAME",
+"tier": 2,
+"tags": [
+3,
+9,
+22,
+31,
+40,
+34,
+4
+],
+"hidden": 0,
+"bundle": "ror2-base-captaindefensematrix"
+},
+{
+"name": "ChainLightning",
+"nameToken": "ITEM_CHAINLIGHTNING_NAME",
+"tier": 1,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-chainlightning"
+},
+{
+"name": "Clover",
+"nameToken": "ITEM_CLOVER_NAME",
+"tier": 2,
+"tags": [
+3,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-clover"
+},
+{
+"name": "CrippleWardOnLevel",
+"nameToken": "ITEM_CRIPPLEWARDONLEVEL_NAME",
+"tier": 5,
+"tags": [
+3,
+13
+],
+"hidden": 0,
+"bundle": "ror2-base-cripplewardonlevel"
+},
+{
+"name": "CritGlasses",
+"nameToken": "ITEM_CRITGLASSES_NAME",
+"tier": 0,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-critglasses"
+},
+{
+"name": "Crowbar",
+"nameToken": "ITEM_CROWBAR_NAME",
+"tier": 0,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-crowbar"
+},
+{
+"name": "CutHp",
+"nameToken": "ITEM_CUTHP_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 0,
+"bundle": "ror2-base-cuthp"
+},
+{
+"name": "Dagger",
+"nameToken": "ITEM_DAGGER_NAME",
+"tier": 2,
+"tags": [
+1,
+6,
+4,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-dagger"
+},
+{
+"name": "DeathMark",
+"nameToken": "ITEM_DEATHMARK_NAME",
+"tier": 1,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-deathmark"
+},
+{
+"name": "DrizzlePlayerHelper",
+"nameToken": "ITEM_DRIZZLEPLAYERHELPER_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 1,
+"bundle": "ror2-base-drizzleplayerhelper"
+},
+{
+"name": "FireRing",
+"nameToken": "ITEM_FIRERING_NAME",
+"tier": 1,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-elementalrings"
+},
+{
+"name": "IceRing",
+"nameToken": "ITEM_ICERING_NAME",
+"tier": 1,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-elementalrings"
+},
+{
+"name": "EnergizedOnEquipmentUse",
+"nameToken": "ITEM_ENERGIZEDONEQUIPMENTUSE_NAME",
+"tier": 1,
+"tags": [
+1,
+7,
+4,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-energizedonequipmentuse"
+},
+{
+"name": "EquipmentMagazine",
+"nameToken": "ITEM_EQUIPMENTMAGAZINE_NAME",
+"tier": 1,
+"tags": [
+3,
+7,
+4,
+34,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-equipmentmagazine"
+},
+{
+"name": "ExecuteLowHealthElite",
+"nameToken": "ITEM_EXECUTELOWHEALTHELITE_NAME",
+"tier": 1,
+"tags": [
+1,
+4,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-executelowhealthelite"
+},
+{
+"name": "ExplodeOnDeath",
+"nameToken": "ITEM_EXPLODEONDEATH_NAME",
+"tier": 1,
+"tags": [
+1,
+6,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-explodeondeath"
+},
+{
+"name": "ExtraLifeConsumed",
+"nameToken": "ITEM_EXTRALIFECONSUMED_NAME",
+"tier": 5,
+"tags": [
+3,
+30
+],
+"hidden": 0,
+"bundle": "ror2-base-extralife"
+},
+{
+"name": "ExtraLife",
+"nameToken": "ITEM_EXTRALIFE_NAME",
+"tier": 2,
+"tags": [
+3,
+24,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-extralife"
+},
+{
+"name": "FallBoots",
+"nameToken": "ITEM_FALLBOOTS_NAME",
+"tier": 2,
+"tags": [
+3,
+1,
+4,
+29,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-fallboots"
+},
+{
+"name": "Feather",
+"nameToken": "ITEM_FEATHER_NAME",
+"tier": 1,
+"tags": [
+3,
+4,
+29,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-feather"
+},
+{
+"name": "FireballsOnHit",
+"nameToken": "ITEM_FIREBALLSONHIT_NAME",
+"tier": 4,
+"tags": [
+1,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-fireballsonhit"
+},
+{
+"name": "Firework",
+"nameToken": "ITEM_FIREWORK_NAME",
+"tier": 0,
+"tags": [
+1,
+4,
+18,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-firework"
+},
+{
+"name": "FlatHealth",
+"nameToken": "ITEM_FLATHEALTH_NAME",
+"tier": 0,
+"tags": [
+2,
+6,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-flathealth"
+},
+{
+"name": "FocusConvergence",
+"nameToken": "ITEM_FOCUSEDCONVERGENCE_NAME",
+"tier": 3,
+"tags": [
+3,
+4,
+13,
+17
+],
+"hidden": 0,
+"bundle": "ror2-base-focusconvergence"
+},
+{
+"name": "Ghost",
+"nameToken": "ITEM_GHOST_NAME",
+"tier": 5,
+"tags": [
+42,
+43
+],
+"hidden": 0,
+"bundle": "ror2-base-ghost"
+},
+{
+"name": "GhostOnKill",
+"nameToken": "ITEM_GHOSTONKILL_NAME",
+"tier": 2,
+"tags": [
+3,
+1,
+6,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-ghostonkill"
+},
+{
+"name": "GoldOnHit",
+"nameToken": "ITEM_GOLDONHIT_NAME",
+"tier": 3,
+"tags": [
+3,
+4
+],
+"hidden": 0,
+"bundle": "ror2-base-goldonhit"
+},
+{
+"name": "HeadHunter",
+"nameToken": "ITEM_HEADHUNTER_NAME",
+"tier": 2,
+"tags": [
+3,
+1,
+4,
+6,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-headhunter"
+},
+{
+"name": "HealOnCrit",
+"nameToken": "ITEM_HEALONCRIT_NAME",
+"tier": 1,
+"tags": [
+2,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-healoncrit"
+},
+{
+"name": "HealthDecay",
+"nameToken": "ITEM_HEALTHDECAY_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 0,
+"bundle": "ror2-base-healthdecay"
+},
+{
+"name": "HealWhileSafe",
+"nameToken": "ITEM_HEALWHILESAFE_NAME",
+"tier": 0,
+"tags": [
+2,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-healwhilesafe"
+},
+{
+"name": "Hoof",
+"nameToken": "ITEM_HOOF_NAME",
+"tier": 0,
+"tags": [
+3,
+29,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-hoof"
+},
+{
+"name": "Icicle",
+"nameToken": "ITEM_ICICLE_NAME",
+"tier": 2,
+"tags": [
+1,
+6,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-icicle"
+},
+{
+"name": "IgniteOnKill",
+"nameToken": "ITEM_IGNITEONKILL_NAME",
+"tier": 0,
+"tags": [
+1,
+6,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-igniteonkill"
+},
+{
+"name": "IncreaseHealing",
+"nameToken": "ITEM_INCREASEHEALING_NAME",
+"tier": 2,
+"tags": [
+2,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-increasehealing"
+},
+{
+"name": "Infusion",
+"nameToken": "ITEM_INFUSION_NAME",
+"tier": 1,
+"tags": [
+3,
+2,
+6,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-infusion"
+},
+{
+"name": "InvadingDoppelganger",
+"nameToken": "ITEM_INVADINGDOPPELGANGER_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 0,
+"bundle": "ror2-base-invadingdoppelganger"
+},
+{
+"name": "JumpBoost",
+"nameToken": "ITEM_JUMPBOOST_NAME",
+"tier": 1,
+"tags": [
+3,
+8,
+29,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-jumpboost"
+},
+{
+"name": "KillEliteFrenzy",
+"nameToken": "ITEM_KILLELITEFRENZY_NAME",
+"tier": 2,
+"tags": [
+3,
+4,
+6,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-killelitefrenzy"
+},
+{
+"name": "Knurl",
+"nameToken": "ITEM_KNURL_NAME",
+"tier": 4,
+"tags": [
+3,
+2,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-knurl"
+},
+{
+"name": "LaserTurbine",
+"nameToken": "ITEM_LASERTURBINE_NAME",
+"tier": 2,
+"tags": [
+1,
+6,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-laserturbine"
+},
+{
+"name": "LevelBonus",
+"nameToken": "ITEM_LEVELBONUS_NAME",
+"tier": 5,
+"tags": [
+3
+],
+"hidden": 0,
+"bundle": "ror2-base-levelbonus"
+},
+{
+"name": "LightningStrikeOnHit",
+"nameToken": "ITEM_LIGHTNINGSTRIKEONHIT_NAME",
+"tier": 4,
+"tags": [
+1,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-lightningstrikeonhit"
+},
+{
+"name": "LunarBadLuck",
+"nameToken": "ITEM_LUNARBADLUCK_NAME",
+"tier": 3,
+"tags": [
+3,
+28
+],
+"hidden": 0,
+"bundle": "ror2-base-lunarbadluck"
+},
+{
+"name": "LunarDagger",
+"nameToken": "ITEM_LUNARDAGGER_NAME",
+"tier": 3,
+"tags": [
+1
+],
+"hidden": 0,
+"bundle": "ror2-base-lunardagger"
+},
+{
+"name": "LunarSecondaryReplacement",
+"nameToken": "ITEM_LUNARSECONDARYREPLACEMENT_NAME",
+"tier": 3,
+"tags": [
+1,
+4,
+12,
+28,
+24,
+36
+],
+"hidden": 0,
+"bundle": "ror2-base-lunarskillreplacements"
+},
+{
+"name": "LunarSpecialReplacement",
+"nameToken": "ITEM_LUNARSPECIALREPLACEMENT_NAME",
+"tier": 3,
+"tags": [
+1,
+4,
+12,
+28,
+24,
+36
+],
+"hidden": 0,
+"bundle": "ror2-base-lunarskillreplacements"
+},
+{
+"name": "LunarUtilityReplacement",
+"nameToken": "ITEM_LUNARUTILITYREPLACEMENT_NAME",
+"tier": 3,
+"tags": [
+3,
+4,
+12,
+28,
+24,
+36
+],
+"hidden": 0,
+"bundle": "ror2-base-lunarskillreplacements"
+},
+{
+"name": "LunarPrimaryReplacement",
+"nameToken": "ITEM_LUNARPRIMARYREPLACEMENT_NAME",
+"tier": 3,
+"tags": [
+1,
+4,
+12,
+28,
+24,
+36
+],
+"hidden": 0,
+"bundle": "ror2-base-lunarskillreplacements"
+},
+{
+"name": "LunarTrinket",
+"nameToken": "ITEM_LUNARTRINKET_NAME",
+"tier": 3,
+"tags": [
+19,
+4
+],
+"hidden": 0,
+"bundle": "ror2-base-lunartrinket"
+},
+{
+"name": "Medkit",
+"nameToken": "ITEM_MEDKIT_NAME",
+"tier": 0,
+"tags": [
+2,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-medkit"
+},
+{
+"name": "MinHealthPercentage",
+"nameToken": "",
+"tier": 5,
+"tags": [],
+"hidden": 1,
+"bundle": "ror2-base-minhealthpercentage"
+},
+{
+"name": "MinionLeash",
+"nameToken": "ITEM_MINIONLEASH_NAME",
+"tier": 5,
+"tags": [
+35,
+34
+],
+"hidden": 1,
+"bundle": "ror2-base-minionleash"
+},
+{
+"name": "OutOfCombatArmor",
+"nameToken": "ITEM_OUTOFCOMBATARMOR_NAME",
+"tier": 0,
+"tags": [
+3,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-outofcombatarmor"
+},
+{
+"name": "PermanentDebuffOnHit",
+"nameToken": "ITEM_PERMANENTDEBUFFONHIT_NAME",
+"tier": 2,
+"tags": [
+1,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-permanentdebuffonhit"
+},
+{
+"name": "PrimarySkillShuriken",
+"nameToken": "ITEM_PRIMARYSKILLSHURIKEN_NAME",
+"tier": 1,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-primaryskillshuriken"
+},
+{
+"name": "RandomEquipmentTrigger",
+"nameToken": "ITEM_RANDOMEQUIPMENTTRIGGER_NAME",
+"tier": 2,
+"tags": [
+3,
+7,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-randomequipmenttrigger"
+},
+{
+"name": "RandomlyLunar",
+"nameToken": "ITEM_RANDOMLYLUNAR_NAME",
+"tier": 3,
+"tags": [
+3,
+4
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-randomlylunar"
+},
+{
+"name": "RegeneratingScrapConsumed",
+"nameToken": "ITEM_REGENERATINGSCRAPCONSUMED_NAME",
+"tier": 5,
+"tags": [
+3,
+20
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-regeneratingscrap"
+},
+{
+"name": "RegeneratingScrap",
+"nameToken": "ITEM_REGENERATINGSCRAP_NAME",
+"tier": 1,
+"tags": [
+3,
+14,
+15,
+20,
+27,
+4,
+38
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-regeneratingscrap"
+},
+{
+"name": "ScrapGreenSuppressed",
+"nameToken": "ITEM_SCRAPGREENSUPPRESSED_NAME",
+"tier": 5,
+"tags": [
+9,
+10
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-scrapvoid"
+},
+{
+"name": "ScrapWhiteSuppressed",
+"nameToken": "ITEM_SCRAPWHITESUPPRESSED_NAME",
+"tier": 5,
+"tags": [
+9,
+10
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-scrapvoid"
+},
+{
+"name": "ScrapRedSuppressed",
+"nameToken": "ITEM_SCRAPREDSUPPRESSED_NAME",
+"tier": 5,
+"tags": [
+9,
+10
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-scrapvoid"
+},
+{
+"name": "SlowOnHitVoid",
+"nameToken": "ITEM_SLOWONHITVOID_NAME",
+"tier": 7,
+"tags": [
+3,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-slowonhitvoid"
+},
+{
+"name": "StrengthenBurn",
+"nameToken": "ITEM_STRENGTHENBURN_NAME",
+"tier": 1,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-strengthenburn"
+},
+{
+"name": "TreasureCacheVoid",
+"nameToken": "ITEM_TREASURECACHEVOID_NAME",
+"tier": 6,
+"tags": [
+3,
+4,
+20,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-treasurecachevoid"
+},
+{
+"name": "AttackSpeedPerNearbyAllyOrEnemy",
+"nameToken": "ITEM_ATTACKSPEEDPERNEARBYALLYORENEMY_NAME",
+"tier": 0,
+"tags": [
+1,
+21,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-attackspeedpernearbyallyorenemy"
+},
+{
+"name": "BarrageOnBoss",
+"nameToken": "ITEM_BARRAGEONBOSS_NAME",
+"tier": 2,
+"tags": [
+1,
+21,
+4,
+34,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-barrageonboss"
+},
+{
+"name": "BoostAllStats",
+"nameToken": "ITEM_BOOSTALLSTATS_NAME",
+"tier": 2,
+"tags": [
+3,
+21,
+28,
+29,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-boostallstats"
+},
+{
+"name": "DelayedDamage",
+"nameToken": "ITEM_DELAYEDDAMAGE_NAME",
+"tier": 0,
+"tags": [
+3,
+21,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-delayeddamage"
+},
+{
+"name": "ExtraShrineItem",
+"nameToken": "ITEM_EXTRASHRINEITEM_NAME",
+"tier": 1,
+"tags": [
+15,
+3,
+21,
+4,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-extrashrineitem"
+},
+{
+"name": "ExtraStatsOnLevelUp",
+"nameToken": "ITEM_EXTRASTATSONLEVELUP_NAME",
+"tier": 1,
+"tags": [
+3,
+21,
+15,
+4,
+36
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-extrastatsonlevelup"
+},
+{
+"name": "IncreaseDamageOnMultiKill",
+"nameToken": "ITEM_INCREASEDAMAGEONMULTIKILL_NAME",
+"tier": 0,
+"tags": [
+1,
+6,
+21,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-increasedamageonmultikill"
+},
+{
+"name": "IncreasePrimaryDamage",
+"nameToken": "ITEM_INCREASEPRIMARYDAMAGE_NAME",
+"tier": 1,
+"tags": [
+1,
+3,
+21,
+23,
+4,
+34,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-increaseprimarydamage"
+},
+{
+"name": "ItemDropChanceOnKill",
+"nameToken": "ITEM_ITEMDROPCHANCEONKILL_NAME",
+"tier": 2,
+"tags": [
+3,
+15,
+21,
+4,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-itemdropchanceonkill"
+},
+{
+"name": "KnockBackHitEnemies",
+"nameToken": "ITEM_KNOCKBACKHITENEMIES_NAME",
+"tier": 1,
+"tags": [
+3,
+21,
+4,
+1,
+23,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-knockbackhitenemies"
+},
+{
+"name": "LowerPricedChestsConsumed",
+"nameToken": "ITEM_LOWERPRICEDCHESTSCONSUMED_NAME",
+"tier": 5,
+"tags": [
+3,
+20
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-lowerpricedchests"
+},
+{
+"name": "LowerPricedChests",
+"nameToken": "ITEM_LOWERPRICEDCHESTS_NAME",
+"tier": 1,
+"tags": [
+15,
+3,
+21,
+4
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-lowerpricedchests"
+},
+{
+"name": "MeteorAttackOnHighDamage",
+"nameToken": "ITEM_METEORATTACKONHIGHDAMAGE_NAME",
+"tier": 2,
+"tags": [
+1,
+21,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-meteorattackonhighdamage"
+},
+{
+"name": "OnLevelUpFreeUnlock",
+"nameToken": "ITEM_ONLEVELUPFREEUNLOCK_NAME",
+"tier": 3,
+"tags": [
+21,
+3,
+1,
+4
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-onlevelupfreeunlock"
+},
+{
+"name": "SpeedBoostPickup",
+"nameToken": "ITEM_SPEEDBOOSTPICKUP_NAME",
+"tier": 0,
+"tags": [
+3,
+21,
+4,
+28,
+29,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-speedboostpickup"
+},
+{
+"name": "StunAndPierce",
+"nameToken": "ITEM_STUNANDPIERCE_NAME",
+"tier": 2,
+"tags": [
+1,
+21,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-stunandpierce"
+},
+{
+"name": "TeleportOnLowHealth",
+"nameToken": "ITEM_TELEPORTONLOWHEALTH_NAME",
+"tier": 1,
+"tags": [
+3,
+21,
+16,
+4,
+31,
+40,
+24,
+34
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-teleportonlowhealth"
+},
+{
+"name": "TeleportOnLowHealthConsumed",
+"nameToken": "ITEM_TELEPORTONLOWHEALTHCONSUMED_NAME",
+"tier": 5,
+"tags": [
+3,
+20
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-teleportonlowhealth"
+},
+{
+"name": "TriggerEnemyDebuffs",
+"nameToken": "ITEM_TRIGGERENEMYDEBUFFS_NAME",
+"tier": 1,
+"tags": [
+21,
+1,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc2-items-triggerenemydebuffs"
+},
+{
+"name": "BarrierOnCooldown",
+"nameToken": "ITEM_BARRIERONCOOLDOWN_NAME",
+"tier": 0,
+"tags": [
+2,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-barrieroncooldown"
+},
+{
+"name": "BonusHealthBoost",
+"nameToken": "ITEM_BONUSHEALTHBOOST_NAME",
+"tier": 10,
+"tags": [
+2,
+9,
+31,
+40,
+24
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-bonushealthboost"
+},
+{
+"name": "CookedSteak",
+"nameToken": "ITEM_COOKEDSTEAK_NAME",
+"tier": 10,
+"tags": [
+2,
+9,
+31,
+40,
+24
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-cookedsteak"
+},
+{
+"name": "CritAtLowerElevation",
+"nameToken": "ITEM_CRITATLOWERELEVATION_NAME",
+"tier": 0,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-critatlowerelevation"
+},
+{
+"name": "DestructibleSpawner",
+"nameToken": "ITEM_DESTRUCTIBLESPAWNER_NAME",
+"tier": 5,
+"tags": [
+1,
+34
+],
+"hidden": 1,
+"bundle": "ror2-dlc3-items-destructiblespawneritem"
+},
+{
+"name": "DronesDropDynamite",
+"nameToken": "ITEM_DRONESDROPDYNAMITE_NAME",
+"tier": 1,
+"tags": [
+1,
+4,
+11,
+24,
+13,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-dronesdropdynamite"
+},
+{
+"name": "DroneDynamiteDisplay",
+"nameToken": "ITEM_DRONEDYNAMITEDISPLAY_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 1,
+"bundle": "ror2-dlc3-items-dronesdropdynamite"
+},
+{
+"name": "DroneUpgradeHidden",
+"nameToken": "",
+"tier": 5,
+"tags": [
+12,
+13,
+24,
+35,
+34
+],
+"hidden": 1,
+"bundle": "ror2-dlc3-items-droneupgradehidden"
+},
+{
+"name": "Duplicator",
+"nameToken": "ITEM_DUPLICATOR_NAME",
+"tier": 2,
+"tags": [
+3,
+31,
+40,
+34,
+4,
+23
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-duplicator"
+},
+{
+"name": "ExtraEquipment",
+"nameToken": "ITEM_EXTRAEQUIPMENT_NAME",
+"tier": 4,
+"tags": [
+7,
+4,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-extraequipment"
+},
+{
+"name": "JumpDamageStrike",
+"nameToken": "ITEM_JUMPDAMAGESTRIKE_NAME",
+"tier": 1,
+"tags": [
+1,
+8,
+29,
+31,
+40,
+34,
+4,
+23
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-jumpdamagestrike"
+},
+{
+"name": "MasterBattery",
+"nameToken": "ITEM_MASTERBATTERY_NAME",
+"tier": 4,
+"tags": [
+12,
+24,
+15,
+9,
+13,
+4,
+11,
+30,
+33,
+38,
+41,
+44
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-masterbattery"
+},
+{
+"name": "MasterCore",
+"nameToken": "ITEM_MASTERCORE_NAME",
+"tier": 4,
+"tags": [
+12,
+24,
+15,
+9,
+13,
+4,
+11,
+33,
+22,
+38,
+41,
+44
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-mastercore"
+},
+{
+"name": "MoneyLoan",
+"nameToken": "ITEM_MONEYLOAN_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-moneyloan"
+},
+{
+"name": "PhysicsProjectile",
+"nameToken": "ITEM_PHYSICSPROJECTILE_NAME",
+"tier": 2,
+"tags": [
+1,
+4,
+24,
+12,
+11,
+13,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-physicsprojectile"
+},
+{
+"name": "PowerCube",
+"nameToken": "ITEM_POWERCUBE_NAME",
+"tier": 4,
+"tags": [
+24,
+9,
+25,
+13,
+4,
+27,
+30,
+33,
+38,
+41,
+44
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-powercube"
+},
+{
+"name": "PowerOrbSphere",
+"nameToken": "ITEM_POWERORB_NAME",
+"tier": 5,
+"tags": [
+24,
+25,
+9,
+33,
+38,
+41
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-powerorbsphere"
+},
+{
+"name": "PowerPyramid",
+"nameToken": "ITEM_POWERPYRAMID_NAME",
+"tier": 4,
+"tags": [
+24,
+25,
+9,
+13,
+30,
+31,
+40,
+33,
+38,
+41,
+44
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-powerpyramid"
+},
+{
+"name": "SharedSuffering",
+"nameToken": "ITEM_SHAREDSUFFERING_NAME",
+"tier": 2,
+"tags": [
+1,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-sharedsuffering"
+},
+{
+"name": "ShieldBooster",
+"nameToken": "ITEM_SHIELDBOOSTER_NAME",
+"tier": 1,
+"tags": [
+2,
+3,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-shieldbooster"
+},
+{
+"name": "ShockDamageAura",
+"nameToken": "ITEM_SHOCKDAMAGEAURA_NAME",
+"tier": 4,
+"tags": [
+1,
+3,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-shockdamageaura"
+},
+{
+"name": "SpeedOnPickup",
+"nameToken": "ITEM_SPEEDONPICKUP_NAME",
+"tier": 1,
+"tags": [
+3,
+4,
+18,
+29,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-speedonpickup"
+},
+{
+"name": "StatsFromScrap",
+"nameToken": "ITEM_STATSFROMSCRAP_NAME",
+"tier": 5,
+"tags": [
+0
+],
+"hidden": 1,
+"bundle": "ror2-dlc3-items-statsfromscrap"
+},
+{
+"name": "Stew",
+"nameToken": "ITEM_STEW_NAME",
+"tier": 10,
+"tags": [
+3,
+2,
+9,
+31,
+40,
+24
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-stew"
+},
+{
+"name": "TransferDebuffOnHit",
+"nameToken": "ITEM_TRANSFERDEBUFFONHIT_NAME",
+"tier": 3,
+"tags": [
+3,
+6,
+5,
+11,
+12,
+13,
+24,
+4
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-transferdebuffonhit"
+},
+{
+"name": "UltimateMeal",
+"nameToken": "ITEM_ULTIMATEMEAL_NAME",
+"tier": 10,
+"tags": [
+2,
+9,
+31,
+40,
+24
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-ultimatemeal"
+},
+{
+"name": "WyrmOnHit",
+"nameToken": "ITEM_WYRMONHIT_NAME",
+"tier": 10,
+"tags": [
+1,
+4,
+9,
+15,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc3-items-wyrmonhit"
+},
+{
+"name": "AcolyteSoul",
+"nameToken": "ITEM_ACOLYTESOUL_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 1,
+"bundle": "ror2-dlc4-acolytesoul"
+},
+{
+"name": "BoostCharacterScale",
+"nameToken": "ITEM_BOOSTCHARACTERSCALE_NAME",
+"tier": 5,
+"tags": [
+3
+],
+"hidden": 1,
+"bundle": "ror2-dlc4-boostcharacterscale"
+},
+{
+"name": "ConvertHealingToAttackSpeed",
+"nameToken": "ITEM_CONVERTHEALINGTOATTACKSPEED_NAME",
+"tier": 5,
+"tags": [
+1
+],
+"hidden": 1,
+"bundle": "ror2-dlc4-converthealingtoattackspeed"
+},
+{
+"name": "Doppelganger",
+"nameToken": "ITEM_DOPPELGANGER_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 0,
+"bundle": "ror2-dlc4-doppelganger"
+},
+{
+"name": "HelpWake",
+"nameToken": "ITEM_HELPWAKE_NAME",
+"tier": 4,
+"tags": [
+9,
+31,
+40,
+44
+],
+"hidden": 0,
+"bundle": "ror2-dlc4-helpwake"
+},
+{
+"name": "HitOnJump",
+"nameToken": "ITEM_HITONJUMP_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 0,
+"bundle": "ror2-dlc4-hitonjump"
+},
+{
+"name": "MaxRegainableHealth",
+"nameToken": "MAX_REGAINABLE_HEALTH_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 1,
+"bundle": "ror2-dlc4-maxregainablehealth"
+},
+{
+"name": "MedusaShard",
+"nameToken": "",
+"tier": 5,
+"tags": [
+12,
+13,
+15,
+22,
+23,
+24,
+25,
+34,
+4
+],
+"hidden": 1,
+"bundle": "ror2-dlc4-medusashard"
+},
+{
+"name": "MushShot",
+"nameToken": "ITEM_MUSHSHOT_NAME",
+"tier": 4,
+"tags": [
+31,
+40,
+3,
+29,
+28
+],
+"hidden": 0,
+"bundle": "ror2-dlc4-mushshot"
+},
+{
+"name": "PageShredded",
+"nameToken": "ITEM_PAGESHREDDED_NAME",
+"tier": 12,
+"tags": [
+9,
+38,
+10
+],
+"hidden": 0,
+"bundle": "ror2-dlc4-pageshredded"
+},
+{
+"name": "ReduceCharacterScale",
+"nameToken": "ITEM_REDUCECHARACTERSCALE_NAME",
+"tier": 5,
+"tags": [
+3
+],
+"hidden": 1,
+"bundle": "ror2-dlc4-reducecharacterscale"
+},
+{
+"name": "ReduceDamage",
+"nameToken": "ITEM_REDUCEDAMAGE_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 0,
+"bundle": "ror2-dlc4-reducehp"
+},
+{
+"name": "StealBackHealth",
+"nameToken": "ITEM_STEALBACKHEALTH_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 1,
+"bundle": "ror2-dlc4-stealbackhealth"
+},
+{
+"name": "UrchinOnDeath",
+"nameToken": "",
+"tier": 5,
+"tags": [],
+"hidden": 1,
+"bundle": "ror2-dlc4-urchinondeath"
+},
+{
+"name": "WakeHiddenOverlay",
+"nameToken": "",
+"tier": 5,
+"tags": [],
+"hidden": 1,
+"bundle": "ror2-dlc4-wakehiddenoverlay"
+},
+{
+"name": "WispOnKill",
+"nameToken": "ITEM_WISPONKILL_NAME",
+"tier": 4,
+"tags": [
+1,
+6,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc4-wisponkill"
+},
+{
+"name": "Missile",
+"nameToken": "ITEM_MISSILE_NAME",
+"tier": 1,
+"tags": [
+1,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-missile"
+},
+{
+"name": "MonsoonPlayerHelper",
+"nameToken": "ITEM_MONSOONPLAYERHELPER_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 1,
+"bundle": "ror2-base-monsoonplayerhelper"
+},
+{
+"name": "MonstersOnShrineUse",
+"nameToken": "ITEM_MONSTERSONSHRINEUSE_NAME",
+"tier": 3,
+"tags": [
+3,
+4
+],
+"hidden": 0,
+"bundle": "ror2-base-monstersonshrineuse"
+},
+{
+"name": "Mushroom",
+"nameToken": "ITEM_MUSHROOM_NAME",
+"tier": 0,
+"tags": [
+2,
+4,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-mushroom"
+},
+{
+"name": "NearbyDamageBonus",
+"nameToken": "ITEM_NEARBYDAMAGEBONUS_NAME",
+"tier": 0,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-nearbydamagebonus"
+},
+{
+"name": "NovaOnHeal",
+"nameToken": "ITEM_NOVAONHEAL_NAME",
+"tier": 2,
+"tags": [
+1,
+31,
+40,
+4
+],
+"hidden": 0,
+"bundle": "ror2-base-novaonheal"
+},
+{
+"name": "NovaOnLowHealth",
+"nameToken": "ITEM_NOVAONLOWHEALTH_NAME",
+"tier": 4,
+"tags": [
+1,
+16,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-novaonlowhealth"
+},
+{
+"name": "ParentEgg",
+"nameToken": "ITEM_PARENTEGG_NAME",
+"tier": 4,
+"tags": [
+1,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-parentegg"
+},
+{
+"name": "Pearl",
+"nameToken": "ITEM_PEARL_NAME",
+"tier": 4,
+"tags": [
+3,
+9,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-pearl"
+},
+{
+"name": "PercentMaxHealth",
+"nameToken": "",
+"tier": 5,
+"tags": [],
+"hidden": 1,
+"bundle": "ror2-base-percentmaxhealth"
+},
+{
+"name": "PersonalShield",
+"nameToken": "ITEM_PERSONALSHIELD_NAME",
+"tier": 0,
+"tags": [
+3,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-personalshield"
+},
+{
+"name": "Phasing",
+"nameToken": "ITEM_PHASING_NAME",
+"tier": 1,
+"tags": [
+3,
+16,
+29,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-phasing"
+},
+{
+"name": "Plant",
+"nameToken": "ITEM_INTERSTELLARDESKPLANT_NAME",
+"tier": 2,
+"tags": [
+2,
+6,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-plant"
+},
+{
+"name": "RandomDamageZone",
+"nameToken": "ITEM_RANDOMDAMAGEZONE_NAME",
+"tier": 3,
+"tags": [
+3
+],
+"hidden": 0,
+"bundle": "ror2-base-randomdamagezone"
+},
+{
+"name": "RepeatHeal",
+"nameToken": "ITEM_REPEATHEAL_NAME",
+"tier": 3,
+"tags": [
+2,
+28
+],
+"hidden": 0,
+"bundle": "ror2-base-repeatheal"
+},
+{
+"name": "RoboBallBuddy",
+"nameToken": "ITEM_ROBOBALLBUDDY_NAME",
+"tier": 4,
+"tags": [
+3,
+13,
+24,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-roboballbuddy"
+},
+{
+"name": "SecondarySkillMagazine",
+"nameToken": "ITEM_SECONDARYSKILLMAGAZINE_NAME",
+"tier": 0,
+"tags": [
+3,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-secondaryskillmagazine"
+},
+{
+"name": "Seed",
+"nameToken": "ITEM_SEED_NAME",
+"tier": 1,
+"tags": [
+2,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-seed"
+},
+{
+"name": "ShieldOnly",
+"nameToken": "ITEM_SHIELDONLY_NAME",
+"tier": 3,
+"tags": [
+3,
+28
+],
+"hidden": 0,
+"bundle": "ror2-base-shieldonly"
+},
+{
+"name": "ShinyPearl",
+"nameToken": "ITEM_SHINYPEARL_NAME",
+"tier": 4,
+"tags": [
+1,
+2,
+3,
+9,
+29,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-shinypearl"
+},
+{
+"name": "ShockNearby",
+"nameToken": "ITEM_SHOCKNEARBY_NAME",
+"tier": 2,
+"tags": [
+1,
+4,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-shocknearby"
+},
+{
+"name": "SiphonOnLowHealth",
+"nameToken": "ITEM_SIPHONONLOWHEALTH_NAME",
+"tier": 4,
+"tags": [
+2,
+11,
+4,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-siphononlowhealth"
+},
+{
+"name": "SlowOnHit",
+"nameToken": "ITEM_SLOWONHIT_NAME",
+"tier": 1,
+"tags": [
+3,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-slowonhit"
+},
+{
+"name": "SprintArmor",
+"nameToken": "ITEM_SPRINTARMOR_NAME",
+"tier": 1,
+"tags": [
+3,
+8,
+29,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-sprintarmor"
+},
+{
+"name": "SprintBonus",
+"nameToken": "ITEM_SPRINTBONUS_NAME",
+"tier": 0,
+"tags": [
+3,
+8,
+28,
+29,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-sprintbonus"
+},
+{
+"name": "SprintOutOfCombat",
+"nameToken": "ITEM_SPRINTOUTOFCOMBAT_NAME",
+"tier": 1,
+"tags": [
+3,
+29,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-sprintoutofcombat"
+},
+{
+"name": "SprintWisp",
+"nameToken": "ITEM_SPRINTWISP_NAME",
+"tier": 4,
+"tags": [
+1,
+8,
+29,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-sprintwisp"
+},
+{
+"name": "Squid",
+"nameToken": "ITEM_SQUIDTURRET_NAME",
+"tier": 1,
+"tags": [
+1,
+4,
+18,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-squid"
+},
+{
+"name": "StickyBomb",
+"nameToken": "ITEM_STICKYBOMB_NAME",
+"tier": 0,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-stickybomb"
+},
+{
+"name": "StunChanceOnHit",
+"nameToken": "ITEM_STUNCHANCEONHIT_NAME",
+"tier": 0,
+"tags": [
+3,
+4,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-stunchanceonhit"
+},
+{
+"name": "Syringe",
+"nameToken": "ITEM_SYRINGE_NAME",
+"tier": 0,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-syringe"
+},
+{
+"name": "Talisman",
+"nameToken": "ITEM_TALISMAN_NAME",
+"tier": 2,
+"tags": [
+3,
+6,
+7,
+4,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-talisman"
+},
+{
+"name": "TeamSizeDamageBonus",
+"nameToken": "",
+"tier": 5,
+"tags": [
+1
+],
+"hidden": 1,
+"bundle": "ror2-base-teamsizedamagebonus"
+},
+{
+"name": "TeleportWhenOob",
+"nameToken": "",
+"tier": 5,
+"tags": [],
+"hidden": 1,
+"bundle": "ror2-base-teleportwhenoob"
+},
+{
+"name": "Thorns",
+"nameToken": "ITEM_THORNS_NAME",
+"tier": 1,
+"tags": [
+1,
+4,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-thorns"
+},
+{
+"name": "TitanGoldDuringTP",
+"nameToken": "ITEM_TITANGOLDDURINGTP_NAME",
+"tier": 4,
+"tags": [
+3,
+9,
+12,
+13,
+17,
+31,
+40,
+24
+],
+"hidden": 0,
+"bundle": "ror2-base-titangoldduringtp"
+},
+{
+"name": "TonicAffliction",
+"nameToken": "ITEM_TONICAFFLICTION_NAME",
+"tier": 5,
+"tags": [
+5
+],
+"hidden": 0,
+"bundle": "ror2-base-tonicaffliction"
+},
+{
+"name": "Tooth",
+"nameToken": "ITEM_TOOTH_NAME",
+"tier": 0,
+"tags": [
+2,
+6,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-tooth"
+},
+{
+"name": "TPHealingNova",
+"nameToken": "ITEM_TPHEALINGNOVA_NAME",
+"tier": 1,
+"tags": [
+2,
+4,
+13,
+17,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-tphealingnova"
+},
+{
+"name": "TreasureCache",
+"nameToken": "ITEM_TREASURECACHE_NAME",
+"tier": 0,
+"tags": [
+3,
+4,
+20,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-treasurecache"
+},
+{
+"name": "UseAmbientLevel",
+"nameToken": "",
+"tier": 5,
+"tags": [
+12,
+13,
+35,
+34
+],
+"hidden": 1,
+"bundle": "ror2-base-useambientlevel"
+},
+{
+"name": "UtilitySkillMagazine",
+"nameToken": "ITEM_UTILITYSKILLMAGAZINE_NAME",
+"tier": 2,
+"tags": [
+3,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-base-utilityskillmagazine"
+},
+{
+"name": "WarCryOnMultiKill",
+"nameToken": "ITEM_WARCRYONMULTIKILL_NAME",
+"tier": 1,
+"tags": [
+1,
+6,
+29,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-warcryonmultikill"
+},
+{
+"name": "WardOnLevel",
+"nameToken": "ITEM_WARDONLEVEL_NAME",
+"tier": 0,
+"tags": [
+3,
+4,
+13,
+29,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-base-wardonlevel"
+},
+{
+"name": "AttackSpeedAndMoveSpeed",
+"nameToken": "ITEM_ATTACKSPEEDANDMOVESPEED_NAME",
+"tier": 0,
+"tags": [
+1,
+3,
+28,
+29,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-attackspeedandmovespeed"
+},
+{
+"name": "BearVoid",
+"nameToken": "ITEM_BEARVOID_NAME",
+"tier": 6,
+"tags": [
+3,
+11,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-bearvoid"
+},
+{
+"name": "BleedOnHitVoid",
+"nameToken": "ITEM_BLEEDONHITVOID_NAME",
+"tier": 6,
+"tags": [
+1,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-bleedonhitvoid"
+},
+{
+"name": "ChainLightningVoid",
+"nameToken": "ITEM_CHAINLIGHTNINGVOID_NAME",
+"tier": 7,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-chainlightningvoid"
+},
+{
+"name": "CloverVoid",
+"nameToken": "ITEM_CLOVERVOID_NAME",
+"tier": 8,
+"tags": [
+3,
+20,
+4,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-clovervoid"
+},
+{
+"name": "ConvertCritChanceToCritDamage",
+"nameToken": "ITEM_CONVERTCRITCHANCETOCRITDAMAGE_NAME",
+"tier": 5,
+"tags": [
+1
+],
+"hidden": 1,
+"bundle": "ror2-dlc1-convertcritchancetocritdamage"
+},
+{
+"name": "CritDamage",
+"nameToken": "ITEM_CRITDAMAGE_NAME",
+"tier": 2,
+"tags": [
+1,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-critdamage"
+},
+{
+"name": "CritGlassesVoid",
+"nameToken": "ITEM_CRITGLASSESVOID_NAME",
+"tier": 6,
+"tags": [
+1,
+4,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-critglassesvoid"
+},
+{
+"name": "DroneWeaponsDisplay2",
+"nameToken": "ITEM_DRONEWEAPONSDISPLAY2_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 1,
+"bundle": "ror2-dlc1-droneweapons"
+},
+{
+"name": "DroneWeaponsBoost",
+"nameToken": "ITEM_DRONEWEAPONSBOOST_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 1,
+"bundle": "ror2-dlc1-droneweapons"
+},
+{
+"name": "DroneWeapons",
+"nameToken": "ITEM_DRONEWEAPONS_NAME",
+"tier": 2,
+"tags": [
+1,
+13,
+4,
+11,
+24,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-droneweapons"
+},
+{
+"name": "DroneWeaponsDisplay1",
+"nameToken": "ITEM_DRONEWEAPONSDISPLAY1_NAME",
+"tier": 5,
+"tags": [],
+"hidden": 1,
+"bundle": "ror2-dlc1-droneweapons"
+},
+{
+"name": "ElementalRingVoid",
+"nameToken": "ITEM_ELEMENTALRINGVOID_NAME",
+"tier": 7,
+"tags": [
+1,
+3,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-elementalringvoid"
+},
+{
+"name": "EquipmentMagazineVoid",
+"nameToken": "ITEM_EQUIPMENTMAGAZINEVOID_NAME",
+"tier": 7,
+"tags": [
+3,
+31,
+40,
+24
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-equipmentmagazinevoid"
+},
+{
+"name": "ExplodeOnDeathVoid",
+"nameToken": "ITEM_EXPLODEONDEATHVOID_NAME",
+"tier": 7,
+"tags": [
+1,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-explodeondeathvoid"
+},
+{
+"name": "ExtraLifeVoid",
+"nameToken": "ITEM_EXTRALIFEVOID_NAME",
+"tier": 8,
+"tags": [
+3,
+28,
+24,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-extralifevoid"
+},
+{
+"name": "ExtraLifeVoidConsumed",
+"nameToken": "ITEM_EXTRALIFEVOIDCONSUMED_NAME",
+"tier": 5,
+"tags": [
+3,
+30
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-extralifevoid"
+},
+{
+"name": "FragileDamageBonusConsumed",
+"nameToken": "ITEM_FRAGILEDAMAGEBONUSCONSUMED_NAME",
+"tier": 5,
+"tags": [
+30
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-fragiledamagebonus"
+},
+{
+"name": "FragileDamageBonus",
+"nameToken": "ITEM_FRAGILEDAMAGEBONUS_NAME",
+"tier": 0,
+"tags": [
+1,
+16,
+31,
+40,
+24
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-fragiledamagebonus"
+},
+{
+"name": "FreeChest",
+"nameToken": "ITEM_FREECHEST_NAME",
+"tier": 1,
+"tags": [
+3,
+20,
+4,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-freechest"
+},
+{
+"name": "GoldOnHurt",
+"nameToken": "ITEM_GOLDONHURT_NAME",
+"tier": 0,
+"tags": [
+3,
+4,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-goldonhurt"
+},
+{
+"name": "HalfAttackSpeedHalfCooldowns",
+"nameToken": "ITEM_HALFATTACKSPEEDHALFCOOLDOWNS_NAME",
+"tier": 3,
+"tags": [
+3
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-halfattackspeedhalfcooldowns"
+},
+{
+"name": "HalfSpeedDoubleHealth",
+"nameToken": "ITEM_HALFSPEEDDOUBLEHEALTH_NAME",
+"tier": 3,
+"tags": [
+3
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-halfspeeddoublehealth"
+},
+{
+"name": "HealingPotionConsumed",
+"nameToken": "ITEM_HEALINGPOTIONCONSUMED_NAME",
+"tier": 5,
+"tags": [
+2,
+30
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-healingpotion"
+},
+{
+"name": "HealingPotion",
+"nameToken": "ITEM_HEALINGPOTION_NAME",
+"tier": 0,
+"tags": [
+2,
+16,
+4,
+28,
+31,
+40,
+24
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-healingpotion"
+},
+{
+"name": "ImmuneToDebuff",
+"nameToken": "ITEM_IMMUNETODEBUFF_NAME",
+"tier": 2,
+"tags": [
+3,
+2,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-immunetodebuff"
+},
+{
+"name": "LunarSun",
+"nameToken": "ITEM_LUNARSUN_NAME",
+"tier": 3,
+"tags": [
+3
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-lunarsun"
+},
+{
+"name": "MinorConstructOnKill",
+"nameToken": "ITEM_MINORCONSTRUCTONKILL_NAME",
+"tier": 4,
+"tags": [
+6,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-minorconstructonkill"
+},
+{
+"name": "MissileVoid",
+"nameToken": "ITEM_MISSILEVOID_NAME",
+"tier": 7,
+"tags": [
+1,
+28,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-missilevoid"
+},
+{
+"name": "MoreMissile",
+"nameToken": "ITEM_MOREMISSILE_NAME",
+"tier": 2,
+"tags": [
+1,
+31,
+40,
+34
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-moremissile"
+},
+{
+"name": "MoveSpeedOnKill",
+"nameToken": "ITEM_MOVESPEEDONKILL_NAME",
+"tier": 1,
+"tags": [
+3,
+29,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-movespeedonkill"
+},
+{
+"name": "MushroomVoid",
+"nameToken": "ITEM_MUSHROOMVOID_NAME",
+"tier": 6,
+"tags": [
+2,
+28,
+29,
+8,
+31,
+40
+],
+"hidden": 0,
+"bundle": "ror2-dlc1-mushroomvoid"
+}
+]

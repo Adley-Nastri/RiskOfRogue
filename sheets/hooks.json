@@ -63,6 +63,14 @@
    "side": "server",
    "args": "Bundle",
    "verified": "2026-10-12 live: perk, shard and augment bundles (BP_Pickup_Bundle_Augment_C)"
+  },
+  {
+   "id": "encounter",
+   "kind": "RegisterHook",
+   "target": "/Script/Valhalla.ValGameMode_SpaceDungeon:NotifyEncounterDoorsClosed",
+   "side": "server",
+   "args": "(none used)",
+   "verified": "2026-10-12 live: fires when an encounter room locks its doors, several times per room (the mod de-duplicates)"
   }
  ]
 }

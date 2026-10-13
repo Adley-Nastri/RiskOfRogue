@@ -145,8 +145,8 @@ local function element_damage(attacker, el, base)
   return base * math.max(0, mult) * attr(attacker, SYS.elem_proc_attr, 1)
 end
 local StatusAt = {}
-local function apply_status(attacker, bot, el)
-  if not el or not alive(bot) or not valid(attacker) then return end
+local function apply_status(attacker, bot, el, dur_override)
+  if not el or el.status_ge == "none" or not alive(bot) or not valid(attacker) then return end
   local key = addr(bot) .. el.id
   if (StatusAt[key] or -1e9) + el.status_cooldown_ms > now_ms then return end
   StatusAt[key] = now_ms
@@ -156,7 +156,7 @@ local function apply_status(attacker, bot, el)
   local src, dst = attacker.AbilitySystemComponent, bot.AbilitySystemComponent
   if not valid(c) or not valid(cdo) or not valid(src) or not valid(dst) then return end
   local potency = attr(attacker, SYS.elem_potency_attr, 1)
-  local dur = el.duration_s * attr(attacker, SYS.elem_duration_attr, 1) + attr(attacker, el.duration_attr, 0)
+  local dur = (dur_override or el.duration_s) * attr(attacker, SYS.elem_duration_attr, 1) + attr(attacker, el.duration_attr, 0)
   local extra = attr(attacker, el.mag_attr, 0)
   local mag = (el.status_mag + (el.status_mag < 0 and -extra or extra)) * potency
   -- SetByCaller magnitudes can't be set from a mod, so the default object gets fixed values for this one call
@@ -213,6 +213,10 @@ local function local_pc()
   return nil
 end
 local function stack_mag(it, n)
+  if it.stack == "power" then
+    if it.op == "mult" then return (1 + it.k) ^ n end
+    return (1 + it.k) ^ n - 1 -- additive modifier on a base of 1: the total change after n multiplicative stacks
+  end
   if it.stack == "hyperbolic" then return 1 - 1 / (1 + it.k * n) end
   if it.op == "mult" then return 1 + it.k * n end
   return it.k * n
@@ -289,7 +293,18 @@ local function apply_items(name)
       if it.kind == "stat" and n > 0 then mag = stack_mag(it, n) end
       if it.kind == "growth" and n > 0 then mag = math.min(st.infusion, it.dmg * n) end
       if n > 0 and mag ~= 0 then st.handles[it.id] = apply_magnitude(pawn, it.ge, mag) end
-    elseif it.kind == "jump" then
+    end
+    if it.kind == "stat" and it.ge2 ~= "" then
+      remove_effect(pawn, st.handles[it.id .. "#2"]); st.handles[it.id .. "#2"] = nil
+      local mag2 = it.op2 == "mult" and (1 + it.k2 * n) or (it.k2 * n)
+      if n > 0 then st.handles[it.id .. "#2"] = apply_magnitude(pawn, it.ge2, mag2) end
+    end
+    if it.pge ~= "" then
+      remove_effect(pawn, st.handles[it.id .. "#p"]); st.handles[it.id .. "#p"] = nil
+      local magp = it.pop == "mult" and (1 + it.pk * n) or (it.pk * n)
+      if n > 0 then st.handles[it.id .. "#p"] = apply_magnitude(pawn, it.pge, magp) end
+    end
+    if it.kind == "jump" then
       if not st.base_jump then st.base_jump = pawn.JumpMaxCount end
       pawn.JumpMaxCount = st.base_jump + math.floor(it.k * n)
       send(pc, "j|" .. tostring(pawn.JumpMaxCount))
@@ -383,7 +398,8 @@ local function roll_offer(b, tries)
   end
   local key = bundle_key(b)
   if Offers[key] or math.random() > SYS.orb_ror2_chance then return end
-  local off = { slot = math.random(n) - 1, item = roll_item(roll_rarity("orb_weight")) }
+  local rar = roll_rarity("orb_weight")
+  local off = { slot = math.random(n) - 1, item = roll_item(rar) }
   Offers[key] = off
   log("orb " .. b:GetClass():GetFName():ToString() .. " offers " .. off.item .. " in slot " .. off.slot)
   for _, pc in ipairs(FindAllOf("ValPlayerController") or {}) do send_offer(pc, key, off) end
@@ -394,6 +410,14 @@ local function grant_orb(pc, b, off, key)
   after(0, function()
     pcall(function() b:DestroyPickup() end)
     give(name, off.item, 1)
+    local st = pstate(name)
+    -- Substandard Duplicator: a temporary extra copy
+    local dup = count(st, "Duplicator")
+    if dup > 0 then
+      local it = Data.ITEM_BY_ID.Duplicator
+      give(name, off.item, 1)
+      after(math.floor((it.dur + it.dur_per * (dup - 1)) * 1000), function() take(name, off.item, 1) end)
+    end
   end)
 end
 
@@ -470,6 +494,778 @@ local function patch_orb_menu(tex)
 end
 
 ---------------------------------------------------------------------------
+-- Generic RoR2 item engine. The 94 items added after the first 14 are described entirely by
+-- their sheet row (kind, trigger, cond, action and numbers); this section runs them.
+--   stat    permanent stat (handled by apply_items, incl. a second stat ge2)
+--   cstat   stat while a condition holds (out of combat, enemies nearby, ...)
+--   buff    timed, stacking stat gained on a trigger
+--   effect  an action (damage, heal, shield, credits, ammo, aura, ...) on a trigger
+--   regen   healing per second while a condition holds
+--   growth2 a stat that grows with kills up to a cap
+--   special a few items with their own small handler below
+-- Everything runs on the host. Damage goes through deal()/item_hit(), so kills are credited.
+---------------------------------------------------------------------------
+local ITEMS_BY_TRIGGER = {}
+local GENERIC_KINDS = { effect = true, buff = true, growth2 = true }
+for _, it in ipairs(Data.ITEMS) do
+  if GENERIC_KINDS[it.kind] and it.trigger ~= "" then
+    ITEMS_BY_TRIGGER[it.trigger] = ITEMS_BY_TRIGGER[it.trigger] or {}
+    table.insert(ITEMS_BY_TRIGGER[it.trigger], it)
+  end
+end
+local COND_ITEMS, REGEN_ITEMS, PERIODIC_ITEMS = {}, {}, {}
+for _, it in ipairs(Data.ITEMS) do
+  if it.kind == "cstat" then COND_ITEMS[#COND_ITEMS + 1] = it end
+  if it.kind == "regen" then REGEN_ITEMS[#REGEN_ITEMS + 1] = it end
+  if it.trigger == "periodic" then PERIODIC_ITEMS[#PERIODIC_ITEMS + 1] = it end
+end
+local ELEMENT_IDS = {}
+for _, e in ipairs(Data.ELEMENTS) do ELEMENT_IDS[#ELEMENT_IDS + 1] = e.id end
+
+local function per(base, step, n) return base + step * (n - 1) end
+local function sec_ms(s) return math.floor(s * 1000) end
+
+-- player context ------------------------------------------------------------
+local function gstate(st)
+  if not st.g then
+    st.g = { base = SYS.base_damage_start, last_fire = {}, counter = {}, buffs = {}, cstat = {}, growth = {},
+             last_hit = -1e9, last_hurt = -1e9, low = false, still_since = nil, charge = 0, soul = 0,
+             fall_from = nil, kills = {}, echo_ready = 0 }
+  end
+  return st.g
+end
+local function in_combat(g) return now_ms - math.max(g.last_hit, g.last_hurt) < SYS.combat_window_ms end
+local function speed_of(pawn)
+  local v = { X = 0, Y = 0, Z = 0 }
+  pcall(function() v = pawn:GetVelocity() end)
+  return math.sqrt(v.X * v.X + v.Y * v.Y)
+end
+local function luck(st) return count(st, "Clover") end
+local function roll(st, p)
+  if p >= 1 then return true end
+  for _ = 0, luck(st) do if math.random() < p then return true end end
+  return false
+end
+local function chance_of(it, n)
+  if it.stack == "hyperbolic" then return 1 - (1 - it.chance) ^ n end
+  return math.min(1, per(it.chance, it.chance_per, n))
+end
+local function cd_of(it, n)
+  if it.cd_per > 0 then return it.cd * it.cd_per ^ (n - 1) end
+  return it.cd
+end
+local function ready(g, key, seconds)
+  if seconds <= 0 then return true end
+  if (g.last_fire[key] or -1e9) + sec_ms(seconds) > now_ms then return false end
+  return true
+end
+
+-- elites: a bot whose max HP is well above the run's typical bot
+local HpEma = nil
+local function note_bot_hp(bot)
+  local m = 0; pcall(function() m = bot:GetHealthMax() end)
+  if m <= 0 then return end
+  HpEma = HpEma and (HpEma * 0.95 + m * 0.05) or m
+end
+local function is_elite(bot)
+  if not HpEma then return false end
+  local m = 0; pcall(function() m = bot:GetHealthMax() end)
+  return m >= HpEma * SYS.elite_hp_ratio
+end
+
+-- element statuses currently on a bot (for Death Mark / Noxious Thorn)
+local StatusUntil = {}
+local function note_status(bot, el_id, dur)
+  StatusUntil[addr(bot) .. "|" .. el_id] = now_ms + sec_ms(dur)
+end
+local function statuses_on(bot)
+  local a, out = addr(bot), {}
+  for _, id in ipairs(ELEMENT_IDS) do
+    if (StatusUntil[a .. "|" .. id] or 0) > now_ms then out[#out + 1] = id end
+  end
+  return out
+end
+
+-- shields, credits, invulnerability -----------------------------------------
+local function apply_fixed(char, path, mag, target)
+  local cpath, dpath = ge_paths(path)
+  local c, cdo = cls(cpath), cls(dpath)
+  if not valid(c) then pcall(function() LoadAsset(path) end); c, cdo = cls(cpath), cls(dpath) end
+  if not valid(c) or not valid(cdo) or not valid(char) then return end
+  local asc = char.AbilitySystemComponent
+  if not valid(asc) then return end
+  local saved = {}
+  local mods = cdo.Modifiers
+  for i = 1, mods:GetArrayNum() do
+    local mm = mods[i].ModifierMagnitude
+    saved[i] = { mm.MagnitudeCalculationType, mm.ScalableFloatMagnitude.Value }
+    if mag and saved[i][1] == 3 then mm.MagnitudeCalculationType = 0; mm.ScalableFloatMagnitude.Value = mag end
+  end
+  pcall(function()
+    if target then asc:BP_ApplyGameplayEffectToTarget(c, target.AbilitySystemComponent, 1.0, asc:MakeEffectContext())
+    else asc:BP_ApplyGameplayEffectToSelf(c, 1.0, asc:MakeEffectContext()) end
+  end)
+  for i = 1, mods:GetArrayNum() do
+    local mm = mods[i].ModifierMagnitude
+    mm.MagnitudeCalculationType = saved[i][1]; mm.ScalableFloatMagnitude.Value = saved[i][2]
+  end
+end
+local function barrier(pawn, amount)
+  if not alive(pawn) or amount <= 0 then return end
+  apply_fixed(pawn, SYS.temp_shield_ge, math.floor(amount))
+end
+local function award_credits(pc, amount)
+  local gm = FindFirstOf("ValGameMode")
+  amount = math.floor(amount * (1 + Run.clock / SYS.currency_clock_scale))
+  if amount <= 0 or not valid(gm) or not valid(pc) then return end
+  pcall(function() gm:AwardCurrency(pc.PlayerState, 0, amount) end)
+end
+
+-- healing that knows about Rejuvenation Rack, Aegis and N'kuhana's Opinion
+local function heal_player(name, pawn, amount)
+  if not alive(pawn) or amount <= 0 then return end
+  local st = pstate(name)
+  amount = amount * (1 + count(st, "IncreaseHealing"))
+  local hp, mx = pawn:GetHealth(), pawn:GetHealthMax()
+  local over = hp + amount - mx
+  pawn:SetHealth(math.min(mx, hp + amount) * 1.0)
+  local aegis = count(st, "BarrierOnOverHeal")
+  if aegis > 0 and over > 0 then
+    local it = Data.ITEM_BY_ID.BarrierOnOverHeal
+    barrier(pawn, over * per(it.k, it.k_per, aegis))
+  end
+end
+
+-- timed stat effects ----------------------------------------------------------
+local function stat_mag(op, raw) if op == "mult" then return 1 + raw end return raw end
+local function set_stat(pawn, slot, key, ge, op, raw)
+  remove_effect(pawn, slot[key]); slot[key] = nil
+  if ge ~= "" and raw ~= 0 and alive(pawn) then slot[key] = apply_magnitude(pawn, ge, stat_mag(op, raw)) end
+end
+
+-- damage helpers ----------------------------------------------------------------
+local function missile_mult(st, it)
+  if it.tag ~= "missile" then return 1, 1 end
+  local m = count(st, "MoreMissile")
+  if m == 0 then return 1, 1 end
+  return 3, 1 + Data.ITEM_BY_ID.MoreMissile.k * (m - 1)
+end
+local function el_of(it) return Data.ELEMENT_BY_ID[it.element] end
+-- one hit from a generic item: element damage, the element's status, and the item's extra status
+local function ghit(pawn, bot, it, n, amount, extra_dur)
+  if not alive(bot) then return end
+  local el = el_of(it)
+  if el and el.status_ge ~= "none" then apply_status(pawn, bot, el); note_status(bot, el.id, el.duration_s) end
+  local sx = Data.ELEMENT_BY_ID[it.status]
+  if sx and sx.status_ge ~= "none" then
+    local d = extra_dur or (it.dur > 0 and per(it.dur, it.dur_per, n)) or sx.duration_s
+    apply_status(pawn, bot, sx, d); note_status(bot, sx.id, d)
+  end
+  if amount and amount > 0 then deal(pawn, bot, element_damage(pawn, el, amount)) end
+end
+local function bots_in(center_x, center_y, center_z, radius)
+  local out = {}
+  for _, b in ipairs(all_bots()) do
+    local x, y, z = loc(b)
+    if math.sqrt((x - center_x) ^ 2 + (y - center_y) ^ 2 + (z - center_z) ^ 2) <= radius then out[#out + 1] = b end
+  end
+  return out
+end
+local function nearest(list, center, k)
+  table.sort(list, function(a, b) return dist(a, center) < dist(b, center) end)
+  local out = {}
+  for i = 1, math.min(k, #list) do out[i] = list[i] end
+  return out
+end
+local function shuffle(t) for i = #t, 2, -1 do local j = math.random(i); t[i], t[j] = t[j], t[i] end return t end
+
+-- auras: short-lived zones handled every tick (banner, turret, ice storm, healing plant, transmitter)
+local Auras = {}
+
+-- the action table ------------------------------------------------------------------
+local ACTIONS = {}
+local function base_value(it, ctx, target)
+  if it.dmg_base == "base" then return ctx.g.base end
+  if it.dmg_base == "vmax" then local m = 0; pcall(function() m = target:GetHealthMax() end); return m end
+  return ctx.amount or ctx.g.base
+end
+local function dmg_of(it, n, ctx, target)
+  local shots, mult = missile_mult(ctx.st, it)
+  return per(it.dmg, it.dmg_per, n) * base_value(it, ctx, target) * mult, shots
+end
+local function radius_of(it, n) return per(it.radius, it.radius_per, n) end
+local function count_of(it, n) return math.floor(per(it.n, it.n_per, n)) end
+
+ACTIONS.bonus = function(it, n, ctx)
+  local d = dmg_of(it, n, ctx, ctx.victim)
+  ghit(ctx.pawn, ctx.victim, it, n, d)
+end
+ACTIONS.single = function(it, n, ctx)
+  local d, shots = dmg_of(it, n, ctx, ctx.victim)
+  for _ = 1, shots do ghit(ctx.pawn, ctx.victim, it, n, d) end
+  fx_at("behemoth_blast", ctx.victim)
+end
+ACTIONS.single_random = function(it, n, ctx)
+  local list = bots_near(ctx.pawn, radius_of(it, n), nil)
+  if #list == 0 then return end
+  local t = list[math.random(#list)]
+  local d = dmg_of(it, n, ctx, t)
+  ghit(ctx.pawn, t, it, n, d); fx_at("behemoth_blast", t)
+end
+ACTIONS.aoe = function(it, n, ctx)
+  local center = ctx.victim or ctx.pawn
+  local x, y, z = loc(center)
+  local d = dmg_of(it, n, ctx, center)
+  fx("behemoth_blast", x, y, z)
+  for _, b in ipairs(bots_in(x, y, z, radius_of(it, n))) do ghit(ctx.pawn, b, it, n, d) end
+end
+ACTIONS.aoe_self = function(it, n, ctx)
+  local x, y, z = loc(ctx.pawn)
+  local d = dmg_of(it, n, ctx, nil)
+  if it.id == "ShieldBooster" then d = d + attr(ctx.pawn, "ShieldMax", 0) end
+  fx("behemoth_blast", x, y, z)
+  for _, b in ipairs(bots_in(x, y, z, radius_of(it, n))) do ghit(ctx.pawn, b, it, n, d) end
+end
+ACTIONS.aoe_random = function(it, n, ctx)
+  local list = bots_near(ctx.pawn, radius_of(it, n), nil)
+  if #list == 0 then return end
+  local t = list[math.random(#list)]
+  local x, y, z = loc(t)
+  local d = dmg_of(it, n, ctx, t)
+  fx("gasoline_blast", x, y, z)
+  for _, b in ipairs(bots_in(x, y, z, 400)) do ghit(ctx.pawn, b, it, n, d) end
+end
+ACTIONS.chain = function(it, n, ctx)
+  local d = dmg_of(it, n, ctx, ctx.victim)
+  for _, b in ipairs(nearest(bots_near(ctx.victim, radius_of(it, n), ctx.victim), ctx.victim, count_of(it, n))) do
+    fx_at("ukulele_hit", b); ghit(ctx.pawn, b, it, n, d)
+  end
+end
+ACTIONS.chain_self = function(it, n, ctx)
+  local d = dmg_of(it, n, ctx, nil)
+  for _, b in ipairs(nearest(bots_near(ctx.pawn, radius_of(it, n), nil), ctx.pawn, count_of(it, n))) do
+    fx_at("ukulele_hit", b); ghit(ctx.pawn, b, it, n, d)
+  end
+end
+ACTIONS.multi = function(it, n, ctx)
+  local list = shuffle(bots_near(ctx.pawn, radius_of(it, n), nil))
+  if #list == 0 then return end
+  local d, shots = dmg_of(it, n, ctx, nil)
+  local k = count_of(it, n) * shots
+  for i = 1, k do
+    local b = list[(i - 1) % #list + 1]
+    after(i * 60, function() if alive(b) then ghit(ctx.pawn, b, it, n, d) end end)
+  end
+end
+ACTIONS.dot = function(it, n, ctx)
+  local b, pawn = ctx.victim, ctx.pawn
+  local total = dmg_of(it, n, ctx, b)
+  if it.element == "fire" and count(ctx.st, "StrengthenBurn") > 0 then
+    local tank = Data.ITEM_BY_ID.StrengthenBurn
+    total = total * (1 + per(tank.k, tank.k_per, count(ctx.st, "StrengthenBurn")))
+  end
+  local ticks = math.max(1, math.floor(it.dur * 2))
+  ghit(pawn, b, it, n, 0)
+  for i = 1, ticks do after(i * 500, function() if alive(b) then deal(pawn, b, element_damage(pawn, el_of(it), total / ticks)) end end) end
+end
+ACTIONS.delayed = function(it, n, ctx)
+  local b, pawn = ctx.victim, ctx.pawn
+  local d = dmg_of(it, n, ctx, b)
+  local x, y, z = loc(b)
+  after(sec_ms(it.dur), function()
+    if alive(b) then x, y, z = loc(b) end
+    fx("gasoline_blast", x, y, z)
+    for _, t in ipairs(bots_in(x, y, z, it.radius)) do ghit(pawn, t, it, n, d) end
+  end)
+end
+ACTIONS.status = function(it, n, ctx) ghit(ctx.pawn, ctx.victim, it, n, 0) end
+ACTIONS.execute = function(it, n, ctx) deal(ctx.pawn, ctx.victim, ctx.victim:GetHealth() + 1) end
+ACTIONS.heal = function(it, n, ctx)
+  local mx = ctx.pawn:GetHealthMax()
+  heal_player(ctx.name, ctx.pawn, per(it.k, it.k_per, n) + per(it.dmg, it.dmg_per, n) * mx)
+end
+ACTIONS.heal_all = function(it, n, ctx)
+  local times = math.max(1, count_of(it, n))
+  for i = 0, times - 1 do
+    after(i * 15000, function()
+      for _, pc in ipairs(FindAllOf("ValPlayerController") or {}) do
+        local p = valid(pc) and pc.Pawn
+        if alive(p) and alive(ctx.pawn) and dist(p, ctx.pawn) <= it.radius then
+          heal_player(player_name(pc), p, it.dmg * p:GetHealthMax()); fx_at("heal", p)
+        end
+      end
+    end)
+  end
+end
+ACTIONS.barrier = function(it, n, ctx)
+  barrier(ctx.pawn, per(it.k, it.k_per, n) + per(it.dmg, it.dmg_per, n) * ctx.pawn:GetHealthMax())
+end
+ACTIONS.currency = function(it, n, ctx) award_credits(ctx.pc, per(it.k, it.k_per, n)) end
+ACTIONS.ammo = function(it, n, ctx) pcall(function() ctx.pawn:RefillAmmo(false) end) end
+ACTIONS.refund = function(it, n, ctx)
+  local pct = it.stack == "hyperbolic" and (1 - 1 / (1 + it.k * n)) or math.min(1, per(it.k, it.k_per, n))
+  if ctx.pawn:GetHealth() > 0 then heal_player(ctx.name, ctx.pawn, ctx.amount * pct) end
+end
+local BUFF_FROM
+ACTIONS.buff = function(it, n, ctx)
+  BUFF_FROM(it, n, ctx)
+  if it.invuln > 0 then apply_fixed(ctx.pawn, SYS.invuln_ge, nil) end
+end
+ACTIONS.aura = function(it, n, ctx)
+  local x, y, z = loc(ctx.victim or ctx.pawn)
+  local a = { it = it, n = n, name = ctx.name, pawn = ctx.pawn, st = ctx.st, x = x, y = y, z = z,
+              start = now_ms + sec_ms(it.delay), stop = now_ms + sec_ms(it.delay + per(it.dur, it.dur_per, n)), next = 0, kills = 0 }
+  if it.sub == "storm" then
+    for _, o in ipairs(Auras) do
+      if o.it.id == it.id and o.name == ctx.name and o.stop > now_ms then o.stop = a.stop; o.kills = o.kills + 1; return end
+    end
+  end
+  if it.sub == "transmit" then barrier(ctx.pawn, it.k * ctx.pawn:GetHealthMax()) end
+  Auras[#Auras + 1] = a
+end
+local function random_item(st, white_pct)
+  local r = math.random() * 100
+  local rar = r < white_pct and "white" or (r < white_pct + 20 and "green" or "red")
+  return roll_item(rar)
+end
+ACTIONS.item = function(it, n, ctx)
+  local id = random_item(ctx.st, it.k)
+  if it.consume > 0 then take(ctx.name, it.id, 1) end
+  give(ctx.name, id, 1)
+  notify(ctx.name, "t", Data.ITEM_BY_ID[it.id].name .. ": " .. Data.ITEM_BY_ID[id].name)
+end
+ACTIONS.disc = function(it, n, ctx)
+  local list = bots_near(ctx.pawn, radius_of(it, n), nil)
+  if #list == 0 then return end
+  local d = dmg_of(it, n, ctx, nil)
+  for i, b in ipairs(list) do after(i * 40, function() if alive(b) then ghit(ctx.pawn, b, it, n, d) end end) end
+  local t = list[math.random(#list)]
+  local boom = per(it.k, it.k_per, n) * ctx.g.base
+  after(600, function()
+    if not alive(t) then return end
+    local x, y, z = loc(t); fx("behemoth_blast", x, y, z)
+    for _, b in ipairs(bots_in(x, y, z, 600)) do ghit(ctx.pawn, b, it, n, boom) end
+  end)
+end
+ACTIONS.elite_strike = function(it, n, ctx)
+  local best, bm = nil, 0
+  for _, b in ipairs(bots_near(ctx.pawn, radius_of(it, n), nil)) do
+    local m = b:GetHealthMax(); if m > bm then best, bm = b, m end
+  end
+  if not best or not is_elite(best) then return end
+  local d, shots = dmg_of(it, n, ctx, best)
+  local k = it.n * shots
+  for i = 1, k do after(i * 120, function() if alive(best) then fx_at("behemoth_blast", best); ghit(ctx.pawn, best, it, n, d / it.n) end end) end
+end
+
+-- buffs -------------------------------------------------------------------------------
+BUFF_FROM = function(it, n, ctx)
+  local g = ctx.g
+  local b = g.buffs[it.id] or { stacks = 0, h = {} }
+  g.buffs[it.id] = b
+  local cap = math.max(1, math.floor(per(it.cap, it.cap_per, n)))
+  b.stacks = math.min(cap, b.stacks + 1)
+  b.untilT = now_ms + sec_ms(per(it.dur, it.dur_per, n))
+  b.it, b.n = it, n
+  set_stat(ctx.pawn, b.h, 1, it.ge, it.op, b.stacks * per(it.k, it.k_per, n))
+  if it.ge2 and it.ge2 ~= "" then set_stat(ctx.pawn, b.h, 2, it.ge2, it.op2, b.stacks * it.k2) end
+end
+local function expire_buffs(pawn, g)
+  for id, b in pairs(g.buffs) do
+    if b.untilT <= now_ms then
+      remove_effect(pawn, b.h[1]); remove_effect(pawn, b.h[2])
+      g.buffs[id] = nil
+    end
+  end
+end
+local function active_buffs(g) local c = 0; for _ in pairs(g.buffs) do c = c + 1 end return c end
+
+-- conditions ------------------------------------------------------------------------------
+local function cond_ok(it, n, ctx)
+  local c, g, v = it.cond, ctx.g, ctx.victim
+  if c == "" then return true end
+  if c == "ooc" then return not in_combat(g) end
+  if c == "in_combat" then return in_combat(g) end
+  if c == "moving" then return speed_of(ctx.pawn) > 400 end
+  if c == "shield" then return attr(ctx.pawn, "Shield", 0) > 0 end
+  if c == "tesla" then return (now_ms // sec_ms(it.cv)) % 2 == 0 end
+  if c == "v_elite" then return v and is_elite(v) end
+  if c == "v_elite_low" then
+    if not (v and is_elite(v)) then return false end
+    local th = 1 - (1 - it.cv) ^ n
+    return v:GetHealth() / math.max(1, v:GetHealthMax()) < th
+  end
+  if c == "v_near" then return v and dist(v, ctx.pawn) <= it.cv end
+  if c == "v_hp_above" then return v and (v:GetHealth() + (ctx.amount or 0)) / math.max(1, v:GetHealthMax()) >= it.cv end
+  if c == "v_debuffed" then return v and #statuses_on(v) >= it.cv end
+  if c == "v_cooldown" then
+    local key = it.id .. addr(v)
+    if (g.last_fire[key] or -1e9) + sec_ms(it.cv) > now_ms then return false end
+    g.last_fire[key] = now_ms; return true
+  end
+  if c == "above" then local _, _, pz = loc(ctx.pawn); local _, _, vz = loc(v); return pz - vz >= it.cv end
+  if c == "hit_big" then return (ctx.amount or 0) >= it.cv * g.base end
+  if c == "every" then g.counter[it.id] = (g.counter[it.id] or 0) + 1; return g.counter[it.id] % it.cv == 0 end
+  if c == "every_target" then
+    local key = it.id .. addr(v); g.counter[key] = (g.counter[key] or 0) + 1; return g.counter[key] % it.cv == 0
+  end
+  if c == "charged" then if g.charge >= it.cv then g.charge = 0; return true end return false end
+  if c == "charges" then return ready(g, it.id .. "c", 10 / (it.cv + n - 1)) and (function() g.last_fire[it.id .. "c"] = now_ms; return true end)() end
+  if c == "meteor" then return true end
+  return false
+end
+
+-- run one trigger for one player -----------------------------------------------------------
+local function fire(trigger, ctx)
+  local list = ITEMS_BY_TRIGGER[trigger]
+  if not list then return end
+  for _, it in ipairs(list) do
+    local n = count(ctx.st, it.id)
+    if n > 0 then
+      local p = chance_of(it, n)
+      if it.cond == "meteor" and ctx.amount then p = p + 0.03 * n * math.max(0, ctx.amount / ctx.g.base - 1) end
+      local cdv = trigger ~= "periodic" and cd_of(it, n) or 0
+      if (trigger ~= "multikill" or #ctx.g.kills >= it.cv) and ready(ctx.g, it.id, cdv) and cond_ok(it, n, ctx) and roll(ctx.st, p) then
+        if cdv > 0 then ctx.g.last_fire[it.id] = now_ms end
+        if it.once == "stage" then
+          if ctx.g.once and ctx.g.once[it.id] == Run.stage then goto continue end
+          ctx.g.once = ctx.g.once or {}; ctx.g.once[it.id] = Run.stage
+        end
+        local ok, err
+        if it.kind == "buff" then ok, err = pcall(BUFF_FROM, it, n, ctx)
+        elseif it.kind == "growth2" then
+          local gr = ctx.g.growth
+          local cap = per(it.cap, it.cap_per, n)
+          local kills = math.min((gr[it.id] or 0) + 1, cap / it.k)
+          gr[it.id] = kills
+          ok, err = pcall(function()
+            ctx.g.cstat[it.id] = ctx.g.cstat[it.id] or { h = {} }
+            set_stat(ctx.pawn, ctx.g.cstat[it.id].h, 1, it.ge, it.op, kills * it.k)
+            set_stat(ctx.pawn, ctx.g.cstat[it.id].h, 2, it.ge2, it.op2, kills * it.k2)
+          end)
+        else
+          local fn = ACTIONS[it.action]
+          if fn then ok, err = pcall(fn, it, n, ctx) end
+        end
+        if ok == false then log(it.id .. " " .. trigger .. ": " .. tostring(err)) end
+      end
+    end
+    ::continue::
+  end
+end
+local function ctx_for(pc, extra)
+  local name = player_name(pc)
+  local st = pstate(name)
+  local c = { pc = pc, name = name, st = st, g = gstate(st), pawn = pc.Pawn }
+  for k, v in pairs(extra or {}) do c[k] = v end
+  return c
+end
+
+-- specials -------------------------------------------------------------------------------------
+local Infected = {} -- Networked Suffering: bot addr -> {bot, owner name}
+local Pool = 0
+local Scorp = {}    -- Symbiotic Scorpion: bot addr .. name -> stacks
+local function special_hit(ctx)
+  local st, v = ctx.st, ctx.victim
+  local scorp = count(st, "PermanentDebuffOnHit")
+  if scorp > 0 then
+    local it = Data.ITEM_BY_ID.PermanentDebuffOnHit
+    local key = addr(v) .. ctx.name
+    Scorp[key] = math.min(25, (Scorp[key] or 0) + 1)
+    local pct = math.min(0.5, Scorp[key] * per(it.k, it.k_per, scorp))
+    deal(ctx.pawn, v, ctx.amount * pct)
+  end
+  local ss = count(st, "SharedSuffering")
+  if ss > 0 then
+    local it = Data.ITEM_BY_ID.SharedSuffering
+    local a = addr(v)
+    local cnt = 0
+    for k, e in pairs(Infected) do if alive(e.bot) then cnt = cnt + 1 else Infected[k] = nil end end
+    if not Infected[a] and cnt < count_of(it, ss) then Infected[a] = { bot = v, name = ctx.name }; apply_status(ctx.pawn, v, Data.ELEMENT_BY_ID.void) end
+  end
+  local thorn = count(st, "TriggerEnemyDebuffs")
+  if thorn > 0 and roll(st, Data.ITEM_BY_ID.TriggerEnemyDebuffs.chance) then
+    ACTIONS.dot({ id = "NoxiousBleed", element = "nano", status = "none", dur = 2, dur_per = 0, dmg = 1.0, dmg_per = 0, dmg_base = "base", tag = "" }, 1, ctx)
+  end
+end
+local function special_kill(ctx)
+  local thorn = count(ctx.st, "TriggerEnemyDebuffs")
+  if thorn > 0 and ctx.victim then
+    local it = Data.ITEM_BY_ID.TriggerEnemyDebuffs
+    local list = statuses_on(ctx.victim)
+    if #list > 0 then
+      for _, b in ipairs(nearest(bots_near(ctx.victim, radius_of(it, thorn), ctx.victim), ctx.victim, count_of(it, thorn))) do
+        for _, id in ipairs(list) do local el = Data.ELEMENT_BY_ID[id]; apply_status(ctx.pawn, b, el); note_status(b, id, el.duration_s) end
+      end
+    end
+  end
+end
+local function special_hurt(ctx)
+  local st, g = ctx.st, ctx.g
+  local echo = count(st, "DelayedDamage")
+  if echo > 0 and g.echo_ready <= now_ms and ctx.pawn:GetHealth() > 0 then
+    local it = Data.ITEM_BY_ID.DelayedDamage
+    g.echo_ready = now_ms + sec_ms(it.cd)
+    local back = ctx.amount
+    heal(ctx.pawn, back)
+    local hits = count_of(it, echo)
+    local each = back * (1 - it.k) / hits
+    for i = 1, hits do
+      after(i * 1000, function()
+        local p = ctx.pawn
+        if alive(p) then p:SetHealth(math.max(1, p:GetHealth() - each) * 1.0) end
+      end)
+    end
+  end
+end
+local function special_lowhp(ctx)
+  local st = ctx.st
+  if count(st, "HealingPotion") > 0 then
+    take(ctx.name, "HealingPotion", 1)
+    heal_player(ctx.name, ctx.pawn, Data.ITEM_BY_ID.HealingPotion.dmg * ctx.pawn:GetHealthMax())
+    fx_at("heal", ctx.pawn)
+    notify(ctx.name, "t", "Power Elixir used")
+  end
+  if count(st, "FragileDamageBonus") > 0 then
+    st.items.FragileDamageBonus = 0
+    apply_items(ctx.name)
+    notify(ctx.name, "t", "Delicate Watch broke")
+  end
+end
+
+-- per-tick work for every player (host) ---------------------------------------------------------
+local cond_acc, regen_acc, pool_acc = 0, 0, 0
+local function engine_tick()
+  cond_acc = cond_acc + TICK_MS; regen_acc = regen_acc + TICK_MS; pool_acc = pool_acc + TICK_MS
+  for _, pc in ipairs(FindAllOf("ValPlayerController") or {}) do
+    if valid(pc) and alive(pc.Pawn) then
+      local ctx = ctx_for(pc)
+      local g, st, pawn = ctx.g, ctx.st, ctx.pawn
+      local hp, mx = pawn:GetHealth(), pawn:GetHealthMax()
+      -- low health edge
+      if hp / math.max(1, mx) < SYS.lowhp_frac then
+        if not g.low then g.low = true; special_lowhp(ctx); fire("lowhp", ctx) end
+      elseif hp / math.max(1, mx) > 0.5 then g.low = false end
+      -- standing still / moving charge
+      local sp = speed_of(pawn)
+      if sp < 30 then g.still_since = g.still_since or now_ms else g.still_since = nil end
+      if sp > 200 then g.charge = g.charge + TICK_MS / 1000 end
+      -- N'kuhana's Opinion: healing seen as health going up
+      if g.last_hp and hp > g.last_hp and count(st, "NovaOnHeal") > 0 then
+        local it = Data.ITEM_BY_ID.NovaOnHeal
+        local nn = count(st, "NovaOnHeal")
+        g.soul = g.soul + (hp - g.last_hp) * per(it.k, it.k_per, nn)
+        if g.soul >= 0.1 * mx then
+          local list = nearest(bots_near(pawn, 4000, nil), pawn, 1)
+          if list[1] then
+            fx_at("behemoth_blast", list[1])
+            ghit(pawn, list[1], it, nn, per(it.dmg, it.dmg_per, nn) * g.base + 2.5 * g.soul)
+          end
+          g.soul = 0
+        end
+      end
+      g.last_hp = hp
+      -- H3AD-5T v2: landing after a big fall
+      if count(st, "FallBoots") > 0 then
+        local falling = false
+        pcall(function() falling = pawn.CharacterMovement:IsFalling() end)
+        local _, _, z = loc(pawn)
+        if falling then g.fall_from = math.max(g.fall_from or z, z)
+        elseif g.fall_from then
+          local drop = g.fall_from - z
+          g.fall_from = nil
+          local it = Data.ITEM_BY_ID.FallBoots
+          local nn = count(st, "FallBoots")
+          if drop > 400 and ready(g, "FallBoots", cd_of(it, nn)) then
+            g.last_fire.FallBoots = now_ms
+            local scale = clamp(drop / 400, 1, 10)
+            local x, y, zz = loc(pawn); fx("behemoth_blast", x, y, zz)
+            for _, b in ipairs(bots_in(x, y, zz, clamp(it.radius * scale, 500, 3000))) do ghit(pawn, b, it, nn, it.dmg * scale * g.base) end
+          end
+        end
+      end
+      -- periodic items
+      for _, it in ipairs(PERIODIC_ITEMS) do
+        local n = count(st, it.id)
+        if n > 0 and ready(g, it.id .. "p", cd_of(it, n)) then
+          g.last_fire[it.id .. "p"] = now_ms
+          local list = ITEMS_BY_TRIGGER.periodic
+          local one = { it }
+          ITEMS_BY_TRIGGER.periodic = one
+          fire("periodic", ctx)
+          ITEMS_BY_TRIGGER.periodic = list
+        end
+      end
+      expire_buffs(pawn, g)
+      -- conditional stats (twice a second)
+      if cond_acc >= 500 then
+        for _, it in ipairs(COND_ITEMS) do
+          local n = count(st, it.id)
+          local slot = g.cstat[it.id] or { h = {}, mag = 0 }
+          g.cstat[it.id] = slot
+          local stacks = 0
+          if n > 0 then
+            if it.cond == "nearby" then
+              stacks = math.min(math.floor(per(it.cap, it.cap_per, n)), #bots_near(pawn, it.radius, nil))
+            elseif it.cond == "buffs" then
+              stacks = math.min(math.floor(per(it.cap, it.cap_per, n)), active_buffs(g))
+            elseif it.cond == "ooc" then stacks = in_combat(g) and 0 or n
+            elseif cond_ok(it, n, ctx) then stacks = n end
+          end
+          local unit = (it.cond == "nearby" or it.cond == "buffs") and per(it.k, it.k_per, n) or it.k
+          local mag = stacks * unit
+          if mag ~= slot.mag then
+            slot.mag = mag
+            set_stat(pawn, slot.h, 1, it.ge, it.op, mag)
+            if it.ge2 ~= "" then set_stat(pawn, slot.h, 2, it.ge2, it.op2, stacks * it.k2) end
+          end
+        end
+      end
+      -- regeneration (once a second)
+      if regen_acc >= 1000 then
+        for _, it in ipairs(REGEN_ITEMS) do
+          local n = count(st, it.id)
+          if n > 0 then
+            local on = (it.cond == "ooc" and not in_combat(g)) or (it.cond == "still" and g.still_since and now_ms - g.still_since >= 1000)
+            if on then
+              local amount = per(it.k, it.k_per, n) + per(it.dmg, it.dmg_per, n) * mx
+              heal_player(ctx.name, pawn, amount)
+              if it.radius > 0 then
+                for _, opc in ipairs(FindAllOf("ValPlayerController") or {}) do
+                  local p = valid(opc) and opc.Pawn
+                  if alive(p) and addr(p) ~= addr(pawn) and dist(p, pawn) <= per(it.radius, it.radius_per, n) then heal_player(player_name(opc), p, per(it.dmg, it.dmg_per, n) * p:GetHealthMax()) end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  if cond_acc >= 500 then cond_acc = 0 end
+  if regen_acc >= 1000 then regen_acc = 0 end
+  -- Networked Suffering: pooled damage every 3 s
+  if pool_acc >= 3000 then
+    pool_acc = 0
+    if Pool > 0 then
+      for k, e in pairs(Infected) do
+        if alive(e.bot) then
+          local pc = pc_of(e.name)
+          if pc and alive(pc.Pawn) then deal(pc.Pawn, e.bot, element_damage(pc.Pawn, Data.ELEMENT_BY_ID.void, Pool)) end
+        else Infected[k] = nil end
+      end
+      Pool = 0
+    end
+  end
+  -- auras
+  local keep = {}
+  for _, a in ipairs(Auras) do
+    if a.stop > now_ms and alive(a.pawn) then
+      keep[#keep + 1] = a
+      if now_ms >= a.start and now_ms >= a.next then
+        local it, n = a.it, a.n
+        local period = it.cd > 0 and it.cd or 1
+        a.next = now_ms + sec_ms(period)
+        local ctx = { pawn = a.pawn, name = a.name, st = a.st, g = gstate(a.st) }
+        if it.sub == "turret" then
+          local list = bots_near(a.pawn, it.radius, nil)
+          if #list > 0 then local t = list[math.random(#list)]; fx_at("ukulele_hit", t); ghit(a.pawn, t, it, n, per(it.dmg, it.dmg_per, n) * ctx.g.base) end
+        elseif it.sub == "storm" then
+          local r = math.min(per(it.cap, it.cap_per, n), it.radius + it.k * a.kills)
+          for _, b in ipairs(bots_near(a.pawn, r, nil)) do ghit(a.pawn, b, it, n, it.dmg * ctx.g.base) end
+        elseif it.sub == "transmit" then
+          for _, b in ipairs(bots_near(a.pawn, it.radius, nil)) do ghit(a.pawn, b, it, n, it.dmg * ctx.g.base) end
+        elseif it.sub == "heal_zone" then
+          if not a.fx then a.fx = true; fx("heal", a.x, a.y, a.z) end
+          for _, pc in ipairs(FindAllOf("ValPlayerController") or {}) do
+            local p = valid(pc) and pc.Pawn
+            if alive(p) then
+              local x, y, z = loc(p)
+              if math.sqrt((x - a.x) ^ 2 + (y - a.y) ^ 2 + (z - a.z) ^ 2) <= radius_of(it, n) then heal_player(player_name(pc), p, it.dmg * p:GetHealthMax()) end
+            end
+          end
+        elseif it.sub == "buff_zone" then
+          for _, pc in ipairs(FindAllOf("ValPlayerController") or {}) do
+            local p = valid(pc) and pc.Pawn
+            if alive(p) then
+              local x, y, z = loc(p)
+              if math.sqrt((x - a.x) ^ 2 + (y - a.y) ^ 2 + (z - a.z) ^ 2) <= radius_of(it, n) then
+                local c2 = ctx_for(pc)
+                BUFF_FROM({ id = it.id, ge = it.ge, op = it.op, k = it.k, k_per = 0, ge2 = it.ge2, op2 = it.op2, k2 = it.k2, dur = period + 0.2, dur_per = 0, cap = 1, cap_per = 0 }, 1, c2)
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  Auras = keep
+end
+
+-- entry points from the hooks -----------------------------------------------------------------
+local function engine_kill(victim, killer)
+  local pc = killer.Controller
+  if not valid(pc) then return end
+  local ctx = ctx_for(pc, { victim = victim })
+  local g = ctx.g
+  table.insert(g.kills, now_ms)
+  local keep = {}
+  for _, t in ipairs(g.kills) do if now_ms - t <= 7000 then keep[#keep + 1] = t end end
+  g.kills = keep
+  fire("kill", ctx)
+  if is_elite(victim) then fire("elitekill", ctx) end
+  -- multikill: Berzerker (4 in 1 s) and Resonance Disc (4 in 7 s)
+  local recent1, recent7 = 0, #g.kills
+  for _, t in ipairs(g.kills) do if now_ms - t <= 1000 then recent1 = recent1 + 1 end end
+  local saved = g.kills
+  for _, it in ipairs(ITEMS_BY_TRIGGER.multikill or {}) do
+    local window = it.id == "WarCryOnMultiKill" and recent1 or recent7
+    if window >= it.cv and count(ctx.st, it.id) > 0 then
+      g.kills = { 1, 2, 3, 4, 5, 6, 7, 8 }
+      local list = ITEMS_BY_TRIGGER.multikill
+      ITEMS_BY_TRIGGER.multikill = { it }
+      fire("multikill", ctx)
+      ITEMS_BY_TRIGGER.multikill = list
+      g.kills = (it.id == "LaserTurbine") and {} or saved
+    end
+  end
+  special_kill(ctx)
+end
+local function engine_hit(victim, inst, amount, d)
+  local pc = inst.Controller
+  if not valid(pc) then return end
+  local ctx = ctx_for(pc, { victim = victim, amount = amount, d = d })
+  local g = ctx.g
+  g.last_hit = now_ms
+  g.base = g.base * 0.9 + amount * 0.1
+  for _, b in pairs(g.buffs) do if b.it.refresh == "hit" then b.untilT = math.max(b.untilT, now_ms + sec_ms(per(b.it.dur, b.it.dur_per, b.n))) end end
+  if Infected[addr(victim)] then Pool = Pool + amount * Data.ITEM_BY_ID.SharedSuffering.k end
+  fire("hit", ctx)
+  local crit = false
+  pcall(function() crit = d.bCriticalHit end)
+  if crit then fire("crit", ctx) end
+  special_hit(ctx)
+end
+local function engine_hurt(victim, amount, d)
+  local pc = victim.Controller
+  if not valid(pc) then return end
+  local ctx = ctx_for(pc, { amount = amount, d = d })
+  ctx.g.last_hurt = now_ms
+  special_hurt(ctx)
+  fire("hurt", ctx)
+  local broke = false
+  pcall(function() broke = d.bShieldBroke end)
+  if broke then fire("shieldbreak", ctx) end
+end
+local function engine_all(trigger)
+  for _, pc in ipairs(FindAllOf("ValPlayerController") or {}) do
+    if valid(pc) and alive(pc.Pawn) then fire(trigger, ctx_for(pc)) end
+  end
+end
+local function engine_orb(pc) if valid(pc) and alive(pc.Pawn) then fire("orb", ctx_for(pc)) end end
+local function engine_stage_start() Run.stage = (Run.stage or 0) + 1; engine_all("stage") end
+
+---------------------------------------------------------------------------
 -- hooks (host)
 ---------------------------------------------------------------------------
 local function on_bot_killed(victim, killer)
@@ -477,6 +1273,8 @@ local function on_bot_killed(victim, killer)
   if va == 0 or Run.killed[va] then return end
   Run.killed[va] = true
   if not valid(killer) or not killer:IsPlayerControlled() then return end
+  local okg, errg = pcall(engine_kill, victim, killer)
+  if not okg then log("engine kill: " .. tostring(errg)) end
   local pc = killer.Controller
   if not valid(pc) then return end
   local name = player_name(pc)
@@ -554,6 +1352,8 @@ local function on_damaged(victim, d)
       local refund = math.min(amount - 1, Data.ITEM_BY_ID.ArmorPlate.k * plate)
       if refund > 0 and victim:GetHealth() > 0 then heal(victim, refund) end
     end
+    local okh, errh = pcall(engine_hurt, victim, amount, d)
+    if not okh then log("engine hurt: " .. tostring(errh)) end
     local med = count(st, "Medkit")
     if med > 0 then
       notify(name, "b", "medkit_heal")
@@ -569,6 +1369,8 @@ local function on_damaged(victim, d)
   if not valid(pc) then return end
   local name = player_name(pc)
   local st = pstate(name)
+  local okh, errh = pcall(engine_hit, victim, inst, amount, d)
+  if not okh then log("engine hit: " .. tostring(errh)) end
   local uke = count(st, "Ukulele")
   if uke > 0 and math.random() < Data.ITEM_BY_ID.Ukulele.chance then
     local it = Data.ITEM_BY_ID.Ukulele
@@ -603,6 +1405,7 @@ local function on_new_character(c)
     if Run.buffed[a] then return end
     Run.buffed[a] = true
     clock_buff(c)
+    note_bot_hp(c)
   end)
 end
 
@@ -631,10 +1434,18 @@ local okb, errb = pcall(function()
 end)
 if not okb then log("bundle watch failed: " .. tostring(errb)) end
 
+local last_encounter = -1e9
+hook("encounter", function()
+  if not server() or now_ms - last_encounter < 20000 then return end
+  last_encounter = now_ms
+  after(0, function() local ok, err = pcall(engine_all, "encounter"); if not ok then log("encounter: " .. tostring(err)) end end)
+end)
+
 -- every machine: the local player's click on an orb card
 hook("request_pick", function(self, pickup, index)
   local pc, b, i = self:get(), pickup:get(), index:get()
   if not valid(b) or not valid(pc) then return end
+  if server() and i ~= SYS.orb_block_index then after(0, function() pcall(engine_orb, pc) end) end
   local key = bundle_key(b)
   local off = Offers[key]
   if not off or off.slot ~= i or not ShownCards[key] then return end
@@ -650,6 +1461,7 @@ end)
 hook("server_pick", function(self, pickup, index)
   if not server() then return end
   local i = index:get()
+  do local rpc = self:get(); after(0, function() pcall(engine_orb, rpc) end) end
   if i < SYS.orb_client_index_offset then return end
   local pc, b = self:get(), pickup:get()
   index:set(SYS.orb_block_index)
@@ -942,7 +1754,7 @@ local Dev = { open = false, god = false, sel = 1, msg = "", msg_t = 0 }
 local KEYS = {
   { "F1", "open / close this menu" },
   { "F2", "god mode on / off" },
-  { "Up / Down  (or F3 / F4)", "select an item" },
+  { "Up / Down  (or F3 / F4)", "select an item  (PgUp / PgDn: 10 at a time)" },
   { "Right / Enter  (or F5)", "give 1 of the selected item" },
   { "Left / Backspace  (or F6)", "remove 1 of the selected item" },
   { "F7", "give 1 of every RoR2 item" },
@@ -962,7 +1774,11 @@ draw_menu = function(H)
   add("God mode: " .. (Dev.god and "ON" or "off") .. "     Clock: " .. string.format("%02d:%02d", math.floor(View.clock) // 60, math.floor(View.clock) % 60) .. " " .. Data.DIFFICULTY_TIERS[tier_index(View.clock)].name,
       Dev.god and { 0.5, 1, 0.5 } or nil)
   add(" ")
-  for i, it in ipairs(Data.ITEMS) do
+  local rows = 20
+  local first = clamp(Dev.sel - rows // 2, 1, math.max(1, #Data.ITEMS - rows + 1))
+  add(string.format("Item %d / %d   (PgUp / PgDn jump 10)", Dev.sel, #Data.ITEMS), { 0.6, 0.65, 0.7 })
+  for i = first, math.min(#Data.ITEMS, first + rows - 1) do
+    local it = Data.ITEMS[i]
     local n = View.items[it.id] or 0
     local mark = (i == Dev.sel) and "> " or "   "
     local c = Data.RARITY_BY_ID[it.rarity].color
@@ -990,9 +1806,15 @@ local function dev_action(key)
   if key == "F2" then Dev.god = not Dev.god; dev_msg("God mode " .. (Dev.god and "ON" or "off"))
   elseif key == "F3" then Dev.sel = (Dev.sel - 2) % #Data.ITEMS + 1
   elseif key == "F4" then Dev.sel = Dev.sel % #Data.ITEMS + 1
+  elseif key == "PGUP" then Dev.sel = math.max(1, Dev.sel - 10)
+  elseif key == "PGDN" then Dev.sel = math.min(#Data.ITEMS, Dev.sel + 10)
   elseif key == "F5" then give(name, it.id, 1); dev_msg("Gave " .. it.name)
   elseif key == "F6" then take(name, it.id, 1); dev_msg("Removed " .. it.name)
-  elseif key == "F7" then for _, x in ipairs(Data.ITEMS) do give(name, x.id, 1) end; dev_msg("Gave one of every item")
+  elseif key == "F7" then
+    local st = pstate(name)
+    for _, x in ipairs(Data.ITEMS) do st.items[x.id] = count(st, x.id) + 1 end
+    apply_items(name)
+    dev_msg("Gave one of every item (" .. #Data.ITEMS .. ")")
   elseif key == "F8" then take_all(name); dev_msg("Removed all RoR2 items")
   elseif key == "F9" then
     local ti = tier_index(Run.clock)
@@ -1008,8 +1830,8 @@ local function dev_action(key)
   end
 end
 -- extra keys for moving through the item list (they map onto the F-key actions)
-local ALIAS = { UP_ARROW = "F3", DOWN_ARROW = "F4", RIGHT_ARROW = "F5", RETURN = "F5", LEFT_ARROW = "F6", BACKSPACE = "F6" }
-for _, k in ipairs({ "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "UP_ARROW", "DOWN_ARROW", "RIGHT_ARROW", "LEFT_ARROW", "RETURN", "BACKSPACE" }) do
+local ALIAS = { UP_ARROW = "F3", DOWN_ARROW = "F4", RIGHT_ARROW = "F5", RETURN = "F5", LEFT_ARROW = "F6", BACKSPACE = "F6", PAGE_UP = "PGUP", PAGE_DOWN = "PGDN" }
+for _, k in ipairs({ "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "UP_ARROW", "DOWN_ARROW", "RIGHT_ARROW", "LEFT_ARROW", "RETURN", "BACKSPACE", "PAGE_UP", "PAGE_DOWN" }) do
   local ok, err = pcall(function()
     RegisterKeyBind(Key[k], function()
       ExecuteInGameThread(function()
@@ -1093,7 +1915,8 @@ local function build_hud(pc)
   H.menu_bg, H.menu_bg_slot = image(wt, canvas, "MenuBg")
   H.menu_bg:SetColorAndOpacity({ R = 0.02, G = 0.03, B = 0.05, A = 0.86 })
   H.menu_lines = {}
-  local nlines = #Data.ITEMS + 16
+  local MENU_ROWS = 20
+  local nlines = math.min(#Data.ITEMS, MENU_ROWS) + 17
   local width = 520
   anchor(H.menu_bg_slot, 0, 0.5, 24, 0, width, 26 + nlines * 21, 0, 0.5)
   for i = 1, nlines do
@@ -1234,6 +2057,13 @@ local function host_tick(gm)
     local p = gpc and gpc.Pawn
     if alive(p) and p:GetHealth() < p:GetHealthMax() then pcall(function() p:SetHealth(p:GetHealthMax() * 1.0) end) end
   end
+  -- a new mission (a different game mode object while in a run) starts the 'stage' items
+  if addr(gm) ~= Run.gm_addr then
+    Run.gm_addr = addr(gm)
+    after(3000, function() local ok, err = pcall(engine_stage_start); if not ok then log("stage: " .. tostring(err)) end end)
+  end
+  local oke, erre = pcall(engine_tick)
+  if not oke then log("engine tick: " .. tostring(erre)) end
   -- local view
   local lpc = local_pc()
   View.in_run = not hub

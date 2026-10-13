@@ -28,13 +28,109 @@
    "id": "lightning",
    "name": "Lightning",
    "status_ge": "/Game/Abilities/Elements/GE_Lightning_Shock",
-   "dmg_attr": "none",
+   "dmg_attr": "ElectroDamageModifier",
    "duration_s": 3,
    "duration_attr": "LightningShockDurationModifier",
    "status_mag": -0.15,
    "mag_attr": "LightningShockCritChanceModifier",
    "status_cooldown_ms": 500,
-   "note": "Shock: duration and CritChanceResistanceModifier are SetByCaller; swapped to fixed values on the effect's default object for the call. No Lightning damage attribute exists, so only AllElementDamageModifier scales it."
+   "note": "Shock: duration and CritChanceResistanceModifier are SetByCaller; swapped to fixed values on the effect's default object for the call. Damage scales with ElectroDamageModifier."
+  },
+  {
+   "id": "cryo",
+   "name": "Cryo",
+   "status_ge": "/Game/Abilities/Elements/GE_Cryo_Chill",
+   "dmg_attr": "CryoDamageModifier",
+   "duration_s": 2,
+   "duration_attr": "CryoSlowDurationModifier",
+   "status_mag": 0.5,
+   "mag_attr": "none",
+   "status_cooldown_ms": 500,
+   "note": "Chill: MovementSpeed and MaxGroundSpeedMultiplier x magnitude (SetByCaller, swapped to 0.5 = half speed)."
+  },
+  {
+   "id": "freeze",
+   "name": "Cryo",
+   "status_ge": "/Game/Abilities/Elements/GE_Cryo_Freeze",
+   "dmg_attr": "CryoDamageModifier",
+   "duration_s": 2,
+   "duration_attr": "CryoFreezeDurationModifier",
+   "status_mag": 0,
+   "mag_attr": "none",
+   "status_cooldown_ms": 3000,
+   "note": "Freeze: movement overridden to 0 and animations paused; only the duration is SetByCaller."
+  },
+  {
+   "id": "void",
+   "name": "Void",
+   "status_ge": "/Game/Abilities/Elements/GE_Void_Corruption",
+   "dmg_attr": "VoidDamageModifier",
+   "duration_s": 4,
+   "duration_attr": "VoidCorruptionDurationModifier",
+   "status_mag": -0.2,
+   "mag_attr": "VoidCorruptionDamageReductionModifier",
+   "status_cooldown_ms": 1000,
+   "note": "Corruption: the enemy's GlobalDamageMultiplier -0.2 (it deals 20% less)."
+  },
+  {
+   "id": "radiation",
+   "name": "Radiation",
+   "status_ge": "/Game/Abilities/Elements/GE_Radiation_Irradiate",
+   "dmg_attr": "RadiationDamageModifier",
+   "duration_s": 4,
+   "duration_attr": "none",
+   "status_mag": -0.25,
+   "mag_attr": "RadiationIrradiateWeakpointDamageModifier",
+   "status_cooldown_ms": 1000,
+   "note": "Irradiate: WeakpointDamageMitigationMultiplier -0.25 (weak points take more damage)."
+  },
+  {
+   "id": "psionic",
+   "name": "Psionic",
+   "status_ge": "/Game/Abilities/Elements/GE_Psionic_Fracture",
+   "dmg_attr": "PsionicDamageModifier",
+   "duration_s": 3,
+   "duration_attr": "none",
+   "status_mag": 0.3,
+   "mag_attr": "PsionicFractureStaggerChanceModifier",
+   "status_cooldown_ms": 1000,
+   "note": "Fracture: IncomingStaggerChance +0.3 (both SetByCaller modifiers get the same value)."
+  },
+  {
+   "id": "nano",
+   "name": "Nano",
+   "status_ge": "/Game/Abilities/Elements/GE_Nano_Infect",
+   "dmg_attr": "NanoDamageModifier",
+   "duration_s": 3,
+   "duration_attr": "none",
+   "status_mag": 0.1,
+   "mag_attr": "none",
+   "status_cooldown_ms": 1000,
+   "note": "Infect: the Nano status visual; its modifier is NanoInfectReplenishmentChance."
+  },
+  {
+   "id": "plasma",
+   "name": "Plasma",
+   "status_ge": "none",
+   "dmg_attr": "PlasmaDamageModifier",
+   "duration_s": 0,
+   "duration_attr": "none",
+   "status_mag": 0,
+   "mag_attr": "none",
+   "status_cooldown_ms": 0,
+   "note": "Plasma damage only: Flux's attack-rate modifiers on enemies are unclear, so no status."
+  },
+  {
+   "id": "launch",
+   "name": "Anti-Gravity",
+   "status_ge": "/Game/Abilities/Elements/GE_AntiGravityStun",
+   "dmg_attr": "none",
+   "duration_s": 1.5,
+   "duration_attr": "AntiGravityStunDurationModifier",
+   "status_mag": 0,
+   "mag_attr": "none",
+   "status_cooldown_ms": 2000,
+   "note": "Anti-gravity stun: lifts the enemy; only the duration is SetByCaller."
   }
  ]
 }

@@ -91,6 +91,41 @@
    "id": "elem_duration_attr",
    "value": "ElementDebuffDurationMultiplier",
    "unit": "attribute multiplying status duration"
+  },
+  {
+   "id": "base_damage_start",
+   "value": 30,
+   "unit": "starting 'base damage' per player (then the running average of their hits)"
+  },
+  {
+   "id": "elite_hp_ratio",
+   "value": 2.5,
+   "unit": "a bot counts as elite/boss if its max HP is this many times the run's typical bot"
+  },
+  {
+   "id": "combat_window_ms",
+   "value": 5000,
+   "unit": "ms since last hit dealt or taken before 'out of combat'"
+  },
+  {
+   "id": "lowhp_frac",
+   "value": 0.25,
+   "unit": "health fraction for low-health triggers"
+  },
+  {
+   "id": "currency_clock_scale",
+   "value": 600,
+   "unit": "credits scale by 1 + run seconds / this"
+  },
+  {
+   "id": "temp_shield_ge",
+   "value": "/Game/Abilities/Effects/GE_TempShield",
+   "unit": "barrier effect (TemporaryShield, SetByCaller Data.TempShield)"
+  },
+  {
+   "id": "invuln_ge",
+   "value": "/Game/Abilities/Effects/GE_Invulnerability_Temporary",
+   "unit": "2 s invulnerability"
   }
  ]
 }
