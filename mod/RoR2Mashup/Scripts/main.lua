@@ -251,6 +251,8 @@ local function count(st, id) return st.items[id] or 0 end
 local View = { clock = 0, items = {}, banners = {}, ticker = {}, buffs = {}, in_run = false }
 local BUFF_BY_ID = {}
 for _, b in ipairs(Data.BUFFS) do BUFF_BY_ID[b.id] = b end
+-- RoR2 buff row states and proc messages for the sheet-driven items (filled in below the engine)
+local Procs = { hits = 0 }
 local function ticker(text)
   table.insert(View.ticker, 1, { text = text, t = now_ms })
   while #View.ticker > 4 do table.remove(View.ticker) end
@@ -273,6 +275,7 @@ local function notify(name, kind, payload)
   if pc:IsLocalController() then
     if kind == "p" then table.insert(View.banners, { id = payload, t = now_ms })
     elseif kind == "b" then local b = BUFF_BY_ID[payload]; if b then View.buffs[payload] = now_ms + b.duration_ms end
+    elseif kind == "B" then local id, ms = payload:match("^([^|]+)|(%d+)$"); if id and BUFF_BY_ID[id] then View.buffs[id] = now_ms + tonumber(ms) end
     elseif kind == "t" then ticker(payload) end
   else
     send(pc, kind .. "|" .. payload)
@@ -651,6 +654,7 @@ local function el_of(it) return Data.ELEMENT_BY_ID[it.element] end
 -- one hit from a generic item: element damage, the element's status, and the item's extra status
 local function ghit(pawn, bot, it, n, amount, extra_dur)
   if not alive(bot) then return end
+  Procs.hits = Procs.hits + 1
   local el = el_of(it)
   if el and el.status_ge ~= "none" then apply_status(pawn, bot, el); note_status(bot, el.id, el.duration_s) end
   local sx = Data.ELEMENT_BY_ID[it.status]
@@ -915,6 +919,7 @@ local function fire(trigger, ctx)
           ctx.g.once = ctx.g.once or {}; ctx.g.once[it.id] = Run.stage
         end
         local ok, err
+        Procs.hits = 0
         if it.kind == "buff" then ok, err = pcall(BUFF_FROM, it, n, ctx)
         elseif it.kind == "growth2" then
           local gr = ctx.g.growth
@@ -930,7 +935,8 @@ local function fire(trigger, ctx)
           local fn = ACTIONS[it.action]
           if fn then ok, err = pcall(fn, it, n, ctx) end
         end
-        if ok == false then log(it.id .. " " .. trigger .. ": " .. tostring(err)) end
+        if ok == false then log(it.id .. " " .. trigger .. ": " .. tostring(err))
+        else pcall(Procs.say, ctx, it.id, Procs.hits) end
       end
     end
     ::continue::
@@ -1016,6 +1022,54 @@ local function special_lowhp(ctx)
   end
 end
 
+-- RoR2 buff row and proc messages for the sheet-driven items -------------------------------------
+-- Same process as the original four: the host decides, notify() shows it locally or messages the client.
+function Procs.say(ctx, id, hits)
+  local p = Data.PROC_BY_ID[id]
+  if not p or not ctx.name then return end
+  local text = p.text
+  if text:find("{enemies}", 1, true) then
+    if (hits or 0) <= 0 then return end
+    text = text:gsub("{enemies}", hits == 1 and "1 enemy" or (hits .. " enemies"))
+  end
+  local g = ctx.g
+  g.proc_t = g.proc_t or {}
+  if (g.proc_t[id] or -1e9) + p.gap_ms > now_ms then return end
+  g.proc_t[id] = now_ms
+  notify(ctx.name, "t", text)
+end
+function Procs.row(ctx)
+  local g, st = ctx.g, ctx.st
+  for _, b in ipairs(Data.BUFFS) do
+    local ms = 0
+    local n = count(st, b.item)
+    if b.event == "buff" then
+      local x = g.buffs[b.item]
+      if x and x.untilT > now_ms then ms = x.untilT - now_ms end
+    elseif b.event == "aura" then
+      for _, a in ipairs(Auras) do
+        if a.it.id == b.item and a.name == ctx.name and a.stop > now_ms then ms = math.max(ms, a.stop - now_ms) end
+      end
+    elseif b.event == "cstat" then
+      local c = g.cstat[b.item]
+      if n > 0 and c and c.mag ~= 0 then ms = b.duration_ms end
+    elseif b.event == "ooc" then
+      if n > 0 and not in_combat(g) then ms = b.duration_ms end
+    elseif b.event == "ready" then
+      if n > 0 and (g.echo_ready or 0) <= now_ms then ms = b.duration_ms end
+    elseif b.event == "ringcd" then
+      for _, id in ipairs({ "FireRing", "IceRing" }) do
+        local k = count(st, id)
+        local it = Data.ITEM_BY_ID[id]
+        if k > 0 and it and not ready(g, id, cd_of(it, k)) then
+          ms = math.max(ms, (g.last_fire[id] or 0) + sec_ms(cd_of(it, k)) - now_ms)
+        end
+      end
+    end
+    if ms > 0 then notify(ctx.name, "B", b.id .. "|" .. math.floor(ms)) end
+  end
+end
+
 -- per-tick work for every player (host) ---------------------------------------------------------
 local cond_acc, regen_acc, pool_acc = 0, 0, 0
 local function engine_tick()
@@ -1049,7 +1103,9 @@ local function engine_tick()
             g.last_fire.FallBoots = now_ms
             local scale = clamp(drop / 400, 1, 10)
             local x, y, zz = loc(pawn); fx("behemoth_blast", x, y, zz)
+            Procs.hits = 0
             for _, b in ipairs(bots_in(x, y, zz, clamp(it.radius * scale, 500, 3000))) do ghit(pawn, b, it, nn, it.dmg * scale * g.base) end
+            pcall(Procs.say, ctx, "FallBoots", Procs.hits)
           end
         end
       end
@@ -1068,6 +1124,7 @@ local function engine_tick()
       expire_buffs(pawn, g)
       -- conditional stats (twice a second)
       if cond_acc >= 500 then
+        pcall(Procs.row, ctx)
         for _, it in ipairs(COND_ITEMS) do
           local n = count(st, it.id)
           local slot = g.cstat[it.id] or { h = {}, mag = 0 }
@@ -1488,6 +1545,7 @@ hook("client_message", function(self, s)
   elseif f[1] == "o" then Offers[f[2]] = { slot = tonumber(f[3]) or 0, item = f[4] }
   elseif f[1] == "p" then table.insert(View.banners, { id = f[2], t = now_ms })
   elseif f[1] == "b" then local b = BUFF_BY_ID[f[2]]; if b then View.buffs[f[2]] = now_ms + b.duration_ms end
+  elseif f[1] == "B" then if BUFF_BY_ID[f[2]] and tonumber(f[3]) then View.buffs[f[2]] = now_ms + tonumber(f[3]) end
   elseif f[1] == "t" then ticker(f[2])
   elseif f[1] == "f" then spawn_fx_local(f[2], tonumber(f[3]) or 0, tonumber(f[4]) or 0, tonumber(f[5]) or 0)
   elseif f[1] == "j" then
@@ -2140,7 +2198,7 @@ end)
 -- internals through R2I below.
 Dev.ST = { running = false }
 _G.R2I = {
-  Data = Data, SYS = SYS, MOD = MOD, Dev = Dev,
+  Data = Data, SYS = SYS, MOD = MOD, Dev = Dev, View = View, Procs = Procs,
   now = function() return now_ms end, after = after, log = log,
   valid = valid, alive = alive, addr = addr, attr = attr, loc = loc, dist = dist,
   bots_near = bots_near, nearest = nearest, deal = deal, apply_status = apply_status, note_status = note_status,

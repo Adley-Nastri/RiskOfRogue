@@ -1,0 +1,74 @@
+{
+ "columns": [
+  "id",
+  "text",
+  "gap_ms"
+ ],
+ "rows": [
+  {
+   "id": "FireRing",
+   "text": "Kjaro's Band set a target ablaze",
+   "gap_ms": 2000
+  },
+  {
+   "id": "IceRing",
+   "text": "Runald's Band chilled a target",
+   "gap_ms": 2000
+  },
+  {
+   "id": "JumpDamageStrike",
+   "text": "Faraday Spur struck {enemies}",
+   "gap_ms": 2000
+  },
+  {
+   "id": "ShieldBooster",
+   "text": "Kinetic Dampener blasted {enemies}",
+   "gap_ms": 2000
+  },
+  {
+   "id": "ExecuteLowHealthElite",
+   "text": "Old Guillotine executed an elite",
+   "gap_ms": 2000
+  },
+  {
+   "id": "Phasing",
+   "text": "Old War Stealthkit cloaked you",
+   "gap_ms": 2000
+  },
+  {
+   "id": "TeleportOnLowHealth",
+   "text": "Unstable Transmitter triggered",
+   "gap_ms": 2000
+  },
+  {
+   "id": "WardOnLevel",
+   "text": "Warbanner planted",
+   "gap_ms": 2000
+  },
+  {
+   "id": "TPHealingNova",
+   "text": "Lepton Daisy healed the team",
+   "gap_ms": 2000
+  },
+  {
+   "id": "KillEliteFrenzy",
+   "text": "Brainstalks: no cooldowns",
+   "gap_ms": 2000
+  },
+  {
+   "id": "WarCryOnMultiKill",
+   "text": "Berzerker's Pauldron: frenzy",
+   "gap_ms": 2000
+  },
+  {
+   "id": "Bandolier",
+   "text": "Bandolier refilled your ammo",
+   "gap_ms": 2000
+  },
+  {
+   "id": "FallBoots",
+   "text": "H3AD-5T v2 slammed {enemies}",
+   "gap_ms": 2000
+  }
+ ]
+}

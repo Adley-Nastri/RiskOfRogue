@@ -111,6 +111,39 @@ M.BUFFS = {
   {id="tooth_regen", icon="BuffRegenBoost", item="Tooth", event="kill", duration_ms=1500, verified="icon extracted from RoR2 croco_static bundle"},
   {id="tesla", icon="BuffTesla", item="Ukulele", event="hit", duration_ms=1500, verified="icon extracted from RoR2 shocknearby_static bundle"},
   {id="on_fire", icon="BuffOnFire", item="Gasoline", event="kill", duration_ms=3000, verified="icon extracted from RoR2 common_static bundle"},
+  {id="crit_speed", icon="BuffAttackSpeedOnCrit", item="AttackSpeedOnCrit", event="buff", duration_ms=1200, verified="icon extracted from RoR2 attackspeedoncrit_static bundle"},
+  {id="warbanner", icon="BuffWarbanner", item="WardOnLevel", event="buff", duration_ms=1200, verified="icon extracted from RoR2 wardonlevel_static bundle"},
+  {id="multikill_dmg", icon="BuffIncreaseDamage", item="IncreaseDamageOnMultiKill", event="buff", duration_ms=1200, verified="icon extracted from RoR2 dlc2-items-increasedamageonmultikill_static bundle"},
+  {id="no_cooldowns", icon="BuffNoCooldowns", item="KillEliteFrenzy", event="buff", duration_ms=1200, verified="icon extracted from RoR2 killelitefrenzy_static bundle"},
+  {id="warcry", icon="BuffWarcry", item="WarCryOnMultiKill", event="buff", duration_ms=1200, verified="icon extracted from RoR2 warcryonmultikill bundle"},
+  {id="kill_movespeed", icon="BuffKillMoveSpeed", item="MoveSpeedOnKill", event="buff", duration_ms=1200, verified="icon extracted from RoR2 dlc1-movespeedonkill_static bundle"},
+  {id="pickup_speed", icon="BuffSpeedOnPickup", item="SpeedOnPickup", event="buff", duration_ms=1200, verified="icon extracted from RoR2 dlc3-items-speedonpickup_static bundle"},
+  {id="high_ground", icon="BuffCritAtLowerElevation", item="CritAtLowerElevation", event="buff", duration_ms=1200, verified="icon extracted from RoR2 dlc3-items-critatlowerelevation_static bundle"},
+  {id="cloak", icon="BuffCloak", item="Phasing", event="buff", duration_ms=1200, verified="icon extracted from RoR2 common_static bundle"},
+  {id="transmitter", icon="BuffTeleportOnLowHealth", item="TeleportOnLowHealth", event="aura", duration_ms=1200, verified="icon extracted from RoR2 dlc2-items-teleportonlowhealth_static bundle"},
+  {id="echo", icon="BuffDelayedDamage", item="DelayedDamage", event="ready", duration_ms=1200, verified="icon extracted from RoR2 dlc2-items-delayeddamage_static bundle"},
+  {id="rings_cooldown", icon="BuffElementalRingsCooldown", item="FireRing", event="ringcd", duration_ms=1200, verified="icon extracted from RoR2 elementalrings_static bundle"},
+  {id="lantern", icon="BuffAttackSpeedNearby", item="AttackSpeedPerNearbyAllyOrEnemy", event="cstat", duration_ms=1200, verified="icon extracted from RoR2 dlc2-items-attackspeedpernearbyallyorenemy bundle"},
+  {id="whip", icon="BuffMovespeed", item="SprintOutOfCombat", event="cstat", duration_ms=1200, verified="icon extracted from RoR2 common bundle"},
+  {id="nectar", icon="BuffBoostAllStats", item="BoostAllStats", event="cstat", duration_ms=1200, verified="icon extracted from RoR2 dlc2-items-boostallstats bundle"},
+  {id="opal", icon="BuffOutOfCombatArmor", item="OutOfCombatArmor", event="ooc", duration_ms=1200, verified="icon extracted from RoR2 dlc1-outofcombatarmor_static bundle"},
+}
+
+-- procs: generated from sheets/procs.json, one row per entry
+M.PROCS = {
+  {id="FireRing", text="Kjaro's Band set a target ablaze", gap_ms=2000},
+  {id="IceRing", text="Runald's Band chilled a target", gap_ms=2000},
+  {id="JumpDamageStrike", text="Faraday Spur struck {enemies}", gap_ms=2000},
+  {id="ShieldBooster", text="Kinetic Dampener blasted {enemies}", gap_ms=2000},
+  {id="ExecuteLowHealthElite", text="Old Guillotine executed an elite", gap_ms=2000},
+  {id="Phasing", text="Old War Stealthkit cloaked you", gap_ms=2000},
+  {id="TeleportOnLowHealth", text="Unstable Transmitter triggered", gap_ms=2000},
+  {id="WardOnLevel", text="Warbanner planted", gap_ms=2000},
+  {id="TPHealingNova", text="Lepton Daisy healed the team", gap_ms=2000},
+  {id="KillEliteFrenzy", text="Brainstalks: no cooldowns", gap_ms=2000},
+  {id="WarCryOnMultiKill", text="Berzerker's Pauldron: frenzy", gap_ms=2000},
+  {id="Bandolier", text="Bandolier refilled your ammo", gap_ms=2000},
+  {id="FallBoots", text="H3AD-5T v2 slammed {enemies}", gap_ms=2000},
 }
 
 -- fx: generated from sheets/fx.json, one row per entry
@@ -192,6 +225,8 @@ M.ITEM_BY_ID = {}
 for _,it in ipairs(M.ITEMS) do M.ITEM_BY_ID[it.id] = it end
 M.ELEMENT_BY_ID = {}
 for _,e in ipairs(M.ELEMENTS) do M.ELEMENT_BY_ID[e.id] = e end
+M.PROC_BY_ID = {}
+for _,p in ipairs(M.PROCS) do M.PROC_BY_ID[p.id] = p end
 M.RARITY_BY_ID = {}
 for _,r in ipairs(M.RARITIES) do M.RARITY_BY_ID[r.id] = r end
 return M

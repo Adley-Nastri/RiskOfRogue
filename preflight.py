@@ -101,7 +101,18 @@ for r in buffs['rows']:
         checked+=1
         if r.get(c) in ('',None): errs.append(f"buffs.{r['id']}.{c}: empty")
     if r['item'] not in ids: errs.append(f"buffs.{r['id']}.item -> items: {r['item']} unresolved")
-    if not os.path.exists(os.path.join('/mnt/user-data/outputs/dz/buffs', r['icon']+'.png')): errs.append(f"buffs.{r['id']}.icon -> icons: {r['icon']}.png missing")
+    if not (os.path.exists(os.path.join('/mnt/user-data/outputs/dz/buffs', r['icon']+'.png')) or r['icon'] in DEVICE_ICONS): errs.append(f"buffs.{r['id']}.icon -> icons: {r['icon']}.png missing")
+    # legacy rows are pushed by the hand-written handlers; state rows are refreshed by the engine while the state holds
+    if r['event'] not in ('hurt','kill','hit','buff','aura','ready','ringcd','cstat','ooc'): errs.append(f"buffs.{r['id']}.event: unknown {r['event']}")
+    if r['event']=='buff' and r['item'] in ids and next(x for x in items['rows'] if x['id']==r['item'])['kind']!='buff' and next(x for x in items['rows'] if x['id']==r['item'])['action'] not in ('buff','aura'): errs.append(f"buffs.{r['id']}: item {r['item']} never makes a buff")
+    if r['event']=='cstat' and r['item'] in ids and next(x for x in items['rows'] if x['id']==r['item'])['kind']!='cstat': errs.append(f"buffs.{r['id']}: item {r['item']} is not a cstat item")
+procs=L('procs.json')
+for r in procs['rows']:
+    for c in procs['columns']:
+        checked+=1
+        if r.get(c) in ('',None): errs.append(f"procs.{r['id']}.{c}: empty")
+    if r['id'] not in ids: errs.append(f"procs.{r['id']} -> items: unresolved")
+    if r['id'] in LEGACY_IDS: errs.append(f"procs.{r['id']}: legacy items keep their own hand-written messages")
 for r in fx['rows']:
     for c in fx['columns']:
         checked+=1
