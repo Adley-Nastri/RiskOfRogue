@@ -1868,32 +1868,9 @@ local function fill_slot(slot, it, n, ps)
     stack:SetVisibility(n > 1 and VIS or HID)
   end
 end
--- Fill the RoR2 slots the moment Deadzone builds or updates the Tab grid, instead of on the next
--- HUD refresh (up to 0.25 s later), so the slots never show empty or default first.
-function Native.hook_grid()
-  if Native.grid_hooked then return end
-  local targets = {
-    { INV.tabmenu_class, "OnShown" }, { INV.tabmenu_class, "ToggleVisibility" },
-    { INV.grid_class, "UpdatePerkAtIndex" }, { INV.grid_class, "InitializeWidget" },
-  }
-  if not valid(StaticFindObject(INV.tabmenu_class)) or not valid(StaticFindObject(INV.grid_class)) then return end
-  Native.grid_hooked = true
-  for _, t in ipairs(targets) do
-    local ok, err = pcall(function()
-      RegisterHook(t[1] .. ":" .. t[2], function() end, function()
-        if Native.in_patch or not Native.tex then return end
-        Native.in_patch = true
-        pcall(function() local pc = local_pc(); if valid(pc) then patch_inventory(Native.tex, pc) end end)
-        Native.in_patch = false
-      end)
-    end)
-    log("grid hook " .. t[2] .. ": " .. (ok and "ok" or tostring(err)))
-  end
-end
 patch_inventory = function(tex, pc)
   Native.tex = tex
   Native.hook_slot()
-  Native.hook_grid()
   local list = owned_list()
   local ps = pc.PlayerState
   for _, g in ipairs(FindAllOf("UI_Equipment_Perks_Items_C") or {}) do
