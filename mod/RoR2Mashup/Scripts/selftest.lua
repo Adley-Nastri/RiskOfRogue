@@ -12,7 +12,7 @@ local OUT = MOD .. "selftest.txt"
 local function wout(line)
   local f = io.open(OUT, "a"); if f then f:write(line .. "\n"); f:close() end
 end
-local WATCH = { TemporaryShield = true, ShieldMax = true, HealthMax = true }
+local WATCH = { ShieldMax = true, HealthMax = true }
 for _, it in ipairs(Data.ITEMS) do
   for _, a in ipairs({ it.attr, it.attr2, it.pattr }) do if a and a ~= "" and a ~= "Health" and a ~= "JumpMaxCount" then WATCH[a] = true end end
 end
@@ -26,11 +26,13 @@ end
 local STATUS_ATTRS = { "MovementSpeed", "MaxGroundSpeedMultiplier", "CriticalChanceResistanceModifier", "GlobalDamageMultiplier",
   "WeakpointDamageMitigationMultiplier", "IncomingStaggerChance", "NanoInfectReplenishmentChance" }
 local target = nil
+local MEASURE_SHIELD = false
 local function snap(pc)
   local pawn = pc.Pawn
   if not alive(pawn) then error("player died") end
   local s = { attrs = {}, hp = pawn:GetHealth(), bots = {}, credits = 0, jumps = pawn.JumpMaxCount }
   for a in pairs(WATCH) do s.attrs[a] = attr(pawn, a, 0) end
+  if MEASURE_SHIELD then s.attrs.TemporaryShield = attr(pawn, "TemporaryShield", 0) end
   for _, b in ipairs(bots_near(pawn, 6000, nil)) do
     local sig, tg = 0, 0
     if target and addr(b) == addr(target) then
@@ -42,6 +44,7 @@ local function snap(pc)
   pcall(function() s.credits = pc.PlayerState.r_MatchCurrency end)
   return s
 end
+local COUNT_STATUS = true
 local function diff(a, b, skip)
   local out, dmg, tags, kills = {}, 0, 0, 0
   for k, v in pairs(b.attrs) do
@@ -60,7 +63,7 @@ local function diff(a, b, skip)
   end
   if dmg > 0 then out[#out + 1] = string.format("enemy damage %.0f", dmg) end
   if kills > 0 then out[#out + 1] = "kills " .. kills end
-  if tags > 0 then out[#out + 1] = "statuses +" .. tags end
+  if tags > 0 and COUNT_STATUS then out[#out + 1] = "statuses +" .. tags end
   if b.hp - a.hp > 0.5 then out[#out + 1] = string.format("healed %.0f", b.hp - a.hp) end
   if b.credits ~= a.credits then out[#out + 1] = "credits +" .. (b.credits - a.credits) end
   if b.jumps ~= a.jumps then out[#out + 1] = "jumps " .. a.jumps .. "->" .. b.jumps end
@@ -87,6 +90,10 @@ local function run_item(pc, it, done)
   local t = { target = near[1], skip = {} }
   target = near[1]
   local tr, k, c = it.trigger, it.kind, it.cond
+  local LEGACY_EL = { Ukulele = true, Gasoline = true, Wisp = true, Behemoth = true }
+  COUNT_STATUS = it.element ~= "none" or it.status ~= "none" or LEGACY_EL[it.id] or it.id == "TriggerEnemyDebuffs"
+  local SHIELD_ITEMS = { BarrierOnOverHeal = true, TeleportOnLowHealth = true }
+  MEASURE_SHIELD = it.action == "barrier" or SHIELD_ITEMS[it.id] or false
   local steps = {}
   local function S(ms, fn) steps[#steps + 1] = { ms, fn } end
   S(0, function()
@@ -96,7 +103,20 @@ local function run_item(pc, it, done)
     st.items = {}; apply_items(name)
     for _, b in pairs(g.buffs) do b.untilT = 0 end
   end)
-  S(400, function()
+  S(0, function()
+    if MEASURE_SHIELD then
+      Dev.inv_t = I.now() + 1e9 -- pause god mode's invulnerability (it fills the temporary shield)
+      for _, set in ipairs(FindAllOf("ValAttributeSet") or {}) do
+        if valid(set) and addr(set:GetOuter()) == addr(pawn) then set.TemporaryShield.BaseValue = 0; set.TemporaryShield.CurrentValue = 0 end
+      end
+    end
+  end)
+  S(MEASURE_SHIELD and 2300 or 400, function()
+    if MEASURE_SHIELD then
+      for _, set in ipairs(FindAllOf("ValAttributeSet") or {}) do
+        if valid(set) and addr(set:GetOuter()) == addr(pawn) then set.TemporaryShield.BaseValue = 0; set.TemporaryShield.CurrentValue = 0 end
+      end
+    end
     t.s0 = snap(pc)
     if it.id == "StrengthenBurn" then st.items.Gasoline = 1 end
     if it.id == "BarrierOnOverHeal" then st.items.Seed = 1 end
@@ -110,7 +130,8 @@ local function run_item(pc, it, done)
     if c == "v_elite_low" then target:SetHealth(target:GetHealthMax() * 0.05) end
     if c == "charged" then g.charge = 99 end
     if c == "v_debuffed" or it.id == "TriggerEnemyDebuffs" then
-      for _, id in ipairs({ "fire", "lightning" }) do local el = Data.ELEMENT_BY_ID[id]; apply_status(pawn, target, el); note_status(target, id, el.duration_s) end
+      local who = (it.id == "TriggerEnemyDebuffs" and near[2]) or target
+      for _, id in ipairs({ "fire", "lightning" }) do local el = Data.ELEMENT_BY_ID[id]; apply_status(pawn, who, el); note_status(who, id, el.duration_s) end
     end
     if c == "ooc" or k == "regen" then g.last_hit, g.last_hurt = -1e9, -1e9 end
     if c == "in_combat" then g.last_hit = I.now() end
@@ -146,7 +167,8 @@ local function run_item(pc, it, done)
   if tr == "kill" or tr == "elitekill" or tr == "multikill" or it.id == "Tooth" or it.id == "Wisp" or it.id == "Gasoline"
     or it.id == "Infusion" or it.id == "TriggerEnemyDebuffs" or it.id == "StrengthenBurn" then
     local victims = (tr == "multikill") and math.min(4, #near) or 1
-    for x = 1, victims do
+    local first = (it.id == "TriggerEnemyDebuffs" and #near >= 2) and 2 or 1
+    for x = first, first + victims - 1 do
       S(tr == "multikill" and 0 or 250, function()
         local v = near[x]
         if alive(v) then t.skip[addr(v)] = true; deal(pawn, v, v:GetHealth() + 1) end
@@ -167,11 +189,13 @@ local function run_item(pc, it, done)
     for _, x in ipairs(diff(t.s1, t.smid, t.skip)) do ev[#ev + 1] = "on trigger: " .. x end
     for _, x in ipairs(diff(t.smid, t.s2, t.skip)) do ev[#ev + 1] = "after: " .. x end
     take_all(name)
+    Dev.inv_t = 0
     for _, b in pairs(g.buffs) do b.untilT = 0 end
     pawn:SetHealth(pawn:GetHealthMax() * 1.0)
     t.ev = ev
   end)
   local function finish()
+    Dev.inv_t = 0
     local ev = t.ev or {}
     if t.err then return done("FAIL", "error: " .. tostring(t.err)) end
     if MANUAL[it.id] and #ev == 0 then return done("MANUAL", MANUAL[it.id]) end
@@ -213,7 +237,7 @@ local function start(only)
     local st = pstate(name)
     st.items = saved; apply_items(name)
     wout(string.format("\nPASS %d  FAIL %d  MANUAL %d  SKIP %d", results.PASS, results.FAIL, results.MANUAL, results.SKIP))
-    Dev.ST.running = false; _G.R2_FORCE = false
+    Dev.ST.running = false; _G.R2_FORCE = false; Dev.inv_t = 0
     Dev.msg = "Self-test done: see selftest.txt"; Dev.msg_t = I.now()
   end
   local function do_item(x, tries)

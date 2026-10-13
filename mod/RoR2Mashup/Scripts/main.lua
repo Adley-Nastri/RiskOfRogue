@@ -1242,8 +1242,10 @@ local function on_bot_killed(victim, killer)
   if va == 0 or Run.killed[va] then return end
   Run.killed[va] = true
   if not valid(killer) or not killer:IsPlayerControlled() then return end
-  local okg, errg = pcall(engine_kill, victim, killer)
-  if not okg then log("engine kill: " .. tostring(errg)) end
+  after(0, function()
+    local okg, errg = pcall(engine_kill, victim, killer)
+    if not okg then log("engine kill: " .. tostring(errg)) end
+  end)
   local pc = killer.Controller
   if not valid(pc) then return end
   local name = player_name(pc)
@@ -1338,8 +1340,12 @@ local function on_damaged(victim, d)
       local refund = math.min(amount - 1, Data.ITEM_BY_ID.ArmorPlate.k * plate)
       if refund > 0 and victim:GetHealth() > 0 then heal(victim, refund) end
     end
-    local okh, errh = pcall(engine_hurt, victim, amount, d)
-    if not okh then log("engine hurt: " .. tostring(errh)) end
+    local dd = { bShieldBroke = false }
+    pcall(function() dd.bShieldBroke = d.bShieldBroke end)
+    after(0, function()
+      local okh, errh = pcall(engine_hurt, victim, amount, dd)
+      if not okh then log("engine hurt: " .. tostring(errh)) end
+    end)
     local med = count(st, "Medkit")
     if med > 0 then
       notify(name, "b", "medkit_heal")
@@ -1355,8 +1361,12 @@ local function on_damaged(victim, d)
   if not valid(pc) then return end
   local name = player_name(pc)
   local st = pstate(name)
-  local okh, errh = pcall(engine_hit, victim, inst, amount, d)
-  if not okh then log("engine hit: " .. tostring(errh)) end
+  local dd = { bCriticalHit = false }
+  pcall(function() dd.bCriticalHit = d.bCriticalHit end)
+  after(0, function()
+    local okh, errh = pcall(engine_hit, victim, inst, amount, dd)
+    if not okh then log("engine hit: " .. tostring(errh)) end
+  end)
   local uke = count(st, "Ukulele")
   if uke > 0 and (math.random() < Data.ITEM_BY_ID.Ukulele.chance or rawget(_G, "R2_FORCE")) then
     local it = Data.ITEM_BY_ID.Ukulele
@@ -1789,7 +1799,14 @@ local function dev_action(key)
   if not srv or not valid(pc) then dev_msg("Only the host (or solo) can use the test menu"); return end
   local name = player_name(pc)
   local it = Data.ITEMS[Dev.sel]
-  if key == "F2" then Dev.god = not Dev.god; dev_msg("God mode " .. (Dev.god and "ON" or "off"))
+  if key == "F2" then
+    Dev.god = not Dev.god
+    if not Dev.god and alive(pc.Pawn) then
+      for _, set in ipairs(FindAllOf("ValAttributeSet") or {}) do
+        if valid(set) and addr(set:GetOuter()) == addr(pc.Pawn) then set.TemporaryShield.BaseValue = 0; set.TemporaryShield.CurrentValue = 0 end
+      end
+    end
+    dev_msg("God mode " .. (Dev.god and "ON" or "off"))
   elseif key == "F3" then Dev.sel = (Dev.sel - 2) % #Data.ITEMS + 1
   elseif key == "F4" then Dev.sel = Dev.sel % #Data.ITEMS + 1
   elseif key == "PGUP" then Dev.sel = math.max(1, Dev.sel - 10)
@@ -2132,6 +2149,7 @@ _G.R2I = {
   engine_all = engine_all, engine_orb = engine_orb, buff_from = function(...) return BUFF_FROM(...) end, cd_of = cd_of,
   get_hp_ema = function() return HpEma end, set_hp_ema = function(v) HpEma = v end,
   clear_auras = function() Auras = {} end,
+  actions = ACTIONS, fire = fire, barrier = barrier, heal_player = heal_player,
 }
 function Dev.ST.start(only)
   if Dev.ST.running then return "already running" end
