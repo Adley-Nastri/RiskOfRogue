@@ -129,3 +129,6 @@ BuffSpeedOnPickup.png
 BuffTeleportOnLowHealth.png
 BuffWarbanner.png
 BuffWarcry.png
+BuffElementalRingsReady.png
+BuffDelayedDamageRed.png
+BuffTeleportOnLowHealthConsumed.png

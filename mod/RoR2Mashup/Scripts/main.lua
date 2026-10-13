@@ -248,7 +248,7 @@ end
 local function count(st, id) return st.items[id] or 0 end
 
 -- view = what the local HUD draws (host fills it directly, clients from messages)
-local View = { clock = 0, items = {}, banners = {}, ticker = {}, buffs = {}, in_run = false }
+local View = { clock = 0, items = {}, banners = {}, ticker = {}, buffs = {}, bcount = {}, in_run = false }
 local BUFF_BY_ID = {}
 for _, b in ipairs(Data.BUFFS) do BUFF_BY_ID[b.id] = b end
 -- RoR2 buff row states and proc messages for the sheet-driven items (filled in below the engine)
@@ -274,8 +274,10 @@ local function notify(name, kind, payload)
   if not valid(pc) then return end
   if pc:IsLocalController() then
     if kind == "p" then table.insert(View.banners, { id = payload, t = now_ms })
-    elseif kind == "b" then local b = BUFF_BY_ID[payload]; if b then View.buffs[payload] = now_ms + b.duration_ms end
-    elseif kind == "B" then local id, ms = payload:match("^([^|]+)|(%d+)$"); if id and BUFF_BY_ID[id] then View.buffs[id] = now_ms + tonumber(ms) end
+    elseif kind == "b" then local b = BUFF_BY_ID[payload]; if b then View.buffs[payload] = now_ms + b.duration_ms; View.bcount[payload] = 1 end
+    elseif kind == "B" then
+      local id, ms, c = payload:match("^([^|]+)|(%d+)|?(%d*)$")
+      if id and BUFF_BY_ID[id] then View.buffs[id] = now_ms + tonumber(ms); View.bcount[id] = tonumber(c) or 1 end
     elseif kind == "t" then ticker(payload) end
   else
     send(pc, kind .. "|" .. payload)
@@ -999,6 +1001,7 @@ local function special_hurt(ctx)
     heal(ctx.pawn, back)
     local hits = count_of(it, echo)
     local each = back * (1 - it.k) / hits
+    g.echo_until = now_ms + hits * 1000
     for i = 1, hits do
       after(i * 1000, function()
         local p = ctx.pawn
@@ -1039,34 +1042,52 @@ function Procs.say(ctx, id, hits)
   notify(ctx.name, "t", text)
 end
 function Procs.row(ctx)
+  -- Mirrors RoR2's BuffDisplay: one icon per active buff, tinted with its BuffDef colour,
+  -- and for stacking buffs the stack count ("x3", or "5%" for percentage buffs).
   local g, st = ctx.g, ctx.st
+  local used = g.once and g.once.TeleportOnLowHealth == Run.stage
   for _, b in ipairs(Data.BUFFS) do
-    local ms = 0
+    local ms, cnt = 0, 1
     local n = count(st, b.item)
     if b.event == "buff" then
       local x = g.buffs[b.item]
-      if x and x.untilT > now_ms then ms = x.untilT - now_ms end
+      if x and x.untilT > now_ms then
+        ms = x.untilT - now_ms; cnt = x.stacks or 1
+        if b.stack_pct == 1 and x.it then cnt = math.floor(cnt * per(x.it.k, x.it.k_per, x.n or 1) * 100 + 0.5) end
+      end
     elseif b.event == "aura" then
       for _, a in ipairs(Auras) do
         if a.it.id == b.item and a.name == ctx.name and a.stop > now_ms then ms = math.max(ms, a.stop - now_ms) end
       end
     elseif b.event == "cstat" then
       local c = g.cstat[b.item]
-      if n > 0 and c and c.mag ~= 0 then ms = b.duration_ms end
+      if n > 0 and c and c.mag ~= 0 then ms = b.duration_ms; cnt = c.stacks or 1 end
     elseif b.event == "ooc" then
       if n > 0 and not in_combat(g) then ms = b.duration_ms end
     elseif b.event == "ready" then
       if n > 0 and (g.echo_ready or 0) <= now_ms then ms = b.duration_ms end
-    elseif b.event == "ringcd" then
+    elseif b.event == "echopending" then
+      if n > 0 and (g.echo_until or 0) > now_ms then ms = g.echo_until - now_ms; cnt = math.ceil(ms / 1000) end
+    elseif b.event == "tpready" then
+      if n > 0 and not used then ms = b.duration_ms end
+    elseif b.event == "tpused" then
+      local active = false
+      for _, a in ipairs(Auras) do if a.it.id == b.item and a.name == ctx.name and a.stop > now_ms then active = true end end
+      if n > 0 and used and not active then ms = b.duration_ms end
+    elseif b.event == "ringcd" or b.event == "ringready" then
+      local held, left = false, 0
       for _, id in ipairs({ "FireRing", "IceRing" }) do
         local k = count(st, id)
         local it = Data.ITEM_BY_ID[id]
-        if k > 0 and it and not ready(g, id, cd_of(it, k)) then
-          ms = math.max(ms, (g.last_fire[id] or 0) + sec_ms(cd_of(it, k)) - now_ms)
+        if k > 0 and it then
+          held = true
+          if not ready(g, id, cd_of(it, k)) then left = math.max(left, (g.last_fire[id] or 0) + sec_ms(cd_of(it, k)) - now_ms) end
         end
       end
+      if b.event == "ringcd" and left > 0 then ms = left; cnt = math.ceil(left / 1000) end
+      if b.event == "ringready" and held and left <= 0 then ms = b.duration_ms end
     end
-    if ms > 0 then notify(ctx.name, "B", b.id .. "|" .. math.floor(ms)) end
+    if ms > 0 then notify(ctx.name, "B", b.id .. "|" .. math.floor(ms) .. "|" .. math.floor(cnt)) end
   end
 end
 
@@ -1140,6 +1161,7 @@ local function engine_tick()
           end
           local unit = (it.cond == "nearby" or it.cond == "buffs") and per(it.k, it.k_per, n) or it.k
           local mag = stacks * unit
+          slot.stacks = stacks
           if mag ~= slot.mag then
             slot.mag = mag
             set_stat(pawn, slot.h, 1, it.ge, it.op, mag)
@@ -1544,8 +1566,8 @@ hook("client_message", function(self, s)
     end
   elseif f[1] == "o" then Offers[f[2]] = { slot = tonumber(f[3]) or 0, item = f[4] }
   elseif f[1] == "p" then table.insert(View.banners, { id = f[2], t = now_ms })
-  elseif f[1] == "b" then local b = BUFF_BY_ID[f[2]]; if b then View.buffs[f[2]] = now_ms + b.duration_ms end
-  elseif f[1] == "B" then if BUFF_BY_ID[f[2]] and tonumber(f[3]) then View.buffs[f[2]] = now_ms + tonumber(f[3]) end
+  elseif f[1] == "b" then local b = BUFF_BY_ID[f[2]]; if b then View.buffs[f[2]] = now_ms + b.duration_ms; View.bcount[f[2]] = 1 end
+  elseif f[1] == "B" then if BUFF_BY_ID[f[2]] and tonumber(f[3]) then View.buffs[f[2]] = now_ms + tonumber(f[3]); View.bcount[f[2]] = tonumber(f[4]) or 1 end
   elseif f[1] == "t" then ticker(f[2])
   elseif f[1] == "f" then spawn_fx_local(f[2], tonumber(f[3]) or 0, tonumber(f[4]) or 0, tonumber(f[5]) or 0)
   elseif f[1] == "j" then
@@ -1961,7 +1983,11 @@ local function build_hud(pc)
     anchor(sl, 0, 1, 40 + (i - 1) * 38, -112 + (i - 1) * 38 * math.tan(math.rad(SYS.buff_row_tilt_deg)), 34, 34, 0, 1)
     pcall(function() img:SetRenderTransformAngle(SYS.buff_row_tilt_deg) end)
     img:SetVisibility(HID)
-    H.buffs[i] = { img = img, slot = sl }
+    -- stack count in the icon's lower right corner, like RoR2's BuffIcon
+    local cnt, csl = text(wt, canvas, "BuffCount" .. i, 11)
+    pcall(function() cnt:SetRenderTransformAngle(SYS.buff_row_tilt_deg) end)
+    cnt:SetVisibility(HID)
+    H.buffs[i] = { img = img, slot = sl, cnt = cnt, cslot = csl }
   end
 
   -- proc ticker (right middle)
@@ -1996,7 +2022,7 @@ local function build_hud(pc)
   for _, t in ipairs(H.tick) do pcall(function() t:ForceVolatile(true) end) end
   for _, t in ipairs(H.menu_lines) do pcall(function() t:ForceVolatile(true) end) end
   pcall(function() H.menu_bg:ForceVolatile(true) end)
-  for _, b in ipairs(H.buffs) do pcall(function() b.img:ForceVolatile(true) end) end
+  for _, b in ipairs(H.buffs) do pcall(function() b.img:ForceVolatile(true); b.cnt:ForceVolatile(true) end) end
   w:AddToViewport(40)
   log("HUD built")
   return H
@@ -2060,12 +2086,24 @@ local function draw_hud()
     local a = active[i]
     if a then
       if valid(H.tex["buff_" .. a.b.id]) then slot.img:SetBrushFromTexture(H.tex["buff_" .. a.b.id], false) end
-      anchor(slot.slot, 0, 1, 40 + (i - 1) * 38, -112 + (i - 1) * 38 * math.tan(math.rad(SYS.buff_row_tilt_deg)), 34, 34, 0, 1)
-      local alpha = a.left < 500 and (0.35 + 0.65 * (a.left / 500)) or 1
-      slot.img:SetColorAndOpacity({ R = 1, G = 1, B = 1, A = alpha })
+      local bx, by = 40 + (i - 1) * 38, -112 + (i - 1) * 38 * math.tan(math.rad(SYS.buff_row_tilt_deg))
+      anchor(slot.slot, 0, 1, bx, by, 34, 34, 0, 1)
+      -- RoR2 tints the icon with the BuffDef's colour and does not fade it
+      local c = a.b.color
+      slot.img:SetColorAndOpacity({ R = c[1], G = c[2], B = c[3], A = c[4] })
       slot.img:SetVisibility(VIS)
+      if a.b.stack == 1 then
+        local n = (View.bcount[a.b.id] or 1) + a.b.offset
+        slot.cnt:SetText(FText(a.b.stack_pct == 1 and (n .. "%") or ("x" .. n)))
+        color(slot.cnt, { 1, 1, 1 })
+        anchor(slot.cslot, 0, 1, bx + 37, by + 3, nil, nil, 1, 1)
+        slot.cnt:SetVisibility(VIS)
+      else
+        slot.cnt:SetVisibility(HID)
+      end
     else
       slot.img:SetVisibility(HID)
+      slot.cnt:SetVisibility(HID)
     end
   end
   -- ticker
