@@ -9,6 +9,7 @@ local pstate, gstate, ctx_for, player_name, local_pc, server = I.pstate, I.gstat
 local give, take_all, apply_items, on_damaged = I.give, I.take_all, I.apply_items, I.on_damaged
 local engine_all, engine_orb, BUFF_FROM, cd_of = I.engine_all, I.engine_orb, I.buff_from, I.cd_of
 local OUT = MOD .. "selftest.txt"
+local FAILED = MOD .. "selftest_failed.txt"
 local function wout(line)
   local f = io.open(OUT, "a"); if f then f:write(line .. "\n"); f:close() end
 end
@@ -124,6 +125,17 @@ local function run_item(pc, it, done)
       end
     end
     t.s0 = snap(pc)
+    if MEASURE_SHIELD then
+      t.peak = 0
+      local function sample(n)
+        if n <= 0 or t.ev then return end
+        local p = local_pc()
+        if not p or not valid(p.Pawn) or addr(p.Pawn) ~= t.pawn_addr then return end
+        t.peak = math.max(t.peak, attr(p.Pawn, "TemporaryShield", 0))
+        after(100, function() sample(n - 1) end)
+      end
+      sample(80)
+    end
     if it.id == "StrengthenBurn" then st.items.Gasoline = 1 end
     if it.id == "BarrierOnOverHeal" then st.items.Seed = 1 end
     give(name, it.id, 1)
@@ -184,6 +196,11 @@ local function run_item(pc, it, done)
   local waitms = 600
   if it.id == "DelayedDamage" or it.id == "Medkit" then waitms = SYS.medkit_delay_ms + 600 end
   if tr == "periodic" then waitms = math.floor(cd_of(it, 1) * 1000) + 700 end
+  if c == "tesla" then
+    local period = math.floor(it.cv * 1000)
+    local phase = (I.now() + 1000) % (2 * period) -- ~1 s of earlier steps before this wait starts
+    if phase > period - 2000 then waitms = (2 * period - phase) + 1500 else waitms = 1500 end
+  end
   if it.id == "SharedSuffering" then waitms = 3400 end
   if k == "regen" or k == "cstat" then waitms = (c == "still") and 2500 or 1600 end
   S(waitms, function() t.smid = snap(pc) end)
@@ -194,6 +211,7 @@ local function run_item(pc, it, done)
     for _, x in ipairs(diff(t.s0, t.s1, {})) do ev[#ev + 1] = "on pickup: " .. x end
     for _, x in ipairs(diff(t.s1, t.smid, t.skip)) do ev[#ev + 1] = "on trigger: " .. x end
     for _, x in ipairs(diff(t.smid, t.s2, t.skip)) do ev[#ev + 1] = "after: " .. x end
+    if t.peak and t.peak > 0.5 then ev[#ev + 1] = string.format("TemporaryShield peaked at %.0f", t.peak) end
     take_all(name)
     Dev.inv_t = 0
     for _, b in pairs(g.buffs) do b.untilT = 0 end
@@ -254,7 +272,10 @@ local function start(only)
     Dev.msg = "Self-test stopped: the map changed"; Dev.msg_t = I.now()
   end
   _G.R2_FORCE = true
+  local failed = {}
   local function finish_all()
+    local ff = io.open(FAILED, "w")
+    if ff then for _, id in ipairs(failed) do ff:write(id .. "\n") end; ff:close() end
     local name = player_name(pc)
     local st = pstate(name)
     st.items = saved; apply_items(name)
@@ -270,12 +291,14 @@ local function start(only)
     local ok, e = pcall(run_item, pc, it, function(verdict, why)
       if verdict == "WAIT" and tries < 60 then return after(2000, function() do_item(x, tries + 1) end) end
       results[verdict] = (results[verdict] or 0) + 1
+      if verdict == "FAIL" then failed[#failed + 1] = it.id end
       wout(string.format("%-6s %-28s [%s/%s] %s", verdict, it.name, it.kind, it.trigger ~= "" and it.trigger or it.cond, why))
       Dev.msg = string.format("Self-test %d/%d: %s %s", x, #list, it.name, verdict); Dev.msg_t = I.now()
       after(300, function() do_item(x + 1, 0) end)
     end)
     if not ok then
       results.FAIL = results.FAIL + 1
+      failed[#failed + 1] = it.id
       wout(string.format("%-6s %-28s error: %s", "FAIL", it.name, tostring(e)))
       after(300, function() do_item(x + 1, 0) end)
     end
