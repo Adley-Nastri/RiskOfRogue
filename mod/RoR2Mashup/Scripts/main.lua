@@ -1115,6 +1115,11 @@ function Procs.row(ctx)
       local active = false
       for _, a in ipairs(Auras) do if a.it.id == b.item and a.name == ctx.name and a.stop > now_ms then active = true end end
       if n > 0 and used and not active then ms = b.duration_ms end
+    elseif b.event == "tesla" then
+      -- Unstable Tesla Coil: on for cv seconds, off for cv seconds (same rule as its "tesla" condition)
+      local it = Data.ITEM_BY_ID[b.item]
+      local period = sec_ms(it.cv)
+      if n > 0 and (now_ms // period) % 2 == 0 then ms = period - (now_ms % period) end
     elseif b.event == "ringcd" or b.event == "ringready" then
       local held, left = false, 0
       for _, id in ipairs({ "FireRing", "IceRing" }) do
@@ -2145,12 +2150,11 @@ local function draw_hud()
       if valid(H.tex["buff_" .. a.b.id]) then slot.img:SetBrushFromTexture(H.tex["buff_" .. a.b.id], false) end
       local bx, by = 40 + (i - 1) * 38, -112 + (i - 1) * 38 * math.tan(math.rad(SYS.buff_row_tilt_deg))
       anchor(slot.slot, 0, 1, bx, by, 34, 34, 0, 1)
-      -- RoR2 tints the icon with the BuffDef's colour and does not fade it
-      local c = a.b.color
-      slot.img:SetColorAndOpacity({ R = c[1], G = c[2], B = c[3], A = c[4] })
+      -- drawn exactly as the icon's own PNG colours, no tint, no fade
+      slot.img:SetColorAndOpacity({ R = 1, G = 1, B = 1, A = 1 })
       if slot.iv ~= 1 then slot.img:SetVisibility(VIS); slot.iv = 1 end
-      if a.b.stack == 1 then
-        local n = (View.bcount[a.b.id] or 1) + a.b.offset
+      local n = (View.bcount[a.b.id] or 1) + a.b.offset
+      if a.b.stack == 1 and n > 1 then
         slot.cnt:SetText(FText(a.b.stack_pct == 1 and (n .. "%") or ("x" .. n)))
         color(slot.cnt, { 1, 1, 1 })
         anchor(slot.cslot, 0, 1, bx + 37, by + 3, nil, nil, 1, 1)
