@@ -496,7 +496,17 @@ local function patch_orb_menu(tex)
   end
   local host = find_named(card, row.icon_host)
   local icon = valid(host) and find_named(host, row.icon_widget) or nil
-  if valid(icon) and valid(tex[it.id]) then pcall(function() icon:SetBrushFromTexture(tex[it.id], false) end) end
+  -- (item_def / set_icon are defined further down; reached through late-bound globals)
+  local def_of, set_icon = rawget(_G, "R2_ITEM_DEF"), rawget(_G, "R2_SET_ICON")
+  local d = def_of and def_of(it) or nil
+  if valid(host) and valid(d) then
+    local cur = nil
+    pcall(function() cur = host.CachedDataAsset end)
+    if not (valid(cur) and addr(cur) == addr(d)) then pcall(function() host:UpdateAsset(d, local_pc().PlayerState) end) end
+  end
+  if valid(icon) and valid(tex[it.id]) then
+    if set_icon then pcall(set_icon, icon, tex[it.id]) else pcall(function() icon:SetBrushFromTexture(tex[it.id], false) end) end
+  end
   for name in string.gmatch(row.hide_widgets, "[^,]+") do
     local w = find_named(card, name)
     if valid(w) then pcall(function() w:SetVisibility(HID) end) end
@@ -1671,6 +1681,18 @@ end
 ---------------------------------------------------------------------------
 local INV = Data.INV
 local Native = { defs = {}, by_name = {}, tex = nil, hooked = false, resolve_ok = nil, pushed = "" }
+-- Put an icon into a Deadzone item slot the way Deadzone does: only the material's Icon texture
+-- parameter changes, so the slot keeps its rarity border and frame. Falls back to a plain brush.
+function Native.set_icon(img, tex)
+  local ok = pcall(function()
+    local mid = img:GetDynamicMaterial()
+    if not valid(mid) then error("no material") end
+    mid:SetTextureParameterValue(FName(INV.icon_param), tex)
+  end)
+  if not ok then img:SetBrushFromTexture(tex, false) end
+  return ok
+end
+_G.R2_SET_ICON = Native.set_icon
 local function ror2_name(id) return "RoR2_" .. id end
 local function ror2_asset_id(id)
   return { PrimaryAssetType = { Name = FName(INV.asset_type) }, PrimaryAssetName = FName(ror2_name(id)) }
@@ -1697,6 +1719,7 @@ local function item_def(it)
   Native.by_name[ror2_name(it.id)] = it
   return d
 end
+_G.R2_ITEM_DEF = item_def
 local function id_name(e)
   local s = nil
   pcall(function() s = e.PrimaryAssetName:ToString() end)
@@ -1812,7 +1835,7 @@ local function fill_slot(slot, it, n, ps)
   pcall(function() slot.bTooltipDisabled = false end)
   local icon, stack = slot[INV.slot_icon], slot[INV.slot_stack]
   local tex = Native.tex and Native.tex[it.id]
-  if valid(icon) and valid(tex) then icon:SetBrushFromTexture(tex, false); icon:SetVisibility(VIS) end
+  if valid(icon) and valid(tex) then Native.set_icon(icon, tex); icon:SetVisibility(VIS) end
   if valid(stack) then
     stack:SetText(FText(n > 1 and ("x" .. n) or ""))
     stack:SetVisibility(n > 1 and VIS or HID)
