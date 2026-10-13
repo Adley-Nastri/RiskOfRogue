@@ -1,4 +1,4 @@
--- RoR2 Mashup for Deadzone: Rogue
+-- Risk of Rogue: Risk of Rain 2 items in Deadzone: Rogue
 -- Risk of Rain 2 items (offered in Deadzone's item orbs) and the RoR2 difficulty clock inside Deadzone runs.
 -- Data (items, tiers, tuning) comes from data_gen.lua, generated from the design sheets.
 -- The host runs all game logic; clients receive state over PlayerController:ClientMessage
@@ -6,13 +6,13 @@
 
 local Data = require("data_gen")
 local SYS = Data.SYS
-local MOD = "ue4ss/Mods/RoR2Mashup/"
+local MOD = "ue4ss/Mods/RiskOfRogue/"
 local TAG = "R2|"
 local VIS, HID = 3, 1 -- ESlateVisibility HitTestInvisible / Collapsed
 local fx, fx_at, can_take, patch_inventory, spawn_fx_local, draw_menu -- defined further down
 local ShownCards = {} -- bundle keys whose RoR2 card this player can see
 
-local function log(s) print("[RoR2Mashup] " .. tostring(s) .. "\n") end
+local function log(s) print("[RiskOfRogue] " .. tostring(s) .. "\n") end
 local function valid(o) return o ~= nil and type(o) == "userdata" and o.IsValid ~= nil and o:IsValid() end
 local function addr(o) return valid(o) and o:GetAddress() or 0 end
 local function clamp(x, a, b) if x < a then return a elseif x > b then return b end return x end
@@ -1900,6 +1900,9 @@ end
 -- test menu: F1 opens it; the other keys only work while it is open (host or solo)
 ---------------------------------------------------------------------------
 local Dev = { open = false, god = false, sel = 1, msg = "", msg_t = 0 }
+-- Developer tools (F1 test menu, god mode, self-test, test-command file) only exist when the file
+-- devtools.txt is in the mod folder. The release build ships without it.
+do local f = io.open(MOD .. "devtools.txt", "r"); Dev.enabled = f ~= nil; if f then f:close() end end
 local KEYS = {
   { "F1", "open / close this menu" },
   { "F2", "god mode on / off" },
@@ -1946,7 +1949,7 @@ draw_menu = function(H)
   if not show then Dev.menu_icons(H, nil); return end
   local lines = {}
   local function add(t, c) lines[#lines + 1] = { t, c or { 0.88, 0.88, 0.88 } } end
-  add("RoR2 MASHUP  //  TEST MENU", { 1, 0.85, 0.35 })
+  add("RISK OF ROGUE  //  TEST MENU", { 1, 0.85, 0.35 })
   add("God mode: " .. (Dev.god and "ON" or "off") .. "     Clock: " .. string.format("%02d:%02d", math.floor(View.clock) // 60, math.floor(View.clock) % 60) .. " " .. Data.DIFFICULTY_TIERS[tier_index(View.clock)].name,
       Dev.god and { 0.5, 1, 0.5 } or nil)
   add(" ")
@@ -2028,7 +2031,7 @@ local function dev_action(key)
 end
 -- extra keys for moving through the item list (they map onto the F-key actions)
 local ALIAS = { UP_ARROW = "F3", DOWN_ARROW = "F4", RIGHT_ARROW = "F5", RETURN = "F5", LEFT_ARROW = "F6", BACKSPACE = "F6", PAGE_UP = "PGUP", PAGE_DOWN = "PGDN" }
-for _, k in ipairs({ "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "HOME", "END", "UP_ARROW", "DOWN_ARROW", "RIGHT_ARROW", "LEFT_ARROW", "RETURN", "BACKSPACE", "PAGE_UP", "PAGE_DOWN" }) do
+for _, k in ipairs(Dev.enabled and { "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "HOME", "END", "UP_ARROW", "DOWN_ARROW", "RIGHT_ARROW", "LEFT_ARROW", "RETURN", "BACKSPACE", "PAGE_UP", "PAGE_DOWN" } or {}) do
   local ok, err = pcall(function()
     RegisterKeyBind(Key[k], function()
       ExecuteInGameThread(function()
@@ -2043,7 +2046,7 @@ for _, k in ipairs({ "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10"
 end
 
 local function build_hud(pc)
-  local w = new("/Script/UMG.UserWidget", pc, "RoR2MashupHUD")
+  local w = new("/Script/UMG.UserWidget", pc, "RiskOfRogueHUD")
   local wt = new("/Script/UMG.WidgetTree", w, "WT")
   w.WidgetTree = wt
   local canvas = new("/Script/UMG.CanvasPanel", wt, "Root")
@@ -2295,7 +2298,7 @@ local function host_tick(gm)
     end
   end
   -- test menu god mode: keep the local player at full health
-  if Dev.god then
+  if Dev.enabled and Dev.god then
     local gpc = local_pc()
     local p = gpc and gpc.Pawn
     -- real invulnerability: Deadzone's own 2 s invulnerability effect (incoming damage x0),
@@ -2339,10 +2342,11 @@ end
 -- its result is appended to test_out.txt. Nothing happens unless that file exists.
 local TEST_IN, TEST_OUT = MOD .. "test_cmd.lua", MOD .. "test_out.txt"
 local function test_mode()
+  if not Dev.enabled then return end
   local f = io.open(TEST_IN, "r")
   if not f then return end
   local code = f:read("*a"); f:close(); os.remove(TEST_IN)
-  local fn, err = load(code, "test_cmd", "t", setmetatable({ R2 = _G.RoR2Mashup }, { __index = _G }))
+  local fn, err = load(code, "test_cmd", "t", setmetatable({ R2 = _G.RiskOfRogue }, { __index = _G }))
   local res
   if fn then local ok, r = pcall(fn); res = (ok and "OK: " or "ERR: ") .. tostring(r) else res = "COMPILE ERR: " .. tostring(err) end
   local o = io.open(TEST_OUT, "a"); if o then o:write(res .. "\n== done\n"); o:close() end
@@ -2400,7 +2404,7 @@ end)
 -- In-game self-test: gives each RoR2 item on its own, sets off what triggers it (hits, kills,
 -- getting hurt, low health, timers, encounter, orb pick) against real enemies, and records what
 -- actually changed in the game: stats, enemy health, statuses on enemies, healing, shields, jumps.
--- Results go to ue4ss/Mods/RoR2Mashup/selftest.txt. Started from the test mode (R2.selftest()).
+-- Results go to ue4ss/Mods/RiskOfRogue/selftest.txt. Started from the test mode (R2.selftest()).
 ---------------------------------------------------------------------------
 -- In-game self-test. The test itself lives in selftest.lua next to this file and is loaded fresh
 -- every time it starts, so it can be changed without restarting the game. It reaches the mod's
@@ -2428,7 +2432,7 @@ function Dev.ST.start(only)
 end
 
 -- test/debug surface (used by the dev bridge and the in-game test mode)
-_G.RoR2Mashup = {
+_G.RiskOfRogue = {
   give = function(id, n) local pc = local_pc(); if pc then give(player_name(pc), id, n or 1) end end,
   run = function() return Run end,
   view = function() return View end,
@@ -2442,4 +2446,4 @@ _G.RoR2Mashup = {
   element_damage = function(item_id, base) local pc = local_pc(); return element_damage(pc.Pawn, Data.ELEMENT_BY_ID[Data.ITEM_BY_ID[item_id].element], base) end,
 }
 math.randomseed(os.time())
-log("loaded: " .. #Data.ITEMS .. " items, " .. #Data.DIFFICULTY_TIERS .. " difficulty tiers")
+log("loaded: " .. #Data.ITEMS .. " items, " .. #Data.DIFFICULTY_TIERS .. " difficulty tiers" .. (Dev.enabled and " (developer tools ON)" or ""))

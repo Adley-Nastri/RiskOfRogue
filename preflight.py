@@ -4,11 +4,12 @@ import json, os, sys
 D=os.path.dirname(os.path.abspath(__file__)); S=os.path.join(D,'sheets')
 L=lambda n: json.load(open(os.path.join(S,n)))
 items,rar,tiers,sysv,hooks,apis,orbs,buffs,fx,inv = [L(n) for n in ['items.json','rarities.json','difficulty_tiers.json','systems.json','hooks.json','apis.json','orbs.json','buffs.json','fx.json','inventory.json']]
-DUMP='/mnt/user-data/uploads/Deadzone Rogue/Valhalla/Binaries/Win64/ue4ss/Mods/DZBridge/'
-classes=open(DUMP+'classes.txt').read(); funcs=open(DUMP+'q.txt').read()
-ICONS='/mnt/user-data/outputs/dz/icons'
+# class and function names from a UE4SS dump of the game (research/), so preflight runs anywhere
+classes=open(os.path.join(D,'research','game_classes.txt')).read(); funcs=open(os.path.join(D,'research','game_functions.txt')).read()
 GE_CLASSES=set(open(os.path.join(D,'research','game_ge_classes.txt')).read().split())
-DEVICE_ICONS=set(x[:-4] for x in open(os.path.join(D,'research','icons_on_device.txt')).read().split())
+# every icon the extractor (tools/extract_ror2_assets.py) can produce from a player's RoR2 install
+_assets=json.load(open(os.path.join(D,'tools','ror2_assets.json')))
+DEVICE_ICONS=set(j['png'] for j in _assets['items']+_assets['buffs'])
 KINDS={ # legacy (hand-written handlers in main.lua) and generic (sheet-driven) kinds -> required columns
  'stat':['ge','attr','op','k','stack'], 'heal':['trigger','k'], 'refund':['trigger','k'], 'proc':['trigger','chance','radius','dmg'],
  'jump':['attr','k'], 'growth':['ge','attr','trigger','k','dmg'],
@@ -59,7 +60,7 @@ for r in items['rows']:
     if r['status'] not in eids|{'none'}: errs.append(f"items.{i}.status -> elements: '{r['status']}' unresolved")
     if r['action']=='status' and r['status']=='none': errs.append(f"items.{i}.status: status action needs a status")
     if r['dmg_base'] not in ('hit','base','vmax'): errs.append(f"items.{i}.dmg_base: unknown {r['dmg_base']}")
-    if r['icon'] not in DEVICE_ICONS: errs.append(f"items.{i}.icon -> icons on the PC: {r['icon']}.png missing")
+    if r['icon'] not in DEVICE_ICONS: errs.append(f"items.{i}.icon -> tools/ror2_assets.json: no extraction rule for {r['icon']}.png")
 for r in rar['rows']:
     for c in rar['columns']:
         checked+=1
@@ -101,7 +102,7 @@ for r in buffs['rows']:
         checked+=1
         if r.get(c) in ('',None): errs.append(f"buffs.{r['id']}.{c}: empty")
     if r['item'] not in ids: errs.append(f"buffs.{r['id']}.item -> items: {r['item']} unresolved")
-    if not (os.path.exists(os.path.join('/mnt/user-data/outputs/dz/buffs', r['icon']+'.png')) or r['icon'] in DEVICE_ICONS): errs.append(f"buffs.{r['id']}.icon -> icons: {r['icon']}.png missing")
+    if r['icon'] not in DEVICE_ICONS: errs.append(f"buffs.{r['id']}.icon -> tools/ror2_assets.json: no extraction rule for {r['icon']}.png")
     # legacy rows are pushed by the hand-written handlers; state rows are refreshed by the engine while the state holds
     if r['event'] not in ('hurt','kill','hit','buff','aura','ready','ringcd','cstat','ooc','tpready','tpused','echopending','ringready','tesla'): errs.append(f"buffs.{r['id']}.event: unknown {r['event']}")
     if r['event']=='buff' and r['item'] in ids and next(x for x in items['rows'] if x['id']==r['item'])['kind']!='buff' and next(x for x in items['rows'] if x['id']==r['item'])['action'] not in ('buff','aura'): errs.append(f"buffs.{r['id']}: item {r['item']} never makes a buff")

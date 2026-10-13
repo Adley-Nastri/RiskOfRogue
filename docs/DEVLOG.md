@@ -1,3 +1,5 @@
+> Engineering log kept while building the mod (it was called *RoR2 Mashup* until the public release, so older entries use that name and its folder `RoR2Mashup`).
+
 # MODLOG: RoR2 Mashup for Deadzone: Rogue
 
 ## Versions

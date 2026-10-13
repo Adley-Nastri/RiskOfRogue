@@ -1,0 +1,746 @@
+{
+ "note": "Which texture in Risk of Rain 2's own asset bundles each icon comes from. Read by tools/extract_ror2_assets.py; nothing from RoR2 is shipped with the mod.",
+ "items": [
+  {
+   "png": "Syringe",
+   "texture": "texSyringeIcon",
+   "bundles": [
+    "ror2-base-syringe_assets_all_*.bundle",
+    "ror2-base-syringe_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Glasses",
+   "texture": "texGlassesIcon",
+   "bundles": [
+    "ror2-base-critglasses_assets_all_*.bundle",
+    "ror2-base-critglasses_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Hoof",
+   "texture": "texHoofIcon",
+   "bundles": [
+    "ror2-base-hoof_assets_all_*.bundle",
+    "ror2-base-hoof_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Bear",
+   "texture": "texBearIcon",
+   "bundles": [
+    "ror2-base-bear_assets_all_*.bundle",
+    "ror2-base-bear_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Crowbar",
+   "texture": "texCrowbarIcon",
+   "bundles": [
+    "ror2-base-crowbar_assets_all_*.bundle",
+    "ror2-base-crowbar_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "RepulsionArmorPlate",
+   "texture": "texRepulsionArmorPlateIcon",
+   "bundles": [
+    "ror2-base-armorplate_assets_all_*.bundle",
+    "ror2-base-armorplate_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "ToothNecklace",
+   "texture": "texToothNecklaceIcon",
+   "bundles": [
+    "ror2-base-tooth_assets_all_*.bundle",
+    "ror2-base-tooth_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Medkit",
+   "texture": "texMedkitIcon",
+   "bundles": [
+    "ror2-base-medkit_assets_all_*.bundle",
+    "ror2-base-medkit_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Ukulele",
+   "texture": "texUkuleleIcon",
+   "bundles": [
+    "ror2-base-chainlightning_assets_all_*.bundle",
+    "ror2-base-chainlightning_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "WilloWisp",
+   "texture": "texWilloWispIcon",
+   "bundles": [
+    "ror2-base-explodeondeath_assets_all_*.bundle",
+    "ror2-base-explodeondeath_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Gasoline",
+   "texture": "texGasolineIcon",
+   "bundles": [
+    "ror2-base-igniteonkill_assets_all_*.bundle",
+    "ror2-base-igniteonkill_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Feather",
+   "texture": "texFeatherIcon",
+   "bundles": [
+    "ror2-base-feather_assets_all_*.bundle",
+    "ror2-base-feather_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Infusion",
+   "texture": "texInfusionIcon",
+   "bundles": [
+    "ror2-base-infusion_assets_all_*.bundle",
+    "ror2-base-infusion_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Behemoth",
+   "texture": "texBehemothIcon",
+   "bundles": [
+    "ror2-base-behemoth_assets_all_*.bundle",
+    "ror2-base-behemoth_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Coffee",
+   "texture": "texCoffeeIcon",
+   "bundles": [
+    "ror2-dlc1-attackspeedandmovespeed_assets_all_*.bundle",
+    "ror2-dlc1-attackspeedandmovespeed_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "RageCrystal",
+   "texture": "texRageCrystalIcon",
+   "bundles": [
+    "ror2-dlc2-items-attackspeedpernearbyallyorenemy_assets_all_*.bundle",
+    "ror2-dlc2-items-attackspeedpernearbyallyorenemy_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Brooch",
+   "texture": "texBroochIcon",
+   "bundles": [
+    "ror2-base-barrieronkill_assets_all_*.bundle",
+    "ror2-base-barrieronkill_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "TriTip",
+   "texture": "texTriTipIcon",
+   "bundles": [
+    "ror2-base-bleedonhit_assets_all_*.bundle",
+    "ror2-base-bleedonhit_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "APRounds",
+   "texture": "texAPRoundsIcon",
+   "bundles": [
+    "ror2-base-bossdamagebonus_assets_all_*.bundle",
+    "ror2-base-bossdamagebonus_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "CritAtLowerElevation",
+   "texture": "texCritAtLowerElevationIcon",
+   "bundles": [
+    "ror2-dlc3-items-critatlowerelevation_assets_all_*.bundle",
+    "ror2-dlc3-items-critatlowerelevation_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "DelayDamage",
+   "texture": "texDelayDamageIcon",
+   "bundles": [
+    "ror2-dlc2-items-delayeddamage_assets_all_*.bundle",
+    "ror2-dlc2-items-delayeddamage_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Steak",
+   "texture": "texSteakIcon",
+   "bundles": [
+    "ror2-base-flathealth_assets_all_*.bundle",
+    "ror2-base-flathealth_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "DelicateWatch",
+   "texture": "texDelicateWatchIcon",
+   "bundles": [
+    "ror2-dlc1-fragiledamagebonus_assets_all_*.bundle",
+    "ror2-dlc1-fragiledamagebonus_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Snail",
+   "texture": "texSnailIcon",
+   "bundles": [
+    "ror2-base-healwhilesafe_assets_all_*.bundle",
+    "ror2-base-healwhilesafe_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "HealingPotion",
+   "texture": "texHealingPotion",
+   "bundles": [
+    "ror2-dlc1-healingpotion_assets_all_*.bundle",
+    "ror2-dlc1-healingpotion_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "IncreaseDamageOnMultiKill",
+   "texture": "texIncreaseDamageOnMultiKillIcon",
+   "bundles": [
+    "ror2-dlc2-items-increasedamageonmultikill_assets_all_*.bundle",
+    "ror2-dlc2-items-increasedamageonmultikill_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Mushroom",
+   "texture": "texMushroomIcon",
+   "bundles": [
+    "ror2-base-mushroom_assets_all_*.bundle",
+    "ror2-base-mushroom_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Diamond",
+   "texture": "texDiamondIcon",
+   "bundles": [
+    "ror2-base-nearbydamagebonus_assets_all_*.bundle",
+    "ror2-base-nearbydamagebonus_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "OddlyShapedOpal",
+   "texture": "texOddlyShapedOpalIcon",
+   "bundles": [
+    "ror2-dlc1-outofcombatarmor_assets_all_*.bundle",
+    "ror2-dlc1-outofcombatarmor_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "PersonalShield",
+   "texture": "texPersonalShieldIcon",
+   "bundles": [
+    "ror2-base-personalshield_assets_all_*.bundle",
+    "ror2-base-personalshield_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "DoubleMag",
+   "texture": "texDoubleMagIcon",
+   "bundles": [
+    "ror2-base-secondaryskillmagazine_assets_all_*.bundle",
+    "ror2-base-secondaryskillmagazine_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Soda",
+   "texture": "texSodaIcon",
+   "bundles": [
+    "ror2-base-sprintbonus_assets_all_*.bundle",
+    "ror2-base-sprintbonus_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "StunGrenade",
+   "texture": "texStunGrenadeIcon",
+   "bundles": [
+    "ror2-base-stunchanceonhit_assets_all_*.bundle",
+    "ror2-base-stunchanceonhit_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Warbanner",
+   "texture": "texWarbannerIcon",
+   "bundles": [
+    "ror2-base-wardonlevel_assets_all_*.bundle",
+    "ror2-base-wardonlevel_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "WolfPelt",
+   "texture": "texWolfPeltIcon",
+   "bundles": [
+    "ror2-base-attackspeedoncrit_assets_all_*.bundle",
+    "ror2-base-attackspeedoncrit_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Bandolier",
+   "texture": "texBandolierIcon",
+   "bundles": [
+    "ror2-base-bandolier_assets_all_*.bundle",
+    "ror2-base-bandolier_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "DeathMark",
+   "texture": "texDeathMarkIcon",
+   "bundles": [
+    "ror2-base-deathmark_assets_all_*.bundle",
+    "ror2-base-deathmark_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Battery",
+   "texture": "texBatteryIcon",
+   "bundles": [
+    "ror2-base-equipmentmagazine_assets_all_*.bundle",
+    "ror2-base-equipmentmagazine_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Guillotine",
+   "texture": "texGuillotineIcon",
+   "bundles": [
+    "ror2-base-executelowhealthelite_assets_all_*.bundle",
+    "ror2-base-executelowhealthelite_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "FireRing",
+   "texture": "texFireRingIcon",
+   "bundles": [
+    "ror2-base-elementalrings_assets_all_*.bundle",
+    "ror2-base-elementalrings_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Scythe",
+   "texture": "texScytheIcon",
+   "bundles": [
+    "ror2-base-healoncrit_assets_all_*.bundle",
+    "ror2-base-healoncrit_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "IceRing",
+   "texture": "texIceRingIcon",
+   "bundles": [
+    "ror2-base-elementalrings_assets_all_*.bundle",
+    "ror2-base-elementalrings_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "JumpDamageStrike",
+   "texture": "texJumpDamageStrikeIcon",
+   "bundles": [
+    "ror2-dlc3-items-jumpdamagestrike_assets_all_*.bundle",
+    "ror2-dlc3-items-jumpdamagestrike_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "KnockbackFin",
+   "texture": "texKnockbackFinIcon",
+   "bundles": [
+    "ror2-dlc2-items-knockbackhitenemies_assets_all_*.bundle",
+    "ror2-dlc2-items-knockbackhitenemies_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "GrappleHook",
+   "texture": "texGrappleHookIcon",
+   "bundles": [
+    "ror2-dlc1-movespeedonkill_assets_all_*.bundle",
+    "ror2-dlc1-movespeedonkill_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Stealthkit",
+   "texture": "texStealthkitIcon",
+   "bundles": [
+    "ror2-base-phasing_assets_all_*.bundle",
+    "ror2-base-phasing_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Seed",
+   "texture": "texSeedIcon",
+   "bundles": [
+    "ror2-base-seed_assets_all_*.bundle",
+    "ror2-base-seed_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "ShieldBooster",
+   "texture": "texShieldBoosterIcon",
+   "bundles": [
+    "ror2-dlc3-items-shieldbooster_assets_all_*.bundle",
+    "ror2-dlc3-items-shieldbooster_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Bauble",
+   "texture": "texBaubleIcon",
+   "bundles": [
+    "ror2-base-slowonhit_assets_all_*.bundle",
+    "ror2-base-slowonhit_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "SpeedOnPickup",
+   "texture": "texSpeedOnPickupIcon",
+   "bundles": [
+    "ror2-dlc3-items-speedonpickup_assets_all_*.bundle",
+    "ror2-dlc3-items-speedonpickup_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Buckler",
+   "texture": "texBucklerIcon",
+   "bundles": [
+    "ror2-base-sprintarmor_assets_all_*.bundle",
+    "ror2-base-sprintarmor_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Whip",
+   "texture": "texWhipIcon",
+   "bundles": [
+    "ror2-base-sprintoutofcombat_assets_all_*.bundle",
+    "ror2-base-sprintoutofcombat_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "GasTank",
+   "texture": "texGasTankIcon",
+   "bundles": [
+    "ror2-dlc1-strengthenburn_assets_all_*.bundle",
+    "ror2-dlc1-strengthenburn_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "GlowFlower",
+   "texture": "texGlowFlowerIcon",
+   "bundles": [
+    "ror2-base-tphealingnova_assets_all_*.bundle",
+    "ror2-base-tphealingnova_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "TeleportOnLowHealth",
+   "texture": "texTeleportOnLowHealthIcon",
+   "bundles": [
+    "ror2-dlc2-items-teleportonlowhealth_assets_all_*.bundle",
+    "ror2-dlc2-items-teleportonlowhealth_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "NoxiousThorn",
+   "texture": "texNoxiousThornIcon",
+   "bundles": [
+    "ror2-dlc2-items-triggerenemydebuffs_assets_all_*.bundle",
+    "ror2-dlc2-items-triggerenemydebuffs_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Pauldron",
+   "texture": "texPauldronIcon",
+   "bundles": [
+    "ror2-base-warcryonmultikill_assets_all_*.bundle",
+    "ror2-base-warcryonmultikill_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "AlienHead",
+   "texture": "texAlienHeadIcon",
+   "bundles": [
+    "ror2-base-alienhead_assets_all_*.bundle",
+    "ror2-base-alienhead_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Warhammer",
+   "texture": "texWarhammerIcon",
+   "bundles": [
+    "ror2-base-armorreductiononhit_assets_all_*.bundle",
+    "ror2-base-armorreductiononhit_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Aegis",
+   "texture": "texAegisIcon",
+   "bundles": [
+    "ror2-base-barrieronoverheal_assets_all_*.bundle",
+    "ror2-base-barrieronoverheal_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "GrowthNectar",
+   "texture": "texGrowthNectarIcon",
+   "bundles": [
+    "ror2-dlc2-items-boostallstats_assets_all_*.bundle",
+    "ror2-dlc2-items-boostallstats_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Clover",
+   "texture": "texCloverIcon",
+   "bundles": [
+    "ror2-base-clover_assets_all_*.bundle",
+    "ror2-base-clover_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "LaserSight",
+   "texture": "texLaserSightIcon",
+   "bundles": [
+    "ror2-dlc1-critdamage_assets_all_*.bundle",
+    "ror2-dlc1-critdamage_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Duplicator",
+   "texture": "texDuplicatorIcon",
+   "bundles": [
+    "ror2-dlc3-items-duplicator_assets_all_*.bundle",
+    "ror2-dlc3-items-duplicator_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "GravBoots",
+   "texture": "texGravBootsIcon",
+   "bundles": [
+    "ror2-base-fallboots_assets_all_*.bundle",
+    "ror2-base-fallboots_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "FrostRelic",
+   "texture": "texFrostRelicIcon",
+   "bundles": [
+    "ror2-base-icicle_assets_all_*.bundle",
+    "ror2-base-icicle_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Antler",
+   "texture": "texAntlerIcon",
+   "bundles": [
+    "ror2-base-increasehealing_assets_all_*.bundle",
+    "ror2-base-increasehealing_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Brainstalk",
+   "texture": "texBrainstalkIcon",
+   "bundles": [
+    "ror2-base-killelitefrenzy_assets_all_*.bundle",
+    "ror2-base-killelitefrenzy_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Scorpion",
+   "texture": "texScorpionIcon",
+   "bundles": [
+    "ror2-dlc1-permanentdebuffonhit_assets_all_*.bundle",
+    "ror2-dlc1-permanentdebuffonhit_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "InterstellarDeskPlant",
+   "texture": "texInterstellarDeskPlantIcon",
+   "bundles": [
+    "ror2-base-plant_assets_all_*.bundle",
+    "ror2-base-plant_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "SharedSuffering",
+   "texture": "texSharedSufferingIcon",
+   "bundles": [
+    "ror2-dlc3-items-sharedsuffering_assets_all_*.bundle",
+    "ror2-dlc3-items-sharedsuffering_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "TeslaCoil",
+   "texture": "texTeslaCoilIcon",
+   "bundles": [
+    "ror2-base-shocknearby_assets_all_*.bundle",
+    "ror2-base-shocknearby_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Talisman",
+   "texture": "texTalismanIcon",
+   "bundles": [
+    "ror2-base-talisman_assets_all_*.bundle",
+    "ror2-base-talisman_static_assets_all_*.bundle"
+   ]
+  },
+  {
+   "png": "Afterburner",
+   "texture": "texAfterburnerIcon",
+   "bundles": [
+    "ror2-base-utilityskillmagazine_assets_all_*.bundle",
+    "ror2-base-utilityskillmagazine_static_assets_all_*.bundle"
+   ]
+  }
+ ],
+ "buffs": [
+  {
+   "png": "BuffMedkitHeal",
+   "texture": "texBuffMedkitHealIcon",
+   "bundles": [
+    "ror2-base-medkit_static*"
+   ]
+  },
+  {
+   "png": "BuffTesla",
+   "texture": "texBuffTeslaIcon",
+   "bundles": [
+    "ror2-base-shocknearby_static*"
+   ]
+  },
+  {
+   "png": "BuffAttackSpeedOnCrit",
+   "texture": "texBuffAttackSpeedOnCritIcon",
+   "bundles": [
+    "ror2-base-attackspeedoncrit_static*"
+   ]
+  },
+  {
+   "png": "BuffWarbanner",
+   "texture": "texBuffWarbannerIcon",
+   "bundles": [
+    "ror2-base-wardonlevel_static*"
+   ]
+  },
+  {
+   "png": "BuffIncreaseDamage",
+   "texture": "texBuffIncreaseDamageBuffIcon",
+   "bundles": [
+    "ror2-dlc2-items-increasedamageonmultikill_static*"
+   ]
+  },
+  {
+   "png": "BuffNoCooldowns",
+   "texture": "texNoCooldownsBuffIcon",
+   "bundles": [
+    "ror2-base-killelitefrenzy_static*"
+   ]
+  },
+  {
+   "png": "BuffWarcry",
+   "texture": "texWarcryBuffIcon",
+   "bundles": [
+    "ror2-base-warcryonmultikill_assets_all_*"
+   ]
+  },
+  {
+   "png": "BuffKillMoveSpeed",
+   "texture": "texBuffKillMoveSpeed",
+   "bundles": [
+    "ror2-dlc1-movespeedonkill_static*"
+   ]
+  },
+  {
+   "png": "BuffSpeedOnPickup",
+   "texture": "texSpeedOnPickupBuffIcon",
+   "bundles": [
+    "ror2-dlc3-items-speedonpickup_static*"
+   ]
+  },
+  {
+   "png": "BuffCritAtLowerElevation",
+   "texture": "texCritChanceAndDamageIcon",
+   "bundles": [
+    "ror2-dlc3-items-critatlowerelevation_static*"
+   ]
+  },
+  {
+   "png": "BuffCloak",
+   "texture": "texBuffCloakIcon",
+   "bundles": [
+    "ror2-base-common_static*"
+   ]
+  },
+  {
+   "png": "BuffTeleportOnLowHealth",
+   "texture": "texBuffTeleportOnLowHealthIcon",
+   "bundles": [
+    "ror2-dlc2-items-teleportonlowhealth_static*"
+   ]
+  },
+  {
+   "png": "BuffTeleportOnLowHealthConsumed",
+   "texture": "texTeleportOnLowHealthIconConsumed",
+   "bundles": [
+    "ror2-dlc2-items-teleportonlowhealth_static*"
+   ]
+  },
+  {
+   "png": "BuffDelayedDamage",
+   "texture": "texBuffDelayedDamageOnIcon",
+   "bundles": [
+    "ror2-dlc2-items-delayeddamage_static*"
+   ]
+  },
+  {
+   "png": "BuffDelayedDamageRed",
+   "texture": "texBuffDelayedDamageRedIcon",
+   "bundles": [
+    "ror2-dlc2-items-delayeddamage_static*"
+   ]
+  },
+  {
+   "png": "BuffElementalRingsReady",
+   "texture": "texBuffElementalRingsReadyIcon",
+   "bundles": [
+    "ror2-base-elementalrings_static*"
+   ]
+  },
+  {
+   "png": "BuffElementalRingsCooldown",
+   "texture": "texBuffElementalRingsCooldownIcon",
+   "bundles": [
+    "ror2-base-elementalrings_static*"
+   ]
+  },
+  {
+   "png": "BuffAttackSpeedNearby",
+   "texture": "texBuffAttackSpeedPerNearbyAllyOrEnemyIcon",
+   "bundles": [
+    "ror2-dlc2-items-attackspeedpernearbyallyorenemy_*"
+   ]
+  },
+  {
+   "png": "BuffMovespeed",
+   "texture": "texMovespeedBuffIcon",
+   "bundles": [
+    "ror2-base-common_assets_all_*"
+   ]
+  },
+  {
+   "png": "BuffBoostAllStats",
+   "texture": "texBuffBoostAllStats",
+   "bundles": [
+    "ror2-dlc2-items-boostallstats_assets_all_*"
+   ]
+  },
+  {
+   "png": "BuffOutOfCombatArmor",
+   "texture": "texBuffUtilitySkillArmor",
+   "bundles": [
+    "ror2-dlc1-outofcombatarmor_static*"
+   ]
+  }
+ ]
+}

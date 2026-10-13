@@ -1,4 +1,4 @@
--- RoR2 Mashup in-game self-test (loaded fresh by the mod each time it starts; see main.lua R2I).
+-- Risk of Rogue in-game self-test (loaded fresh by the mod each time it starts; see main.lua R2I).
 -- Gives each RoR2 item on its own, sets off its trigger against real enemies and records what
 -- changed: your stats, enemy health, statuses on the enemy, healing, shields, jumps.
 local I = _G.R2I
@@ -253,7 +253,7 @@ local function start(only)
   if Dev.ST.running then return "already running" end
   local pc = local_pc()
   if not valid(pc) or not server() then return "host only" end
-  local f = io.open(OUT, "w"); if f then f:write("RoR2 Mashup self-test " .. os.date() .. "\n\n"); f:close() end
+  local f = io.open(OUT, "w"); if f then f:write("Risk of Rogue self-test " .. os.date() .. "\n\n"); f:close() end
   results = { PASS = 0, FAIL = 0, MANUAL = 0, SKIP = 0, WAIT = 0 }
   local saved = {}
   for kk, v in pairs(pstate(player_name(pc)).items) do saved[kk] = v end

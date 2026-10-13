@@ -27,7 +27,7 @@
   },
   {
    "id": "icon_import",
-   "how": "KismetRenderingLibrary:ImportFileAsTexture2D(pc, 'ue4ss/Mods/RoR2Mashup/icons/X.png')",
+   "how": "KismetRenderingLibrary:ImportFileAsTexture2D(pc, 'ue4ss/Mods/RiskOfRogue/icons/X.png')",
    "verified": "Texture2D created"
   },
   {
