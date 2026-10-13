@@ -2176,8 +2176,14 @@ local function host_tick(gm)
   else
     Run.is_reset = false
     local ok, t = pcall(function() return cls("/Script/Engine.Default__GameplayStatics"):GetTimeSeconds(gm) end)
+    -- The clock runs with Deadzone's own run timer, which starts at the first door, not at map load.
+    local started = true
+    pcall(function()
+      if not valid(Run.gs) then Run.gs = FindFirstOf(SYS.run_timer_state) end
+      if valid(Run.gs) then started = Run.gs:HasRunStarted() and true or false end
+    end)
     if ok and t then
-      if Run.last_world_t and t >= Run.last_world_t then Run.clock = Run.clock + (t - Run.last_world_t) end
+      if started and Run.last_world_t and t >= Run.last_world_t then Run.clock = Run.clock + (t - Run.last_world_t) end
       Run.last_world_t = t
     end
   end
@@ -2258,7 +2264,7 @@ LoopAsync(TICK_MS, function()
       -- player controller changes, drop the HUD and wait a moment before touching game objects.
       local lp = local_pc()
       local la = lp and addr(lp) or 0
-      if la ~= Settle.pc then Settle.pc = la; Settle.until_ms = now_ms + SYS.map_settle_ms; HUD = nil end
+      if la ~= Settle.pc then Settle.pc = la; Settle.until_ms = now_ms + SYS.map_settle_ms; HUD = nil; Run.gs = nil end
       if now_ms < Settle.until_ms then return end
       run_timers()
       local srv, gm = server()

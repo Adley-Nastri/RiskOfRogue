@@ -297,6 +297,7 @@ M.SYS = {
   shock_crit_bonus = 0.15, -- chance
   mark_damage_taken = 0.5, -- fraction
   map_settle_ms = 1500, -- ms
+  run_timer_state = "ValGameState_SpaceDungeon", -- class
 }
 
 M.HOOKS = {
