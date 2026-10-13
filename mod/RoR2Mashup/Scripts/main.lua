@@ -2358,6 +2358,10 @@ LoopAsync(TICK_MS, function()
         if srv then host_tick(gm) end
       end
       hud_acc = hud_acc + TICK_MS
+      -- follow Deadzone's HUD on every tick, so hiding/showing doesn't wait for the next refresh
+      local vis = true
+      if HUD and valid(HUD.visor) then pcall(function() vis = HUD.visor:IsVisible() and true or false end) end
+      if vis ~= Settle.vis then Settle.vis = vis; hud_acc = SYS.hud_refresh_ms end
       if hud_acc >= SYS.hud_refresh_ms then hud_acc = 0; draw_hud() end
       local okt, errt = pcall(update_tip)
       if not okt then log("tooltip: " .. tostring(errt)) end
