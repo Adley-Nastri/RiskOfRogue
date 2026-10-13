@@ -296,6 +296,7 @@ M.SYS = {
   mark_damage_taken = 0.5, -- fraction
   map_settle_ms = 1500, -- ms
   run_timer_state = "ValGameState_SpaceDungeon", -- class
+  buff_show_stacks = 0, -- 0/1
 }
 
 M.HOOKS = {

@@ -2195,7 +2195,7 @@ local function draw_hud()
       slot.img:SetColorAndOpacity({ R = 1, G = 1, B = 1, A = 1 })
       if slot.iv ~= 1 then slot.img:SetVisibility(VIS); slot.iv = 1 end
       local n = (View.bcount[a.b.id] or 1) + a.b.offset
-      if a.b.stack == 1 and n > 1 then
+      if SYS.buff_show_stacks == 1 and a.b.stack == 1 and n > 1 then
         slot.cnt:SetText(FText(a.b.stack_pct == 1 and (n .. "%") or ("x" .. n)))
         color(slot.cnt, { 1, 1, 1 })
         anchor(slot.cslot, 0, 1, bx + 37, by + 3, nil, nil, 1, 1)
