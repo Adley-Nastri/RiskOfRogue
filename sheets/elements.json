@@ -109,18 +109,6 @@
    "note": "Infect: the Nano status visual; its modifier is NanoInfectReplenishmentChance."
   },
   {
-   "id": "plasma",
-   "name": "Plasma",
-   "status_ge": "none",
-   "dmg_attr": "PlasmaDamageModifier",
-   "duration_s": 0,
-   "duration_attr": "none",
-   "status_mag": 0,
-   "mag_attr": "none",
-   "status_cooldown_ms": 0,
-   "note": "Plasma damage only: Flux's attack-rate modifiers on enemies are unclear, so no status."
-  },
-  {
    "id": "launch",
    "name": "Anti-Gravity",
    "status_ge": "/Game/Abilities/Elements/GE_AntiGravityStun",

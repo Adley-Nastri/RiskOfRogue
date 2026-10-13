@@ -44,6 +44,9 @@ UE4SS Lua (loader API). The game uses GAS (ValAttributeSet, ValAbilitySystemComp
 - Calling `ValRHUIActiveItemDisplay:AddItem` with a Lua table for `FActiveItemDisplay` crashed the game: fields not given (inside FSlateBrush) are left uninitialised, so a garbage UObject pointer was read.
 - Teleporting the player with K2_SetActorLocation put them outside the level, and they died ("Suicide"). Don't teleport. Aim with SetControlRotation and fire instead.
 
+## Item set
+- 74 items after review with the user: removed RoR2 mechanics Deadzone lacks (gold, chests, shrines, drones, allies, equipment, XP) and thrown/fired objects (missiles, fireworks, boomerang, bombs, shurikens, daggers, hooks, razors, disc, skull, meteor). Full list in README and sheets/items.json "skipped".
+
 ## Status
 Verified: RoR2 cards in item orbs, native Tab and end-of-run slots with Deadzone's tooltip, stacking counts, stat items, kill and hit procs, clock. The teleporter event, kill drops and Dio's Best Friend were removed at the user's request. Open: the HUD item row under the minimap, and co-op with two players.
 

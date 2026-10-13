@@ -17,12 +17,12 @@ KINDS={ # legacy (hand-written handlers in main.lua) and generic (sheet-driven) 
 }
 TRIGGERS={'kill','elitekill','hit','crit','hurt','lowhp','shieldbreak','multikill','orb','stage','encounter','periodic'}
 ACTIONS={'bonus','single','aoe','aoe_self','aoe_random','chain','chain_self','multi','dot','delayed','status','execute',
-         'heal','heal_all','barrier','currency','ammo','refund','buff','aura','disc'}
+         'heal','heal_all','barrier','currency','ammo','refund','buff','aura'}
 CONDS={'','ooc','still','moving','shield','nearby','buffs','in_combat','tesla','v_elite','v_elite_low','v_near','v_hp_above','v_debuffed','v_cooldown',
        'above','hit_big','every','every_target','charged','charges','meteor'}
 SUBS={'','buff_zone','turret','storm','heal_zone','transmit'}
 SPECIALS={'DelayedDamage','HealingPotion','StrengthenBurn','TriggerEnemyDebuffs','BarrierOnOverHeal','Clover',
-          'Duplicator','FallBoots','MoreMissile','NovaOnHeal','PermanentDebuffOnHit','SharedSuffering'}
+          'Duplicator','FallBoots','PermanentDebuffOnHit','SharedSuffering'}
 LEGACY_IDS={'Syringe','Glasses','Hoof','Bear','ArmorPlate','Tooth','Medkit','Ukulele','Wisp','Gasoline','Feather','Infusion','Behemoth'}
 errs=[]; checked=0
 rids={r['id'] for r in rar['rows']}

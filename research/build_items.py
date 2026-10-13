@@ -191,7 +191,11 @@ SKIP = {'RegeneratingScrap': 'needs 3D printers', 'DroneWeapons': 'needs drones'
  'EnergizedOnEquipmentUse': 'needs an equipment slot', 'RandomEquipmentTrigger': 'needs equipment', 'IncreasePrimaryDamage': 'needs secondary-skill charges',
  'JumpBoost': 'the sprint-jump boost has no Deadzone equivalent', 'Squid': 'needs a turret ally', 'GhostOnKill': 'needs spawned allies',
  'PhysicsProjectile': 'needs a summoned unit', 'CaptainDefenseMatrix': 'enemy projectiles cannot be shot down', 'HeadHunter': 'needs elite affixes',
- 'ImmuneToDebuff': 'debuffs on the player cannot be blocked'}
+ 'ImmuneToDebuff': 'debuffs on the player cannot be blocked',
+ # removed: thrown or fired objects (projectiles, bombs, missiles) that Deadzone doesn't have
+ 'StunAndPierce': 'boomerang projectile', 'Missile': 'missiles', 'MoreMissile': 'missiles', 'Firework': 'fireworks',
+ 'StickyBomb': 'thrown bombs', 'PrimarySkillShuriken': 'thrown shurikens', 'Dagger': 'homing daggers', 'BounceNearby': 'thrown hooks',
+ 'Thorns': 'fired razors', 'LaserTurbine': 'thrown disc', 'NovaOnHeal': 'fired skull projectile', 'MeteorAttackOnHighDamage': 'meteor strikes'}
 # existing ids of the 14 tested items -> RoR2 name, so they aren't added twice
 OLD_SRC = {'Syringe':'Syringe','Glasses':'CritGlasses','Hoof':'Hoof','Bear':'Bear','Crowbar':'Crowbar','ArmorPlate':'ArmorPlate','Tooth':'Tooth',
            'Medkit':'Medkit','Ukulele':'ChainLightning','Wisp':'ExplodeOnDeath','Gasoline':'IgniteOnKill','Feather':'Feather','Infusion':'Infusion','Behemoth':'Behemoth'}

@@ -644,12 +644,6 @@ local function set_stat(pawn, slot, key, ge, op, raw)
 end
 
 -- damage helpers ----------------------------------------------------------------
-local function missile_mult(st, it)
-  if it.tag ~= "missile" then return 1, 1 end
-  local m = count(st, "MoreMissile")
-  if m == 0 then return 1, 1 end
-  return 3, 1 + Data.ITEM_BY_ID.MoreMissile.k * (m - 1)
-end
 local function el_of(it) return Data.ELEMENT_BY_ID[it.element] end
 -- one hit from a generic item: element damage, the element's status, and the item's extra status
 local function ghit(pawn, bot, it, n, amount, extra_dur)
@@ -690,8 +684,7 @@ local function base_value(it, ctx, target)
   return ctx.amount or ctx.g.base
 end
 local function dmg_of(it, n, ctx, target)
-  local shots, mult = missile_mult(ctx.st, it)
-  return per(it.dmg, it.dmg_per, n) * base_value(it, ctx, target) * mult, shots
+  return per(it.dmg, it.dmg_per, n) * base_value(it, ctx, target), 1
 end
 local function radius_of(it, n) return per(it.radius, it.radius_per, n) end
 local function count_of(it, n) return math.floor(per(it.n, it.n_per, n)) end
@@ -833,19 +826,6 @@ ACTIONS.item = function(it, n, ctx)
   if it.consume > 0 then take(ctx.name, it.id, 1) end
   give(ctx.name, id, 1)
   notify(ctx.name, "t", Data.ITEM_BY_ID[it.id].name .. ": " .. Data.ITEM_BY_ID[id].name)
-end
-ACTIONS.disc = function(it, n, ctx)
-  local list = bots_near(ctx.pawn, radius_of(it, n), nil)
-  if #list == 0 then return end
-  local d = dmg_of(it, n, ctx, nil)
-  for i, b in ipairs(list) do after(i * 40, function() if alive(b) then ghit(ctx.pawn, b, it, n, d) end end) end
-  local t = list[math.random(#list)]
-  local boom = per(it.k, it.k_per, n) * ctx.g.base
-  after(600, function()
-    if not alive(t) then return end
-    local x, y, z = loc(t); fx("behemoth_blast", x, y, z)
-    for _, b in ipairs(bots_in(x, y, z, 600)) do ghit(ctx.pawn, b, it, n, boom) end
-  end)
 end
 ACTIONS.elite_strike = function(it, n, ctx)
   local best, bm = nil, 0
@@ -1050,20 +1030,6 @@ local function engine_tick()
       local sp = speed_of(pawn)
       if sp < 30 then g.still_since = g.still_since or now_ms else g.still_since = nil end
       if sp > 200 then g.charge = g.charge + TICK_MS / 1000 end
-      -- N'kuhana's Opinion: healing seen as health going up
-      if g.last_hp and hp > g.last_hp and count(st, "NovaOnHeal") > 0 then
-        local it = Data.ITEM_BY_ID.NovaOnHeal
-        local nn = count(st, "NovaOnHeal")
-        g.soul = g.soul + (hp - g.last_hp) * per(it.k, it.k_per, nn)
-        if g.soul >= 0.1 * mx then
-          local list = nearest(bots_near(pawn, 4000, nil), pawn, 1)
-          if list[1] then
-            fx_at("behemoth_blast", list[1])
-            ghit(pawn, list[1], it, nn, per(it.dmg, it.dmg_per, nn) * g.base + 2.5 * g.soul)
-          end
-          g.soul = 0
-        end
-      end
       g.last_hp = hp
       -- H3AD-5T v2: landing after a big fall
       if count(st, "FallBoots") > 0 then
