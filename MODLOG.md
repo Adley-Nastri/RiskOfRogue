@@ -57,6 +57,14 @@ UE4SS Lua (loader API). The game uses GAS (ValAttributeSet, ValAbilitySystemComp
 ## Item set
 - 74 items after review with the user: removed RoR2 mechanics Deadzone lacks (gold, chests, shrines, drones, allies, equipment, XP) and thrown/fired objects (missiles, fireworks, boomerang, bombs, shurikens, daggers, hooks, razors, disc, skull, meteor). Full list in README and sheets/items.json "skipped".
 
+## RoR2 buff row and proc messages (testing branch)
+- Buff row above the health bar now covers the sheet-driven items: 24 entries in sheets/buffs.json, icons extracted from the player's own RoR2 install (never shipped in the repo).
+- Drawn the way RoR2's `BuffIcon.UpdateIcon` does it (read from the player's RoR2.dll): sprite tinted with the BuffDef `buffColor`; stacking buffs show "x" + count, or count + "%" when `stackingDisplayMethod` is 1; no fade. Colours, canStack, displayOffset and stackingDisplayMethod come from the BuffDefs in the bundles.
+- Extra RoR2 states: elemental rings ready / cooldown countdown, Warped Echo ready / pending (red), Unstable Transmitter ready / active / used.
+- State buffs are refreshed by the engine every 500 ms (`Procs.row`) through `notify(name, "B", "id|ms|count")`; the original four still use `"b"` and are unchanged apart from the RoR2 tint and stack count.
+- Row tilted 2 degrees (`buff_row_tilt_deg`) to run parallel to Deadzone's health bar.
+- Proc messages: 13 items in sheets/procs.json, at most one per item every 2 s; frequent on-hit procs stay silent.
+
 ## Status
 Verified: RoR2 cards in item orbs, native Tab and end-of-run slots with Deadzone's tooltip, stacking counts, stat items, kill and hit procs, clock. The teleporter event, kill drops and Dio's Best Friend were removed at the user's request. Open: the HUD item row under the minimap, and co-op with two players.
 
