@@ -1713,7 +1713,9 @@ function Native.hook_slot()
   local c = StaticFindObject(INV.slot_class)
   if not valid(c) then return end
   Native.slot_hooked = true
-  for _, fn in ipairs({ "UpdateTexture", "UpdateDefaultTexture" }) do
+  -- every slot function that can (re)build its material or icon: re-apply the RoR2 icon after each
+  for _, fn in ipairs({ "UpdateTexture", "UpdateDefaultTexture", "UpdateItemTypeMaterial", "UpdateRarity",
+                        "UpdateAsset", "UpdateDataAsset", "UpdateIsEmpty", "UpdateVisibility", "ValidateSlot" }) do
     local ok, err = pcall(function()
       RegisterHook(INV.slot_class .. ":" .. fn, function() end, function(self) pcall(Native.after_slot_texture, self) end)
     end)
