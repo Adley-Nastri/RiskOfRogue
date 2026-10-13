@@ -64,11 +64,6 @@
    "id": "icon_param",
    "value": "Icon",
    "note": "texture parameter of MI_UI_ItemEntry (read live)"
-  },
-  {
-   "id": "slot_class",
-   "value": "/Game/UI/Components/Shared/Equipment/UI_Equipment_Perk.UI_Equipment_Perk_C",
-   "note": "Deadzone's item slot widget; UpdateTexture / UpdateDefaultTexture set its icon after AsyncLoadTexture (function names listed live 2026-10-13)"
   }
  ]
 }

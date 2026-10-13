@@ -263,7 +263,6 @@ M.INV = {
   get_asset_fn = "/Script/Valhalla.ValBlueprintLibrary:GetAssetById",
   brush_fn = "/Script/ValhallaUI.ValRHUIActiveItemDisplay:UpdateBrushForItem",
   icon_param = "Icon",
-  slot_class = "/Game/UI/Components/Shared/Equipment/UI_Equipment_Perk.UI_Equipment_Perk_C",
 }
 
 -- systems: generated from sheets/systems.json
