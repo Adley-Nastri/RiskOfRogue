@@ -2264,7 +2264,13 @@ LoopAsync(TICK_MS, function()
       -- player controller changes, drop the HUD and wait a moment before touching game objects.
       local lp = local_pc()
       local la = lp and addr(lp) or 0
-      if la ~= Settle.pc then Settle.pc = la; Settle.until_ms = now_ms + SYS.map_settle_ms; HUD = nil; Run.gs = nil end
+      if la ~= Settle.pc then
+        Settle.pc = la; Settle.until_ms = now_ms + SYS.map_settle_ms; HUD = nil; Run.gs = nil
+        -- everything that still points at the old world goes: pending timers, cached attribute
+        -- sets, auras and infected enemies (calling into a destroyed object crashes UE4SS)
+        timers = {}; ATTRSET = {}; Auras = {}; Infected = {}
+        if Dev.ST and Dev.ST.running and Dev.ST.on_abort then pcall(Dev.ST.on_abort) end
+      end
       if now_ms < Settle.until_ms then return end
       run_timers()
       local srv, gm = server()

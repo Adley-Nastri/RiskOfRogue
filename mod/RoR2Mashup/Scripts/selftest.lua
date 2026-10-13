@@ -29,7 +29,7 @@ local target = nil
 local MEASURE_SHIELD = false
 local function snap(pc)
   local pawn = pc.Pawn
-  if not alive(pawn) then error("player died") end
+  if not alive(pawn) then error("WAIT: player died") end
   local s = { attrs = {}, hp = pawn:GetHealth(), bots = {}, credits = 0, jumps = pawn.JumpMaxCount }
   for a in pairs(WATCH) do s.attrs[a] = attr(pawn, a, 0) end
   if MEASURE_SHIELD then s.attrs.TemporaryShield = attr(pawn, "TemporaryShield", 0) end
@@ -87,7 +87,7 @@ local function run_item(pc, it, done)
   if not alive(pawn) then return done("WAIT", "waiting for you to respawn") end
   local near = nearest(bots_near(pawn, 5000, nil), pawn, 6)
   if #near == 0 then return done("WAIT", "no enemies within 50 m") end
-  local t = { target = near[1], skip = {} }
+  local t = { target = near[1], skip = {}, pawn_addr = addr(pawn) }
   target = near[1]
   local tr, k, c = it.trigger, it.kind, it.cond
   local LEGACY_EL = { Ukulele = true, Gasoline = true, Wisp = true, Behemoth = true }
@@ -106,6 +106,12 @@ local function run_item(pc, it, done)
   S(0, function()
     if MEASURE_SHIELD then
       Dev.inv_t = I.now() + 1e9 -- pause god mode's invulnerability (it fills the temporary shield)
+      local function guard(n)
+        if n <= 0 or (Dev.inv_t or 0) < I.now() then return end
+        if alive(pawn) then pcall(function() pawn:SetHealth(pawn:GetHealthMax() * 1.0) end) end
+        after(100, function() guard(n - 1) end)
+      end
+      guard(40)
       for _, set in ipairs(FindAllOf("ValAttributeSet") or {}) do
         if valid(set) and addr(set:GetOuter()) == addr(pawn) then set.TemporaryShield.BaseValue = 0; set.TemporaryShield.CurrentValue = 0 end
       end
@@ -197,6 +203,7 @@ local function run_item(pc, it, done)
   local function finish()
     Dev.inv_t = 0
     local ev = t.ev or {}
+    if t.err and tostring(t.err):find("WAIT: player died", 1, true) then return done("WAIT", "died mid-item; retrying after respawn") end
     if t.err then return done("FAIL", "error: " .. tostring(t.err)) end
     if MANUAL[it.id] and #ev == 0 then return done("MANUAL", MANUAL[it.id]) end
     if (c == "moving" or c == "above" or c == "still") and #ev == 0 then
@@ -210,6 +217,10 @@ local function run_item(pc, it, done)
   local function nextstep(x)
     if x > #steps then return finish() end
     after(steps[x][1], function()
+      -- never touch this item's saved objects once you've died or the map changed: they may be gone
+      local p = local_pc()
+      local pa = (p and valid(p.Pawn)) and addr(p.Pawn) or 0
+      if pa ~= t.pawn_addr then return done("WAIT", "you died or the map changed mid-item; retrying") end
       if not t.err then
         local ok, e = pcall(steps[x][2])
         if not ok then t.err = e end
@@ -232,6 +243,16 @@ local function start(only)
   for _, it in ipairs(Data.ITEMS) do if not only or only[it.id] then list[#list + 1] = it end end
   Dev.ST.running = true
   Dev.ST.stop = false
+  local was_god = Dev.god
+  Dev.god = true
+  -- called by the mod when the map changes (death, new floor, back to ship): pending steps are gone
+  Dev.ST.on_abort = function()
+    wout("\nStopped: the map changed (death, new floor or back to the ship).")
+    local p = local_pc()
+    if p then pcall(function() pstate(player_name(p)).items = saved end) end
+    Dev.ST.running = false; _G.R2_FORCE = false; Dev.inv_t = 0; Dev.god = was_god
+    Dev.msg = "Self-test stopped: the map changed"; Dev.msg_t = I.now()
+  end
   _G.R2_FORCE = true
   local function finish_all()
     local name = player_name(pc)
@@ -239,6 +260,7 @@ local function start(only)
     st.items = saved; apply_items(name)
     wout(string.format("\nPASS %d  FAIL %d  MANUAL %d  SKIP %d", results.PASS, results.FAIL, results.MANUAL, results.SKIP))
     Dev.ST.running = false; _G.R2_FORCE = false; Dev.inv_t = 0
+    Dev.god = was_god
     Dev.msg = "Self-test done: see selftest.txt"; Dev.msg_t = I.now()
   end
   local function do_item(x, tries)
