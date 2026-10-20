@@ -238,5 +238,22 @@ patch_inventory = function(tex, pc)
   -- The item row under the minimap is parked: feeding it RoR2 ids needed native hooks
   -- (GetAssetById / UpdateBrushForItem) that crashed the mod loader. See MODLOG.
 end
+-- Risk of Rogue's version and branch after Deadzone's own version number in the main and pause menus,
+-- in the same text block (so the same font and place). Re-added if the game rewrites it.
+function patch_version()
+  -- the testing branch ships devtools.txt, the release (main) doesn't
+  local tag = SYS.version_label .. SYS.mod_version .. (Dev.enabled and SYS.version_branch_dev or SYS.version_branch_release)
+  for _, w in ipairs(FindAllOf(SYS.version_widget) or {}) do
+    if valid(w) and w:GetFullName():find("/Engine/Transient", 1, true) and w:IsVisible() then
+      local tb = w[SYS.version_text]
+      if valid(tb) then
+        local s = tb:GetText():ToString()
+        local cut = s:find(SYS.version_label, 1, true) -- keep only Deadzone's part
+        local base = cut and s:sub(1, cut - 1) or s
+        if base ~= "" and s ~= base .. tag then tb:SetText(FText(base .. tag)) end
+      end
+    end
+  end
+end
 function update_tip() end -- Deadzone's own tooltip is used now
 

@@ -303,6 +303,12 @@ M.SYS = {
   buff_show_stacks = 0, -- 0/1
   kill_dedupe_ms = 1000, -- ms
   spawn_dedupe_ms = 2000, -- ms
+  mod_version = "1.0.0", -- text
+  version_widget = "WBP_VersionNumber_C", -- class
+  version_text = "VersionDisplay", -- name
+  version_label = "   Risk of Rogue v.", -- text
+  version_branch_dev = " (testing)", -- text
+  version_branch_release = " (main)", -- text
 }
 
 M.HOOKS = {

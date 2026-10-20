@@ -134,7 +134,11 @@ LoopAsync(TICK_MS, function()
       local vis = true
       if HUD and valid(HUD.visor) then pcall(function() vis = HUD.visor:IsVisible() and true or false end) end
       if vis ~= Settle.vis then Settle.vis = vis; hud_acc = SYS.hud_refresh_ms end
-      if hud_acc >= SYS.hud_refresh_ms then hud_acc = 0; draw_hud() end
+      if hud_acc >= SYS.hud_refresh_ms then
+        hud_acc = 0; draw_hud()
+        local okv, errv = pcall(patch_version)
+        if not okv then log("version text: " .. tostring(errv)) end
+      end
       local okt, errt = pcall(update_tip)
       if not okt then log("tooltip: " .. tostring(errt)) end
       test_acc = test_acc + TICK_MS
