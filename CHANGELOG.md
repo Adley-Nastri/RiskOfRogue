@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- RoR2 items now show in the "Items" row of the end-of-run screen.
+- Code split into smaller files by area (no change in behaviour).
+
 ## 1.0.0 (first public release)
 
 - 74 Risk of Rain 2 items (Common, Uncommon, Legendary, base game and DLCs) as native Deadzone: Rogue items, offered in item orbs.
