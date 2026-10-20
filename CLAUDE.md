@@ -40,7 +40,8 @@ See `docs/DEVELOPMENT.md` for the full version.
 - `research/build_items.py` builds `sheets/items.json`; `research/build_item_text.py` builds `sheets/item_text.json` (Deadzone rich text: `<em>`, `<element_fire>` etc., `<img id="..."/>`; shorthand `*x*` and `{KEY}`).
 - `research/game_classes.txt`, `game_functions.txt`, `game_ge_classes.txt`: names from a UE4SS dump, used by preflight.
 - `tools/ror2_assets.json`: which RoR2 texture and bundle each icon comes from.
-- `main.lua` and `data_gen.lua` load once at game start (restart to apply). `selftest.lua` reloads every time a self-test starts.
+- Code: `Scripts/main.lua` is only a loader. The runtime is `Scripts/parts/*.lua` (17 files, loaded in a fixed order into ONE shared environment; table of parts in `docs/DEVELOPMENT.md` → "Code layout"). Top-level names are shared across parts; Lua/UE4SS globals come through `__index = _G`.
+- The mod's Lua and `data_gen.lua` load once at game start (restart to apply). `selftest.lua` reloads every time a self-test starts.
 
 ## Developer tools (testing branch, `devtools.txt` present)
 
@@ -54,7 +55,7 @@ Last full self-test: 66 PASS, 3 FAIL (all fixed since: Topaz Brooch/Aegis measur
 - **No native hooks** on hot paths (`GetAssetById` / `UpdateBrushForItem` crashed the Lua VM). Blueprint/UFunction hooks are OK but each adds risk; three slot-icon flash hooks were tried and reverted.
 - **No game calls inside Lua coroutines.** Use `after(ms, fn)` timer chains.
 - **Map changes:** when the local PlayerController changes, the mod drops its HUD, pending timers, cached attribute sets, auras and infected enemies, and waits 1.5 s (`map_settle_ms`).
-- **`main.lua`'s main chunk is near Lua's 200-local limit.** Put new code in functions or tables (`Procs`, `Native`, `Dev`, `R2I`).
+- **Shared environment:** top-level names in `Scripts/parts/` are visible to all parts. Keep names distinct; group helpers in tables (`Procs`, `Native`, `Dev`, `R2I`). New parts must be added to the `PARTS` list in `main.lua` in load order.
 - Don't teleport the player (lands outside the level). Inspection scripts must be read-only.
 - Ask before quitting the user's runs; if a tool call is rejected, stop and wait.
 

@@ -10,7 +10,7 @@ GE_CLASSES=set(open(os.path.join(D,'research','game_ge_classes.txt')).read().spl
 # every icon the extractor (tools/extract_ror2_assets.py) can produce from a player's RoR2 install
 _assets=json.load(open(os.path.join(D,'tools','ror2_assets.json')))
 DEVICE_ICONS=set(j['png'] for j in _assets['items']+_assets['buffs'])
-KINDS={ # legacy (hand-written handlers in main.lua) and generic (sheet-driven) kinds -> required columns
+KINDS={ # legacy (hand-written handlers in Scripts/parts/) and generic (sheet-driven) kinds -> required columns
  'stat':['ge','attr','op','k','stack'], 'heal':['trigger','k'], 'refund':['trigger','k'], 'proc':['trigger','chance','radius','dmg'],
  'jump':['attr','k'], 'growth':['ge','attr','trigger','k','dmg'],
  'cstat':['cond','ge','attr','op','k'], 'buff':['trigger','ge','attr','op','k','dur','cap'], 'effect':['trigger','action'],
@@ -46,7 +46,7 @@ for r in items['rows']:
     for c in KINDS[k]:
         if r[c] in ('',None,0) and not (c=='k' and k in ('effect','special')): errs.append(f"items.{i}.{c}: required for kind {k} but empty")
     if k in ('proc','heal','refund','growth','jump') and i not in LEGACY_IDS|{'Infusion'}: errs.append(f"items.{i}.kind: '{k}' only has hand-written handlers for the original items")
-    if k=='special' and i not in SPECIALS: errs.append(f"items.{i}: special kind but no handler in main.lua")
+    if k=='special' and i not in SPECIALS: errs.append(f"items.{i}: special kind but no handler in Scripts/parts/")
     if r['trigger'] and r['trigger'] not in TRIGGERS: errs.append(f"items.{i}.trigger: unknown {r['trigger']}")
     if r['action'] and r['action'] not in ACTIONS: errs.append(f"items.{i}.action: unknown {r['action']}")
     if r['cond'] not in CONDS: errs.append(f"items.{i}.cond: unknown {r['cond']}")
