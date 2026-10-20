@@ -174,6 +174,18 @@
    "value": 0,
    "unit": "0/1",
    "note": "stack numbers on the HUD buff icons: off at the user's request (the icon only shows that the buff is active)"
+  },
+  {
+   "id": "kill_dedupe_ms",
+   "value": 1000,
+   "unit": "ms",
+   "note": "a second kill report for the same enemy within this window is ignored; Deadzone reuses dead enemies' memory for new spawns, so it must not be remembered longer"
+  },
+  {
+   "id": "spawn_dedupe_ms",
+   "value": 2000,
+   "unit": "ms",
+   "note": "a second spawn report for the same enemy within this window doesn't re-apply the clock buff; kept short because Deadzone reuses dead enemies' memory for new spawns"
   }
  ]
 }

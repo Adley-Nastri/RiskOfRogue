@@ -11,8 +11,8 @@ function reset_run()
     players = {},        -- name -> {items={}, handles={}, pawn=addr, base_jump=nil, infusion=0}
     clock = 0.0,         -- seconds of run time
     last_world_t = nil,
-    buffed = {},         -- bot addr -> true
-    killed = {},         -- bot addr -> true (dedupe kill hooks)
+    buffed = {},         -- bot addr -> time the clock buff was applied
+    killed = {},         -- bot addr -> time of death (dedupe kill hooks)
   }
 end
 reset_run()
