@@ -87,7 +87,8 @@ local function run_item(pc, it, done)
   local g = gstate(st)
   if not alive(pawn) then return done("WAIT", "waiting for you to respawn") end
   local near = nearest(bots_near(pawn, 5000, nil), pawn, 6)
-  if #near == 0 then return done("WAIT", "no enemies within 50 m") end
+  -- between waves there's nothing to test on: wait for the next wave (no time limit)
+  if #near == 0 then return done("WAIT", "no enemies within 50 m", "noenemy") end
   local t = { target = near[1], skip = {}, pawn_addr = addr(pawn) }
   target = near[1]
   local tr, k, c = it.trigger, it.kind, it.cond
@@ -189,7 +190,10 @@ local function run_item(pc, it, done)
     for x = first, first + victims - 1 do
       S(tr == "multikill" and 0 or 250, function()
         local v = near[x]
-        if alive(v) then t.skip[addr(v)] = true; deal(pawn, v, v:GetHealth() + 1) end
+        if alive(v) then
+          t.skip[addr(v)] = true; deal(pawn, v, v:GetHealth() + 1)
+          t.victims = t.victims or {}; t.victims[#t.victims + 1] = v
+        end
       end)
     end
   end
@@ -230,6 +234,17 @@ local function run_item(pc, it, done)
     if c == "ooc" and #ev == 0 then return done("MANUAL", "needs 5 s without being hit (enemies kept attacking during the test)") end
     if it.action == "ammo" and #ev == 0 then return done("MANUAL", "refills ammo (can't be measured from the mod)") end
     if #ev > 0 then return done("PASS", table.concat(ev, "; ")) end
+    -- if the wave ended while this item ran, there was nothing left to show its effect on:
+    -- try again when enemies are back instead of failing
+    local left = 0
+    pcall(function() left = #bots_near(pawn, 5000, nil) end)
+    if left < 2 then return done("WAIT", "enemies ran out mid-item; retrying", "ranout") end
+    -- enemies that are still spawning in can't be killed yet, so the kill never happened
+    for _, v in ipairs(t.victims or {}) do
+      local up = false
+      pcall(function() up = alive(v) end)
+      if up then return done("WAIT", "the enemy couldn't be killed yet (still spawning?); retrying", "ranout") end
+    end
     return done("FAIL", "no measurable effect")
   end
   local function nextstep(x)
@@ -284,12 +299,23 @@ local function start(only)
     Dev.god = was_god
     Dev.msg = "Self-test done: see selftest.txt"; Dev.msg_t = I.now()
   end
-  local function do_item(x, tries)
+  local function do_item(x, tries, ranouts)
+    ranouts = ranouts or 0
     if Dev.ST.stop then Dev.ST.stop = false; wout("\nStopped from the test menu after " .. (x - 1) .. " of " .. #list .. " items."); return finish_all() end
     if x > #list then return finish_all() end
     local it = list[x]
-    local ok, e = pcall(run_item, pc, it, function(verdict, why)
-      if verdict == "WAIT" and tries < 60 then return after(2000, function() do_item(x, tries + 1) end) end
+    local ok, e = pcall(run_item, pc, it, function(verdict, why, kind)
+      if verdict == "WAIT" and kind == "noenemy" then
+        Dev.msg = string.format("Self-test %d/%d: waiting for enemies", x, #list); Dev.msg_t = I.now()
+        return after(2000, function() do_item(x, tries, ranouts) end)
+      end
+      if verdict == "WAIT" and kind == "ranout" then
+        if ranouts < 5 then return after(2000, function() do_item(x, tries, ranouts + 1) end) end
+        verdict, why = "FAIL", "no measurable effect (enemies kept running out)"
+      end
+      -- a failure gets two more tries before it counts, like pressing End for that item
+      if verdict == "FAIL" and ranouts < 2 then return after(2000, function() do_item(x, tries, ranouts + 1) end) end
+      if verdict == "WAIT" and tries < 60 then return after(2000, function() do_item(x, tries + 1, ranouts) end) end
       results[verdict] = (results[verdict] or 0) + 1
       if verdict == "FAIL" then failed[#failed + 1] = it.id end
       wout(string.format("%-6s %-28s [%s/%s] %s", verdict, it.name, it.kind, it.trigger ~= "" and it.trigger or it.cond, why))
