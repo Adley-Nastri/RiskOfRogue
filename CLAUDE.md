@@ -9,7 +9,7 @@ Context for Claude (and other AI assistants) working on this repo. The human-fac
 - Items are offered in Deadzone's item orbs (one RoR2 card next to the normal choices; rarity weights Common 70 / Uncommon 25 / Legendary 5). They never drop on their own.
 - Each RoR2 item is a copy of a vanilla Deadzone item definition (template `/Game/Items/Items/Item_ArmorValue`) with its own name, description and rarity, so Deadzone's inventory (18 slots, shared), tooltips and rarity borders work natively. Only RoR2 items stack ("x2"); a full inventory still accepts copies of RoR2 items already held.
 - Items use Deadzone's elements and statuses (Fire/Ignite, Lightning/Shock, Cryo/Chill/Freeze, Void/Corruption, Psionic/Fracture, Nano/Infect, Mark = `GE_GrenadeWeakened`). Item damage can Critical Hit (procs from a hit inherit its crit; other procs roll the player's crit chance, +15% vs Shocked targets; DoT ticks never crit). Marked targets take +50% from item damage.
-- HUD (one UMG widget the mod builds): RoR2 difficulty clock (top right, 9 tiers Easy→HAHAHAHA, 5 min each, starts with Deadzone's run timer via `ValGameState_SpaceDungeon:HasRunStarted()`), RoR2 buff-icon row above the health bar (tilted 2°, untinted PNGs, no stack numbers), proc-message ticker, pickup banner. Shown only while Deadzone's own HUD (`UI_Game_Visor_C`) is visible; the mod's clock freezes when the world clock stands still (solo pause).
+- HUD (one UMG widget the mod builds): RoR2 difficulty clock (top right, 9 tiers Easy→HAHAHAHA, 5 min each; follows Deadzone's run timer `UI_Game_TimeRemaining_C.CachedCurrentTime` to the second; new enemies get +8% max HP, +3% damage and +1.25% speed per minute, speed capped at +50%), RoR2 buff-icon row above the health bar (tilted 2°, untinted PNGs, no stack numbers), proc-message ticker, pickup banner. Shown only while Deadzone's own HUD (`UI_Game_Visor_C`) is visible; the mod's clock freezes when the world clock stands still (solo pause).
 - Co-op: host runs all logic; clients get state over `PlayerController:ClientMessage` and draw the HUD. **Untested with two players.**
 - No RoR2 assets are shipped. `tools/extract_ror2_assets.py` extracts 95 PNGs (74 item icons + 21 buff icons) from the player's own RoR2 install.
 
@@ -58,6 +58,9 @@ Last full self-test: 66 PASS, 3 FAIL (all fixed since: Topaz Brooch/Aegis measur
 - **Shared environment:** top-level names in `Scripts/parts/` are visible to all parts. Keep names distinct; group helpers in tables (`Procs`, `Native`, `Dev`, `R2I`). New parts must be added to the `PARTS` list in `main.lua` in load order.
 - Don't teleport the player (lands outside the level). Inspection scripts must be read-only.
 - Ask before quitting the user's runs; if a tool call is rejected, stop and wait.
+
+- **Per-enemy state is keyed by address, and Deadzone reuses addresses.** Never remember an enemy address for longer than a short window; drop an enemy's entries when it dies (`forget_bot` in `hooks.lua`).
+- **Version:** `mod_version` in `sheets/systems.json` is shown in the menus as `Risk of Rogue v.<version> (testing|main)`; bump it with each release alongside `CHANGELOG.md`.
 
 ## Known limits / open items
 

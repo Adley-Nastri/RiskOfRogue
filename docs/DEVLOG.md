@@ -70,6 +70,15 @@ UE4SS Lua (loader API). The game uses GAS (ValAttributeSet, ValAbilitySystemComp
 ## End-of-run Items row
 The results screen's "Items:" row is a UI_Equipment_Perks_Minimal_C that only creates one UI_Equipment_Perk slot per vanilla item, so the 18-slot grid patch never reached it. The mod now creates UI_Equipment_Perk slots (WidgetBlueprintLibrary.Create, AddChildToHorizontalBox on ItemGridHorizontal), copies the row's ScaleOverride (0.4) via UpdateScaleOverride, and fills them like the Tab grid. Verified in game.
 
+## Enemy address reuse
+Deadzone reuses a dead enemy's memory for new spawns, and everything the mod keeps per enemy is keyed by address. The kill dedupe (Run.killed) remembered addresses for the whole run, so on-kill items silently stopped firing for new enemies at reused addresses (checked live: 3 of 8 live enemies were already marked killed). The clock buff dedupe (Run.buffed) had the same flaw. Both are now time windows (kill_dedupe_ms 1000, spawn_dedupe_ms 2000), and on a kill forget_bot() drops the enemy's clock-buff mark, cached attribute set, Networked Suffering infection and status timers. Found through self-test kill items failing late in a run.
+
+## Clock synced to Deadzone's run timer
+Deadzone's run timer is UI_Game_TimeRemaining_C (top left, under the wave info); it keeps the whole seconds it shows in CachedCurrentTime. The RoR2 clock is now those seconds plus the time since they last changed (capped below 1 s), so both read the same mm:ss. Its bTimerInitialized flag stays false while it runs and must not be checked (the first version did, and fell back to the mod's own count, about 4 s ahead). Without the widget the mod's own count is used.
+
+## Version in the menus
+WBP_VersionNumber_C.VersionDisplay (main and pause menus) reads "v.1.4.2.0"; the mod appends "   Risk of Rogue v.<mod_version> (testing|main)" in the same text block. The branch comes from devtools.txt.
+
 ## Status
 Verified: RoR2 cards in item orbs, native Tab and end-of-run slots with Deadzone's tooltip, stacking counts, stat items, kill and hit procs, clock. The teleporter event, kill drops and Dio's Best Friend were removed at the user's request. Open: the HUD item row under the minimap, and co-op with two players.
 

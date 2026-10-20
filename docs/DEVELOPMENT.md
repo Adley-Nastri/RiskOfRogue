@@ -102,7 +102,7 @@ With `devtools.txt` in the mod folder:
 
 The menu shows each item's HUD buff icons next to its name, so you know what to look for.
 
-**Self-test:** stand near enemies and press Home. Each item is given on its own and its trigger is fired against real enemies. Then `selftest.txt` gets PASS with the evidence (stat change, damage dealt, status applied, shield, heal), FAIL, or MANUAL for items that need you, like sprinting or high ground. God mode turns itself on while it runs. Failed items are listed in `selftest_failed.txt` for End.
+**Self-test:** stand near enemies and press Home. Each item is given on its own and its trigger is fired against real enemies. Then `selftest.txt` gets PASS with the evidence (stat change, damage dealt, status applied, shield, heal), FAIL, or MANUAL for items that need you, like sprinting or high ground. God mode turns itself on while it runs. Failed items are listed in `selftest_failed.txt` for End. Between waves it waits for enemies (ready up to continue). If a kill didn't land or the enemies ran out mid-item, it retries, and any FAIL is retried twice before it counts.
 
 **Test-command file:** a Lua snippet saved as `Mods/RiskOfRogue/test_cmd.lua` runs inside the mod within half a second, and its result is appended to `test_out.txt`. `R2I` exposes the mod's internals. This only exists with `devtools.txt`, so the release build never runs files from disk.
 
@@ -114,6 +114,7 @@ These are learned the hard way (see DEVLOG):
 - **No native hooks on hot paths.** Hooks on native functions such as `GetAssetById` crashed the Lua VM. Blueprint and UFunction hooks are fine.
 - **No game calls from coroutines.** UE4SS can't call UObject methods inside a Lua coroutine. Use the mod's `after(ms, fn)` timer chain.
 - **Map changes.** When the local player controller changes, the mod drops its HUD and pending timers and waits 1.5 s before touching game objects.
+- **Enemy addresses get reused.** Deadzone reuses a dead enemy's memory for new spawns. Don't remember an enemy's address for long, and drop its entries when it dies.
 - **One shared environment.** Top-level names in `Scripts/parts/` are shared between all parts (see "Code layout"), so give new ones distinct names and put related helpers in a table (`Procs`, `Native`, `Dev`).
 
 ## Releasing
