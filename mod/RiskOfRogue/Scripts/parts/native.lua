@@ -172,6 +172,45 @@ function fill_slot(slot, it, n, ps)
     stack:SetVisibility(n > 1 and VIS or HID)
   end
 end
+-- The end-of-run "Items:" row only makes a slot for each vanilla item, so RoR2 items get slots
+-- of the same class added after them, at the row's own scale. Added once per results screen
+-- (keyed by the row's address), then refilled like the other grids.
+Native.end_rows = {}
+function patch_end_row(list, pc, ps)
+  if #list == 0 then return end
+  for _, row in ipairs(FindAllOf(INV.end_row_class) or {}) do
+    local fn = valid(row) and row:GetFullName() or ""
+    if fn:find("^[%w_]+ /Engine/Transient") and fn:find(INV.end_grid_owner) and row:IsVisible() then
+      local grid = row[INV.end_row_grid]
+      if valid(grid) then
+        local key = addr(grid)
+        local mine = Native.end_rows[key]
+        if not mine then
+          mine = {}
+          Native.end_rows = { [key] = mine } -- older results screens are gone
+        end
+        local n = grid:GetChildrenCount()
+        local first = n > #mine and grid:GetChildAt(0) or nil
+        local scale = INV.end_row_scale
+        if valid(first) then pcall(function() scale = first.ScaleOverride end) end
+        local wbl = StaticFindObject("/Script/UMG.Default__WidgetBlueprintLibrary")
+        local proto = valid(first) and first or FindFirstOf(INV.end_row_slot)
+        local slot_cls = valid(proto) and proto:GetClass() or nil
+        for i, e in ipairs(list) do
+          if not valid(mine[i]) and valid(wbl) and valid(slot_cls) then
+            local w = wbl:Create(pc, slot_cls, pc)
+            if valid(w) then
+              grid:AddChildToHorizontalBox(w)
+              pcall(function() w:UpdateScaleOverride(scale) end)
+              mine[i] = w
+            end
+          end
+          if valid(mine[i]) then fill_slot(mine[i], Data.ITEM_BY_ID[e.id], e.n, ps) end
+        end
+      end
+    end
+  end
+end
 patch_inventory = function(tex, pc)
   Native.tex = tex
   local list = owned_list()
@@ -195,6 +234,7 @@ patch_inventory = function(tex, pc)
       end
     end
   end
+  patch_end_row(list, pc, ps)
   -- The item row under the minimap is parked: feeding it RoR2 ids needed native hooks
   -- (GetAssetById / UpdateBrushForItem) that crashed the mod loader. See MODLOG.
 end

@@ -16,6 +16,26 @@
    "note": "end-of-run equipment display, same layout"
   },
   {
+   "id": "end_row_class",
+   "value": "UI_Equipment_Perks_Minimal_C",
+   "note": "the end-of-run 'Items:' row; makes one UI_Equipment_Perk slot per vanilla item only, so the mod adds slots for RoR2 items (verified live)"
+  },
+  {
+   "id": "end_row_grid",
+   "value": "ItemGridHorizontal",
+   "note": "HorizontalBox in the 'Items:' row that holds its slots"
+  },
+  {
+   "id": "end_row_slot",
+   "value": "UI_Equipment_Perk_C",
+   "note": "slot widget class in the 'Items:' row (same as the Tab grid's slots)"
+  },
+  {
+   "id": "end_row_scale",
+   "value": 0.4,
+   "note": "ScaleOverride Deadzone gives the row's slots (read live); used when the run had no vanilla item to copy it from"
+  },
+  {
    "id": "slot_icon",
    "value": "BGMat",
    "note": "Image inside UI_Equipment_Perk; SetBrushFromTexture shows our icon (verified live)"
