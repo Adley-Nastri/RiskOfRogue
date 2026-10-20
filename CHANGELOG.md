@@ -3,6 +3,10 @@
 ## Unreleased
 
 - RoR2 items now show in the "Items" row of the end-of-run screen.
+- Fixed on-kill items sometimes not firing, and the difficulty clock sometimes not buffing new enemies, later in a run (Deadzone reuses dead enemies' memory for new spawns).
+- The RoR2 difficulty clock now matches Deadzone's run timer to the second.
+- The main and pause menus show the Risk of Rogue version and branch next to Deadzone's version.
+- Self-test: waits for the next wave instead of failing when no enemies are around, and retries items whose kill didn't land.
 - Code split into smaller files by area (no change in behaviour).
 
 ## 1.0.0 (first public release)
