@@ -170,6 +170,18 @@
    "note": "Deadzone's run timer lives here; HasRunStarted() turns true at the first door. Checked live 2026-10-13: Deadzone timer = world time - ~12 s on the first floor."
   },
   {
+   "id": "run_timer_widget",
+   "value": "UI_Game_TimeRemaining_C",
+   "unit": "class",
+   "note": "Deadzone's run-timer widget (top left, under the wave info); the RoR2 clock follows it exactly (verified live)"
+  },
+  {
+   "id": "run_timer_seconds",
+   "value": "CachedCurrentTime",
+   "unit": "name",
+   "note": "its whole seconds as shown (Minutes:Seconds)"
+  },
+  {
    "id": "buff_show_stacks",
    "value": 0,
    "unit": "0/1",

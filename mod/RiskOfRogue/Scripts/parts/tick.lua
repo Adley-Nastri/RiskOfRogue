@@ -28,6 +28,25 @@ function host_tick(gm)
     if ok and t then
       if started and Run.last_world_t and t >= Run.last_world_t then Run.clock = Run.clock + (t - Run.last_world_t) end
       Run.last_world_t = t
+      -- Follow Deadzone's own run timer exactly: its widget keeps the whole seconds it shows.
+      -- The clock is those seconds plus the time since they last changed (capped below 1 s),
+      -- so both clocks always read the same mm:ss. Without the widget, the count above is used.
+      pcall(function()
+        if not valid(Run.tw) then
+          Run.tw = nil
+          for _, w in ipairs(FindAllOf(SYS.run_timer_widget) or {}) do
+            if valid(w) and w:GetFullName():find("/Engine/Transient", 1, true) then Run.tw = w; break end
+          end
+        end
+        -- (its bTimerInitialized flag stays false while it runs, so it isn't checked)
+        if Run.tw and started then
+          local v = Run.tw[SYS.run_timer_seconds]
+          if v and v >= 0 then
+            if v ~= Run.tw_v then Run.tw_v = v; Run.tw_t = t end
+            Run.clock = v + math.min(math.max(t - (Run.tw_t or t), 0), 0.999)
+          end
+        end
+      end)
     end
   end
   -- re-apply items when a player's pawn changes (respawn, new floor)
@@ -117,7 +136,7 @@ LoopAsync(TICK_MS, function()
       -- player controller changes, drop the HUD and wait a moment before touching game objects.
       local la = lp and addr(lp) or 0
       if la ~= Settle.pc then
-        Settle.pc = la; Settle.until_ms = now_ms + SYS.map_settle_ms; HUD = nil; Run.gs = nil
+        Settle.pc = la; Settle.until_ms = now_ms + SYS.map_settle_ms; HUD = nil; Run.gs = nil; Run.tw = nil
         -- everything that still points at the old world goes: pending timers, cached attribute
         -- sets, auras and infected enemies (calling into a destroyed object crashes UE4SS)
         timers = {}; ATTRSET = {}; Auras = {}; Infected = {}
