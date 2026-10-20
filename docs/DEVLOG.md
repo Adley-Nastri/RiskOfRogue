@@ -67,6 +67,9 @@ UE4SS Lua (loader API). The game uses GAS (ValAttributeSet, ValAbilitySystemComp
 - Row tilted 2 degrees (`buff_row_tilt_deg`) to run parallel to Deadzone's health bar.
 - Proc messages: 13 items in sheets/procs.json, at most one per item every 2 s; frequent on-hit procs stay silent.
 
+## End-of-run Items row
+The results screen's "Items:" row is a UI_Equipment_Perks_Minimal_C that only creates one UI_Equipment_Perk slot per vanilla item, so the 18-slot grid patch never reached it. The mod now creates UI_Equipment_Perk slots (WidgetBlueprintLibrary.Create, AddChildToHorizontalBox on ItemGridHorizontal), copies the row's ScaleOverride (0.4) via UpdateScaleOverride, and fills them like the Tab grid. Verified in game.
+
 ## Status
 Verified: RoR2 cards in item orbs, native Tab and end-of-run slots with Deadzone's tooltip, stacking counts, stat items, kill and hit procs, clock. The teleporter event, kill drops and Dio's Best Friend were removed at the user's request. Open: the HUD item row under the minimap, and co-op with two players.
 
