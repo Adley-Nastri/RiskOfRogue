@@ -186,6 +186,42 @@
    "value": 2000,
    "unit": "ms",
    "note": "a second spawn report for the same enemy within this window doesn't re-apply the clock buff; kept short because Deadzone reuses dead enemies' memory for new spawns"
+  },
+  {
+   "id": "mod_version",
+   "value": "1.0.0",
+   "unit": "text",
+   "note": "Risk of Rogue's version, shown after Deadzone's version number in the menus; bump with each release (see CHANGELOG.md)"
+  },
+  {
+   "id": "version_widget",
+   "value": "WBP_VersionNumber_C",
+   "unit": "class",
+   "note": "Deadzone's version-number widget in the main and pause menus (verified live)"
+  },
+  {
+   "id": "version_text",
+   "value": "VersionDisplay",
+   "unit": "name",
+   "note": "its TextBlock that reads 'v.1.4.2.0'"
+  },
+  {
+   "id": "version_label",
+   "value": "   Risk of Rogue v.",
+   "unit": "text",
+   "note": "appended after Deadzone's version, followed by mod_version"
+  },
+  {
+   "id": "version_branch_dev",
+   "value": " (testing)",
+   "unit": "text",
+   "note": "added after the version on the testing build (devtools.txt present)"
+  },
+  {
+   "id": "version_branch_release",
+   "value": " (main)",
+   "unit": "text",
+   "note": "added after the version on the release build (main branch, no devtools.txt)"
   }
  ]
 }
