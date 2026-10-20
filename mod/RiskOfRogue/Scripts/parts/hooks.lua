@@ -5,10 +5,25 @@
 ---------------------------------------------------------------------------
 -- hooks (host)
 ---------------------------------------------------------------------------
+-- Everything the mod keeps per enemy is keyed by its address, and Deadzone reuses a dead
+-- enemy's memory for new spawns. Drop the dead enemy's entries so a newcomer starts clean.
+function forget_bot(va)
+  Run.buffed[va] = nil
+  ATTRSET[va] = nil
+  Infected[va] = nil
+  local pre = tostring(va) .. "|"
+  for k in pairs(StatusUntil) do if k:sub(1, #pre) == pre then StatusUntil[k] = nil end end
+end
 function on_bot_killed(victim, killer)
   local va = addr(victim)
-  if va == 0 or Run.killed[va] then return end
-  Run.killed[va] = true
+  -- The same death can reach us twice (damage event and kill event), so a repeat within a
+  -- second is ignored. Only for a second: Deadzone reuses dead enemies' memory for new spawns,
+  -- and remembering addresses for the whole run silently blocked on-kill items for them.
+  if va == 0 then return end
+  local seen = Run.killed[va]
+  if seen and now_ms - seen < SYS.kill_dedupe_ms then return end
+  Run.killed[va] = now_ms
+  forget_bot(va)
   if not valid(killer) or not killer:IsPlayerControlled() then return end
   after(0, function()
     local okg, errg = pcall(engine_kill, victim, killer)
@@ -167,9 +182,11 @@ function on_new_character(c)
     if not is_bot(c) or not alive(c) then return end
     local srv, gm = server()
     if not srv or in_hub(gm) then return end
+    -- same window idea as kills: a new enemy can sit at a dead one's address
     local a = addr(c)
-    if Run.buffed[a] then return end
-    Run.buffed[a] = true
+    local seen = Run.buffed[a]
+    if seen and now_ms - seen < SYS.spawn_dedupe_ms then return end
+    Run.buffed[a] = now_ms
     clock_buff(c)
     note_bot_hp(c)
   end)
