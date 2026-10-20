@@ -24,7 +24,7 @@ K = {  # keyword -> (img id or None, tag, text)
  'NANO': ('DamageType.Nano', 'element_nano', 'Nano Damage'),
 }
 T = {
- # Every line checked against sheets/items.json and the handlers in main.lua (2026-10-13 audit).
+ # Every line checked against sheets/items.json and the handlers in the mod's Lua (2026-10-13 audit).
  # "average hit" = the engine's g.base: a running average of your hit damage.
  'Syringe': "*+15%* *Fire Rate* per stack.",
  'Glasses': "*+10%* {CRITCH} per stack.",
