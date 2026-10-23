@@ -79,6 +79,15 @@ Deadzone's run timer is UI_Game_TimeRemaining_C (top left, under the wave info);
 ## Version in the menus
 WBP_VersionNumber_C.VersionDisplay (main and pause menus) reads "v.1.4.2.0"; the mod appends "   Risk of Rogue v.<mod_version> (testing|main)" in the same text block. The branch comes from devtools.txt.
 
+## Music research (RoR2 music option, 1.1 idea)
+- Deadzone's audio is Wwise (AkAudio). Its music is driven by cues the mod can hook (AkGameplayStatics:SetState/SetSwitch, verified with a read-only watcher over two waves):
+  - `MusicZone-MUS_Z{1-3}_{F1,F2,F3,MINIBOSS,BOSS}` (switch, set on mission load): which track.
+  - `CombatState-Combat` / `CombatState-Safe` (state): Combat fires when a wave starts and stays on for the whole wave, lulls included; Safe fires when the wave is cleared.
+  - `MusicStatus-On`, `MatchState-Active`, `LoadingState-*` on load. No separate music "play" event is posted from Blueprint.
+- Deadzone's music volume is the Wwise RTPC `/Game/WwiseAudio/Game_Parameters/AudioGameParameters/MusicVolume` (AkGameplayStatics:SetRTPCValue).
+- Unreal's MediaPlayer/FileMediaSource/MediaSoundComponent exist, but the game ships no audio decoder plugin (no WmfMedia/Electra; only Bink and ImgMedia): OpenSource/OpenFile fail for .wav, .ogg and .m4a. Playing RoR2 music needs a native .ogg player.
+- RoR2's music is Ogg Vorbis inside its Wwise banks, so it can be extracted from the player's own install without re-encoding (like the icons).
+
 ## Status
 Verified: RoR2 cards in item orbs, native Tab and end-of-run slots with Deadzone's tooltip, stacking counts, stat items, kill and hit procs, clock. The teleporter event, kill drops and Dio's Best Friend were removed at the user's request. Open: the HUD item row under the minimap, and co-op with two players.
 
