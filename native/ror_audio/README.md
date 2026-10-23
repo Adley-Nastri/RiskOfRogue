@@ -9,5 +9,6 @@ on the same output device as the game, found from the game's own Windows audio s
   unmodified third-party libraries.
 - `build.sh`: builds `ror_audio.dll`. The DLL itself is not committed.
 
-Status: prototype. Verified in game: plays `.ogg`, follows the game's output device, two tracks
-started sample-locked (RoR2 stage song + its teleporter layer) with independent fades.
+Status: in testing. Verified in game: plays `.ogg`, follows the game's output device, a calm track
+with a second track (a wave's fight music) layered over it, independent fades, loopback recording
+for measuring timings. How the mod uses it: `docs/MUSIC.md`.

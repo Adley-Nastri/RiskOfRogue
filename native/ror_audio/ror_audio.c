@@ -12,8 +12,14 @@
  *   volume <volume 0..1> <fade_ms>                    change the playing track's volume
  *   pair <fade_ms> <loop> <volA> <volB> <pathA>|<pathB>  two tracks started on the same sample
  *                                                     (RoR2 stage song + its teleporter layer)
- *   mix <volA> <volB> <fade_ms>                       fade the pair's two volumes
+ *   layer <fade_ms> <loop> <vol> <path>               start a second track from its beginning over the
+ *                                                     current one (a wave's fight track); an older
+ *                                                     layer fades out over the same time
+ *   unlayer <fade_ms>                                 fade the layer out and free it
+ *   mix <volA> <volB> <fade_ms>                       fade the current track (A) and the layer (B)
  *   pause / resume                                    hold and continue, keeping the pair in sync
+ *   record start <wav> / mark <text> / record stop     developer tool: loopback-record the game's
+ *                                                     output (marks go to <wav>.marks.txt)
  *   status                                            just report
  *   info                                              device in use, the game's device, position
  *   devices / device <index|-1>                       list outputs / force one (-1 = follow the game)
@@ -33,14 +39,13 @@
 
 #define STB_VORBIS_HEADER_ONLY
 #include "stb_vorbis.c"
-#define MA_NO_ENCODING
 #define MA_NO_GENERATION
 #define MINIAUDIO_IMPLEMENTATION
 #include "miniaudio.h"
 #undef STB_VORBIS_HEADER_ONLY
 #include "stb_vorbis.c"
 
-#define SLOTS 4
+#define SLOTS 6
 
 static ma_engine g_engine;
 static int g_engine_ok = 0;
@@ -49,6 +54,19 @@ static int g_used[SLOTS];
 static int g_cur = -1;
 static int g_layer = -1;   /* optional second track that plays in sync with g_cur */
 static wchar_t g_dir[MAX_PATH];
+
+/* ---- loopback recorder (development only: measures the game's own music timing) ---- */
+static ma_device g_rec_dev;
+static ma_encoder g_rec_enc;
+static int g_rec_on = 0;
+static volatile ma_uint64 g_rec_frames = 0;
+static ma_uint32 g_rec_rate = 48000;
+static FILE *g_rec_marks = NULL;
+
+static void rec_callback(ma_device *d, void *out, const void *in, ma_uint32 frames) {
+    (void)out; (void)d;
+    if (g_rec_on && in) { ma_encoder_write_pcm_frames(&g_rec_enc, in, frames, NULL); g_rec_frames += frames; }
+}
 
 static void find_dir(void) {
     HMODULE self = NULL;
@@ -263,6 +281,27 @@ __declspec(dllexport) int ror_audio_cmd(void *lua_state) {
         g_cur = a; g_layer = b;
         snprintf(msg, sizeof msg, "ok pair %s | %s", pa, pb);
         write_status(msg);
+    } else if (strncmp(cmd, "layer ", 6) == 0) {
+        /* layer <fade_ms> <loop> <vol> <path> : start a track from its beginning over the current one
+           (the old layer, if any, fades out over the same time) */
+        unsigned fade = 0; int loop = 0; float vol = 1.0f; int used = 0;
+        if (sscanf(cmd + 6, "%u %d %f %n", &fade, &loop, &vol, &used) < 3 || !cmd[6 + used]) { write_status("error bad layer command"); return 0; }
+        fade_out_slot(g_layer, fade);
+        g_layer = -1;
+        int b = open_slot(cmd + 6 + used, loop, msg, sizeof msg); if (b < 0) { write_status(msg); return 0; }
+        ma_sound_set_volume(&g_sound[b], 1.0f);
+        ma_sound_set_fade_in_milliseconds(&g_sound[b], fade > 0 ? 0.0f : vol, vol, fade);
+        ma_sound_start(&g_sound[b]);
+        g_layer = b;
+        snprintf(msg, sizeof msg, "ok layer %s", cmd + 6 + used);
+        write_status(msg);
+    } else if (strncmp(cmd, "unlayer", 7) == 0) {
+        /* unlayer <fade_ms> : fade the layer out and free it */
+        unsigned fade = 0;
+        sscanf(cmd + 7, " %u", &fade);
+        fade_out_slot(g_layer, fade);
+        g_layer = -1;
+        write_status("ok unlayer");
     } else if (strncmp(cmd, "mix ", 4) == 0) {
         /* mix <volA> <volB> <fade_ms> : change the two tracks' volumes (B = the layer) */
         float va = 1.0f, vb = 0.0f; unsigned fade = 0;
@@ -305,6 +344,40 @@ __declspec(dllexport) int ror_audio_cmd(void *lua_state) {
         g_dev_index = idx;
         g_follow = (idx < 0);
         if (ensure_engine(msg)) snprintf(msg, sizeof msg, "ok device set to %d", idx);
+        write_status(msg);
+    } else if (strncmp(cmd, "record start ", 13) == 0) {
+        /* record start <wav path>: loopback-record the game's output device; marks go to <wav path>.marks.txt */
+        if (g_rec_on) { write_status("error already recording"); return 0; }
+        const char *path = cmd + 13;
+        wchar_t wpath[MAX_PATH * 2], wmarks[MAX_PATH * 2];
+        MultiByteToWideChar(CP_UTF8, 0, path, -1, wpath, MAX_PATH * 2);
+        _snwprintf(wmarks, MAX_PATH * 2, L"%ls.marks.txt", wpath);
+        ma_device_config dc = ma_device_config_init(ma_device_type_loopback);
+        dc.capture.format = ma_format_s16; dc.capture.channels = 2; dc.sampleRate = 48000;
+        dc.dataCallback = rec_callback;
+        wchar_t gd[256];
+        static ma_device_id rid;
+        if (find_game_endpoint(gd, 256)) { memset(&rid, 0, sizeof rid); wcsncpy(rid.wasapi, gd, 63); dc.capture.pDeviceID = &rid; }
+        ensure_context();
+        if (ma_device_init(g_ctx_ok ? &g_ctx : NULL, &dc, &g_rec_dev) != MA_SUCCESS) { write_status("error loopback init failed"); return 0; }
+        ma_encoder_config ec = ma_encoder_config_init(ma_encoding_format_wav, ma_format_s16, 2, 48000);
+        if (ma_encoder_init_file_w(wpath, &ec, &g_rec_enc) != MA_SUCCESS) { ma_device_uninit(&g_rec_dev); write_status("error cannot create wav"); return 0; }
+        g_rec_marks = _wfopen(wmarks, L"wb");
+        g_rec_frames = 0; g_rec_rate = 48000; g_rec_on = 1;
+        ma_device_start(&g_rec_dev);
+        snprintf(msg, sizeof msg, "ok recording %s", path);
+        write_status(msg);
+    } else if (strncmp(cmd, "mark ", 5) == 0) {
+        /* mark <text>: write the current recording position (seconds) and the text */
+        if (g_rec_on && g_rec_marks) { fprintf(g_rec_marks, "%.3f\t%s\n", (double)g_rec_frames / g_rec_rate, cmd + 5); fflush(g_rec_marks); }
+        write_status("ok marked");
+    } else if (strncmp(cmd, "record stop", 11) == 0) {
+        if (!g_rec_on) { write_status("error not recording"); return 0; }
+        g_rec_on = 0;
+        ma_device_uninit(&g_rec_dev);
+        ma_encoder_uninit(&g_rec_enc);
+        if (g_rec_marks) { fclose(g_rec_marks); g_rec_marks = NULL; }
+        snprintf(msg, sizeof msg, "ok recorded %.1f s", (double)g_rec_frames / g_rec_rate);
         write_status(msg);
     } else if (strncmp(cmd, "info", 4) == 0) {
         ma_device *dev = ma_engine_get_device(&g_engine);

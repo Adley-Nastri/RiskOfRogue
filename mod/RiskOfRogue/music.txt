@@ -1,0 +1,5 @@
+music = ror2
+
+# ror2:     Risk of Rain 2 music in runs (needs the songs in music\, see README)
+# deadzone: Deadzone's own music
+# Restart the game after changing this.

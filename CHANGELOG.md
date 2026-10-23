@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased (testing)
+
+- Optional Risk of Rain 2 music in runs, in place of Deadzone's: one calm stage song per run and a
+  different teleporter track every wave, switched at Deadzone's own music cues with timings measured
+  from the vanilla game. Follows the Music and Master sliders; silent outside runs. Turn it off in
+  `music.txt`. Songs are extracted from your own RoR2 install (extractor still to come). See docs/MUSIC.md.
+
 ## 1.0.0 (first public release)
 
 - 74 Risk of Rain 2 items (Common, Uncommon, Legendary, base game and DLCs) as native Deadzone: Rogue items, offered in item orbs.

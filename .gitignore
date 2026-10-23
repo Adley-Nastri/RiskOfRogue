@@ -5,9 +5,15 @@ mod/RiskOfRogue/icons/
 mod/RiskOfRogue/test_*
 mod/RiskOfRogue/*.txt
 !mod/RiskOfRogue/enabled.txt
-__pycache__/
 !mod/RiskOfRogue/devtools.txt
+!mod/RiskOfRogue/music.txt
+mod/RiskOfRogue/*.wav
+__pycache__/
 
 # native build output
 native/**/*.dll
 native/**/*.lib
+
+# music extracted from the player's own Risk of Rain 2, and the locally built audio player
+mod/RiskOfRogue/music/
+mod/RiskOfRogue/audio/

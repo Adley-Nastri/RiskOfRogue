@@ -88,6 +88,9 @@ WBP_VersionNumber_C.VersionDisplay (main and pause menus) reads "v.1.4.2.0"; the
 - Unreal's MediaPlayer/FileMediaSource/MediaSoundComponent exist, but the game ships no audio decoder plugin (no WmfMedia/Electra; only Bink and ImgMedia): OpenSource/OpenFile fail for .wav, .ogg and .m4a. Playing RoR2 music needs a native .ogg player.
 - RoR2's music is Ogg Vorbis inside its Wwise banks, so it can be extracted from the player's own install without re-encoding (like the icons).
 
+## RoR2 music (testing)
+Built as `parts/music.lua` plus `native/ror_audio` (see docs/MUSIC.md, which also explains why Wwise itself can't be used). Calm: one RoR2 stage song per run, never the previous run's; fight: a different teleporter track every wave. Timings measured from a music-only loopback recording of vanilla (observe mode). Fixed on the way: the music poll died on map changes (the mod clears its timers) and froze in pauses, so the music has its own clock; reading the settings TMap every tick crashed UE4SS while the game saved settings, so the sliders come from the .ini; RoR2's teleporter layer (`_BC`) is 15-25 dB under the stage mix and inaudible as a fight change, so waves use the boss tracks instead. Stage/boss pairs read from RoR2's SceneDefs.
+
 ## Status
 Verified: RoR2 cards in item orbs, native Tab and end-of-run slots with Deadzone's tooltip, stacking counts, stat items, kill and hit procs, clock. The teleporter event, kill drops and Dio's Best Friend were removed at the user's request. Open: the HUD item row under the minimap, and co-op with two players.
 

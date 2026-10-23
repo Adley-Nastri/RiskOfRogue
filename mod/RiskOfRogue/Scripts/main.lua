@@ -23,6 +23,7 @@ local PARTS = {
   "hud_widgets",    -- HUD building blocks
   "devmenu",        -- developer test menu (only with devtools.txt)
   "hud",            -- the HUD
+  "music",          -- optional: Risk of Rain 2 music in place of Deadzone's
   "tick",           -- host tick, test-command file, main loop
   "api",            -- self-test launcher and debug API (last)
 }

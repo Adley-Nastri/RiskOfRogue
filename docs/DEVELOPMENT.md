@@ -22,13 +22,16 @@ mod/RiskOfRogue/            what goes into ue4ss/Mods/
   enabled.txt               UE4SS loads the mod when this exists
   devtools.txt              testing branch only: turns the developer tools on
   icons/                    made by tools/extract_ror2_assets.py, never committed
+  music.txt                 music = ror2 | deadzone (docs/MUSIC.md)
+  music/, audio/            RoR2 songs and the music player, local only, never committed
 sheets/                     the design: items, elements, buffs, tuning, hooks, text
 gen.py                      runs preflight.py, then writes data_gen.lua and docs/ITEMS.md
 preflight.py                cross-checks every sheet before anything is generated
 research/                   item builders and reference data read from both games
 tools/                      the icon extractor for players
 ue4ss_overrides/            VTableLayout.ini that UE4SS needs for Deadzone's engine build
-docs/                       ITEMS.md (generated), this file, DEVLOG.md
+docs/                       ITEMS.md (generated), this file, MUSIC.md, DEVLOG.md
+native/ror_audio/           the music player DLL's source (built locally, never committed)
 ```
 
 ## Code layout
@@ -52,6 +55,7 @@ docs/                       ITEMS.md (generated), this file, DEVLOG.md
 | `hud_widgets` | widget constructors and layout helpers |
 | `devmenu` | F1 test menu (only with `devtools.txt`) |
 | `hud` | building and drawing the mod HUD |
+| `music` | optional RoR2 music in place of Deadzone's (`Music`; see `docs/MUSIC.md`) |
 | `tick` | host tick, the test-command file, the main loop |
 | `api` | self-test launcher and the debug API (`R2I`, `RiskOfRogue`) |
 

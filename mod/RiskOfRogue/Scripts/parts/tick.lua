@@ -142,6 +142,9 @@ LoopAsync(TICK_MS, function()
         timers = {}; ATTRSET = {}; Auras = {}; Infected = {}
         if Dev.ST and Dev.ST.running and Dev.ST.on_abort then pcall(Dev.ST.on_abort) end
       end
+      -- the music runs on its own clock, through pauses and map loads (music.lua)
+      local okm, errm = pcall(Music.tick, now_ms < Settle.until_ms)
+      if not okm then log("music: " .. tostring(errm)) end
       if now_ms < Settle.until_ms then return end
       if not paused then
         run_timers()
