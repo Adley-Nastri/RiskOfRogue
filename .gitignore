@@ -7,3 +7,7 @@ mod/RiskOfRogue/*.txt
 !mod/RiskOfRogue/enabled.txt
 __pycache__/
 !mod/RiskOfRogue/devtools.txt
+
+# native build output
+native/**/*.dll
+native/**/*.lib
